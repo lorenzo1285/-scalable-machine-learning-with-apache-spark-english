@@ -186,6 +186,31 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
+# Define a utility method to wait until the model is ready
+def wait_for_model(model_name, version, stage="None", status="READY", timeout=300):
+  import time
+  
+  last_stage = "unknown"
+  last_status = "unknown"
+  
+  for i in range(timeout):
+    model_version_details = client.get_model_version(name=model_name, version=version)
+    last_stage = str(model_version_details.current_stage)
+    last_status = str(model_version_details.status)
+    if last_status == str(status) and last_stage == str(stage):
+      return
+      
+    time.sleep(1)
+    
+  raise Exception(f"The model {model_name} v{version} was not {status} after {timeout} seconds: {last_status}/{last_stage}")
+
+# COMMAND ----------
+
+# Force our notebook to block until the model is ready
+wait_for_model(model_name, 1, stage="Staging")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC 
 # MAGIC Add a model description using [update_registered_model](https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#mlflow.tracking.MlflowClient.update_registered_model).
@@ -197,6 +222,10 @@ client.update_registered_model(
   name=model_details.name,
   description="This model forecasts Airbnb housing list prices based on various listing inputs."
 )
+
+# COMMAND ----------
+
+wait_for_model(model_details.name, 1, stage="Staging")
 
 # COMMAND ----------
 
@@ -353,6 +382,10 @@ model_version_details.status
 
 # COMMAND ----------
 
+wait_for_model(model_name, new_model_version)
+
+# COMMAND ----------
+
 # ANSWER
 # Move Model into Production
 client.transition_model_version_stage(
@@ -360,6 +393,10 @@ client.transition_model_version_stage(
   version=new_model_version,
   stage="Production"
 )
+
+# COMMAND ----------
+
+wait_for_model(model_name, new_model_version, "Production")
 
 # COMMAND ----------
 
@@ -383,11 +420,19 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
+wait_for_model(model_name, 1, "Archived")
+
+# COMMAND ----------
+
 client.transition_model_version_stage(
   name=model_name,
   version=2,
   stage="Archived"
 )
+
+# COMMAND ----------
+
+wait_for_model(model_name, 2, "Archived")
 
 # COMMAND ----------
 

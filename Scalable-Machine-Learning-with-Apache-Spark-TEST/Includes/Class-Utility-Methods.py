@@ -106,7 +106,7 @@ def assertDbrVersion(expected:str, latestMajor:int=latestDbrMajor, latestMinor:i
   expMajor = latestMajor
   expMinor = latestMinor
   
-  if expected and expected != "DBR 8.4 ML":
+  if expected and expected != "DBR 9.1 ML":
     expMajor = int(expected.split(".")[0])
     expMinor = int(expected.split(".")[1])
 
