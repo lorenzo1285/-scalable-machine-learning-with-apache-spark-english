@@ -11,7 +11,7 @@
 # MAGIC 
 # MAGIC * Name: **Scalable Machine Learning with Apache Spark**
 # MAGIC * Version:  **1.6.2**
-# MAGIC * Built On: **Oct 19, 2021 at 01:00:20 UTC**
+# MAGIC * Built On: **Oct 19, 2021 at 18:37:59 UTC**
 
 # COMMAND ----------
 

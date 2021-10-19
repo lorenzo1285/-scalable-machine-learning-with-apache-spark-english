@@ -201,7 +201,14 @@ display(df)
 
 # COMMAND ----------
 
-# ANSWER
+# Use your own timestamp 
+# timeStampString = "FILL_IN"
+
+# OR programatically get the first verion's timestamp value
+timeStampString = str(spark.sql("DESCRIBE HISTORY train_delta").collect()[-1]["timestamp"])
+
+df = spark.read.format("delta").option("timestampAsOf", timeStampString).load(deltaPath)
+display(df)
 
 # COMMAND ----------
 

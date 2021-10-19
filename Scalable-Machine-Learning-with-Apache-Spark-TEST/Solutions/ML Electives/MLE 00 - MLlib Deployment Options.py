@@ -112,7 +112,8 @@ display(
 
 for stream in spark.streams.active:
   print(f"Stopping {stream.name}")
-  stream.stop() # Stop the stream
+  stream.stop()             # Stop the active stream
+  stream.awaitTermination() # Wait for it to actually stop
 
 # COMMAND ----------
 
