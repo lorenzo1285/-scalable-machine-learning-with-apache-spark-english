@@ -69,17 +69,6 @@ print(rf.explainParams())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC Deeper trees are more expressive (potentially allowing higher accuracy), but they are also more costly to train and are more likely to overfit.
-# MAGIC 
-# MAGIC We chose the hyperparam values because they train relatively quickly.
-# MAGIC 
-# MAGIC NOTE: Performance degrades exponentially as you grow deeper trees, and SparkML has a cutoff around depth of 30.
-
-# COMMAND ----------
-
 from pyspark.ml.tuning import ParamGridBuilder
 
 paramGrid = (ParamGridBuilder()
@@ -124,15 +113,6 @@ cv = CrossValidator(estimator=pipeline, evaluator=evaluator, estimatorParamMaps=
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC We are training 13 models: 3-fold cross validation combined with 2 different values for the `maxDepth` and 2 for `numTrees`, plus one to retrain on all the training data.
-# MAGIC 
-# MAGIC SparkML automatically retrains on all the data because otherwise you wouldn't be able to combine those three submodels trained on different folds of the data.
-
-# COMMAND ----------
-
 cvModel = cv.fit(trainDF)
 
 # COMMAND ----------
@@ -147,17 +127,6 @@ cvModel = cv.fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC The value to set parallelism depends on the size of your model and the size of your cluster. Some models, like linear regression, are very cheap to store + relatively cheap to compute.
-# MAGIC 
-# MAGIC However, some models like ALS are distributed models stored across the workers rather than the driver.
-# MAGIC 
-# MAGIC Parallelism is like a hyperparameter - try a few to find the best value to speed up your Spark jobs. We recommend trying 2, 4, and 8.
-
-# COMMAND ----------
-
 cvModel = cv.setParallelism(4).fit(trainDF)
 
 # COMMAND ----------
@@ -168,13 +137,6 @@ cvModel = cv.setParallelism(4).fit(trainDF)
 # MAGIC It depends if there are estimators or transformers in the pipeline. If you have things like StringIndexer (an estimator) in the pipeline, then you have to refit it every time if you put the entire pipeline in the cross validator.
 # MAGIC 
 # MAGIC However, if there is any concern about data leakage from the earlier steps, the safest thing is to put the pipeline inside the CV, not the other way. CV first splits the data and then .fit() the pipeline. If it is placed at the end of the pipeline, we potentially can leak the info from hold-out set to train set.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC If your pipeline only contains transformers, there won't be a notable speed difference.
 
 # COMMAND ----------
 

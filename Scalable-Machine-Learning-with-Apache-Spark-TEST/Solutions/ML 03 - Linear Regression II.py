@@ -51,15 +51,6 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC In Spark 2.3, the StringIndexer only takes 1 column as input, but in 3.0, it accepts multiple columns as input.
-# MAGIC 
-# MAGIC Another change in Spark 3.0 is the OneHotEncoderEstimator was renamed to OneHotEncoder.
-
-# COMMAND ----------
-
 from pyspark.ml.feature import OneHotEncoder, StringIndexer
 
 categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
@@ -78,13 +69,6 @@ oheEncoder = OneHotEncoder(inputCols=indexOutputCols, outputCols=oheOutputCols)
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC A lot of students will forget to remove the label from their features. This is why we explicitly exclude price.
-
-# COMMAND ----------
-
 from pyspark.ml.feature import VectorAssembler
 
 numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "price"))]
@@ -96,13 +80,6 @@ vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
 # MAGIC %md ## Linear Regression
 # MAGIC 
 # MAGIC Now that we have all of our features, let's build a linear regression model.
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC We are cloning the stages in the pipeline in case students accidentally run the cell multiple times (that would result in duplicate stages).
 
 # COMMAND ----------
 
@@ -132,13 +109,6 @@ pipelineModel = pipeline.fit(trainDF)
 # MAGIC %md ## Saving Models
 # MAGIC 
 # MAGIC We can save our models to persistent storage (e.g. DBFS) in case our cluster goes down so we don't have to recompute our results.
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC We recommend that students ALWAYS use Pipelines when they save their models. That way they don't have to guess what type of model they are loading back in (e.g. was it a DecisionTreeClassifier?). You can also use Pipelines as stages within Pipelines.
 
 # COMMAND ----------
 

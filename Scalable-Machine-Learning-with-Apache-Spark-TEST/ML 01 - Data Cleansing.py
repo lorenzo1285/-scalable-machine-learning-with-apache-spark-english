@@ -106,13 +106,6 @@ display(fixedPriceDF)
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC The mean is cheaper to compute than the median, and if the data is normally distributed, then the two contain the same value. However, with outliers, you should be looking at the median. Given that you don't know a priori if there are outliers or not, you should use the median/IQR.
-
-# COMMAND ----------
-
 display(fixedPriceDF.describe())
 
 # COMMAND ----------

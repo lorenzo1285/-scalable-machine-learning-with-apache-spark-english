@@ -39,23 +39,6 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC Why not OHE variables before passing into RF?
-# MAGIC 
-# MAGIC One-hot encoding categorical variables with high cardinality can cause inefficiency in tree-based methods. Continuous variables will be given more importance than the dummy variables by the algorithm which will obscure the order of feature importance resulting in worse performance.
-# MAGIC 
-# MAGIC Categorical variables are naturally disadvantaged as they have only a few options for splitting which results in very sparse decision trees. The trees generally tend to grow in one direction because at every split of a categorical variable as there are only two values (0 or 1). The tree grows in the direction of zeroes in the dummy variables.
-# MAGIC 
-# MAGIC By one-hot encoding a categorical variable, we are inducing sparsity into the dataset which is undesirable. From the splitting algorithm’s point of view, all the dummy variables are independent. If the tree decides to make a split on one of the dummy variables, the gain in purity per split is very marginal. As a result, the tree is very unlikely to select one of the dummy variables closer to the root.
-# MAGIC 
-# MAGIC For more detail see this [blog post](https://towardsdatascience.com/one-hot-encoding-is-making-your-tree-based-ensembles-worse-heres-why-d64b282b5769)
-# MAGIC 
-# MAGIC In Spark we only use StringIndexer for preprocessing categorical features before passing into a tree-cased model. StringIndexer encodes a string column of labels to a column of label indices. If the input column is numeric, we cast it to string and index the string values
-
-# COMMAND ----------
-
 from pyspark.ml.feature import StringIndexer
 
 categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
@@ -132,13 +115,6 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC We select 40 here simply because it is larger than 32 - the value that the error message throws.
-
-# COMMAND ----------
-
 dt.setMaxBins(40)
 
 # COMMAND ----------
@@ -154,13 +130,6 @@ pipelineModel = pipeline.fit(trainDF)
 # MAGIC %md ## Feature Importance
 # MAGIC 
 # MAGIC Let's go ahead and get the fitted decision tree model, and look at the feature importance scores.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC Right now in Databricks you can only get the index of the features, not the names.
 
 # COMMAND ----------
 

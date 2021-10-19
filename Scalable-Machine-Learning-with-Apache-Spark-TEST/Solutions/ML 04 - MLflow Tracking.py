@@ -67,13 +67,6 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC If you do not specify an experiment, it will be logged to the Runs tab of this notebook.
-
-# COMMAND ----------
-
 import mlflow
 import mlflow.spark
 from pyspark.ml.regression import LinearRegression

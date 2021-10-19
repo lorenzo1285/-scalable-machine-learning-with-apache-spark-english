@@ -7,14 +7,6 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTE
-# MAGIC These are the best resources for getting up to speed with Model Registry:
-# MAGIC - https://drive.google.com/drive/folders/1Lfw2yYna8lSHhHFuTGSUiB77l31zHpxD?usp=sharing
-# MAGIC - https://docs.google.com/presentation/d/1DTWw8H7oPuxdjl5DPSINiXUDjKXKBfN3MJto-3Sq3ag/edit?usp=sharing
-
-# COMMAND ----------
-
 # MAGIC %md # Model Registry
 # MAGIC 
 # MAGIC MLflow Model Registry is a collaborative hub where teams can share ML models, work together from experimentation to online testing and production, integrate with approval and governance workflows, and monitor ML deployments and their performance.  This lesson explores how to manage models using the MLflow model registry.

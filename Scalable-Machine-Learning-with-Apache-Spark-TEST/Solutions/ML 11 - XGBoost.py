@@ -20,22 +20,6 @@
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC **What is Gradient Boosting?**
-# MAGIC 
-# MAGIC Gradient boosting is a sequential based ensemble method, which employs the idea of additive training. At each iteration, a new tree learns the gradients of the residuals between the target values and the current predicted values, and then the algorithm conducts gradient descent based on the learned gradients.
-# MAGIC 
-# MAGIC **Differences between GBT and RF**
-# MAGIC 
-# MAGIC GBT builds one tree at a time, where each new tree aims to correct errors of the previously trained tree.
-# MAGIC RFs train each tree independently, using a random sample of the data. This randomness helps to make the model more robust than a single decision tree, and less likely to overfit on the training data. RF will generally have more trees than GBTs.
-# MAGIC 
-# MAGIC With GBTs, you can parallelize finding the best split at each level, but cannot parallelize across trees, like RFs.
-
-# COMMAND ----------
-
 # MAGIC %run "./Includes/Classroom-Setup"
 
 # COMMAND ----------
@@ -43,13 +27,6 @@
 # MAGIC %md ## Data Preparation
 # MAGIC 
 # MAGIC Let's go ahead and index all of our categorical features, and set our label to be `log(price)`.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC Although decision tree features are scale invariant, their labels are not. We are predicting on a log scale and later exponentiating to get better predictions.
 
 # COMMAND ----------
 
@@ -83,13 +60,6 @@ pipeline = Pipeline(stages=[stringIndexer, vecAssembler])
 # MAGIC * `use_gpu`: Enable to utilize GPU based training for faster performance (optional).
 # MAGIC 
 # MAGIC **NOTE:** `use_gpu` requires an ML GPU runtime. Currently, at most one GPU per worker will be used when doing distributed training. 
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC XGBoost is a special implementation of GBTs. Don't worry about the details - just know it tends to be the best non-neural network technique for Kaggle competitions.
 
 # COMMAND ----------
 

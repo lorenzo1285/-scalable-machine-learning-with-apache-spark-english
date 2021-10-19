@@ -35,44 +35,6 @@ airbnbDF = spark.read.format("delta").load(filePath)
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC Below, we show what happens if you "change" your cluster config by repartitioning your data. To test this out, try spinning up a cluster with just one worker, and another with two workers. 
-# MAGIC 
-# MAGIC When you do an 80/20 train/test split, it is an "approximate" 80/20 split. It is not an exact 80/20 split, and when we repartition the data (aka change the cluster config), we show that we get not only a different # of data points in train/test, but also different data points.
-# MAGIC 
-# MAGIC Our recommendation is to split your data once, then write it out to its own train/test folder so you don't have these reproducibility issues.
-# MAGIC 
-# MAGIC Example:
-# MAGIC 
-# MAGIC 1- Let's say you have a dataset: {1,3,2,4,5,6,9,7, 8,10}.
-# MAGIC 2- You do 0.8 0.2 split
-# MAGIC 3- Let's say Spark decides to create two partition of the data when you run .randomSplit()
-# MAGIC 4- partition1 {1,4,3,6,10}. partition2 {2,7,5,9,8}
-# MAGIC 5- Spark orders each partition {1,3,4,6,10} and {2,5,7,8,9}
-# MAGIC 6- If you use random with replacement spark uses Poisson sampler otherwise it uses Bernoulli sampler
-# MAGIC 7- Spark creates random number for each element
-# MAGIC {1:0.24,3:0.65,4:0.7,6:0.82,10:0.54} and {2:0.14,5:0.98,7:0.33,8:0.76,9:0.87}
-# MAGIC 8- Spark picks those numbers that are associated with <0.8 (since we are doing 80-20 split)
-# MAGIC 9- Spark picks {1,3,4,10} from partition 1 and {2,7,8} from partition 2
-# MAGIC 
-# MAGIC Now if you run the command again, spark "reshuffles the data". There is no guarantee that each partition gets same number of elements. For example:
-# MAGIC 
-# MAGIC 1- partition1 {1,5,3,4}. partition2 {6,2,7,5,9,8, 10}
-# MAGIC 2- Spark orders each partition {1,3,4,5} and {2,6,7,8,9,10}
-# MAGIC 3- If you use random with replacement spark uses Poisson sampler otherwise it uses Bernoulli sampler
-# MAGIC 4- Spark creates random number for each element (if you use the same seed, it will be the same order of random numbers.)
-# MAGIC {1:0.24,3:0.65,4:0.7,5:0.87} and {2:0.14,6:0.98,7:0.33,8:0.76,9:0.87,10:0.98}
-# MAGIC 5- Spark picks those numbers that are associated with <0.8 (we are doing 80-20 split)
-# MAGIC 6- Spark picks {1,3,4} from partition 1 and {2,7,8} from partition 2
-# MAGIC 
-# MAGIC So we ended up with 7 elements when we ran randomSplit() first time and ended up with 6 elements when we ran randomSplit() the second time.
-# MAGIC 
-# MAGIC Same thing happens in our notebook. We actually do not need to do .repartition(). Even without repartitioning, if we do not cache() the data, we might end up with different elements in our random split.
-
-# COMMAND ----------
-
 trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 print(trainDF.cache().count())
 
@@ -96,15 +58,6 @@ print(trainRepartitionDF.count())
 # MAGIC We are going to build a very simple model predicting `price` just given the number of `bedrooms`.
 # MAGIC 
 # MAGIC **Question**: What are some assumptions of the linear regression model?
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC * Linear relationship between X & y
-# MAGIC * Errors are normally distributed (Homoscedasticity)
-# MAGIC * Features are independent
 
 # COMMAND ----------
 
@@ -173,13 +126,6 @@ print(f"The formula for the linear regression line is y = {m:.2f}x + {b:.2f}")
 
 # MAGIC %md
 # MAGIC ## Apply model to test set
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC We are using `.show()` instead of `display()` below because display in Databricks is a bit funky when working with vectors. More on this in the next notebook.
 
 # COMMAND ----------
 

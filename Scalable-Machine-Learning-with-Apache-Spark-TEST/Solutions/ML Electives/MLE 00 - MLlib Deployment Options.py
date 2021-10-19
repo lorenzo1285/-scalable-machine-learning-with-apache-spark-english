@@ -49,13 +49,6 @@ schema = spark.read.parquet(repartitionedPath).schema
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC // INSTRUCTOR_NOTES
-# MAGIC 
-# MAGIC With maxFilesPerTrigger, it will make predictions for one of the parquet files every time the trigger interval gets kicked off (default I believe is 10 seconds).
-
-# COMMAND ----------
-
 streamingData = (spark
                  .readStream
                  .schema(schema) # Can set the schema this way
