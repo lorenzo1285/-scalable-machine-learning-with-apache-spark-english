@@ -1,7 +1,5 @@
 # Databricks notebook source
-# MAGIC 
-# MAGIC %python
-# MAGIC spark.conf.set("com.databricks.training.module-name", "machine_learning")
+spark.conf.set("com.databricks.training.module-name", "machine_learning")
 
 # COMMAND ----------
 
@@ -115,34 +113,34 @@ None # Suppress output
 
 # COMMAND ----------
 
-# MAGIC %python
-# MAGIC # %scala
-# MAGIC 
-# MAGIC # val cleaned_username = spark.conf.get("cleaned_username")
-# MAGIC 
-# MAGIC # def untilStreamIsReady(name:String):Unit = {
-# MAGIC #   val queries = spark.streams.active.filter(_.name == name)
-# MAGIC 
-# MAGIC #   if (queries.length == 0) {
-# MAGIC #     println("The stream is not active.")
-# MAGIC #   } else {
-# MAGIC #     while (queries(0).isActive && queries(0).recentProgress.length == 0) {
-# MAGIC #       // wait until there is any type of progress
-# MAGIC #     }
-# MAGIC 
-# MAGIC #     if (queries(0).isActive) {
-# MAGIC #       queries(0).awaitTermination(5*1000)
-# MAGIC #       println("The stream is active and ready.")
-# MAGIC #     } else {
-# MAGIC #       println("The stream is not active.")
-# MAGIC #     }
-# MAGIC #   }
-# MAGIC # }
-# MAGIC 
-# MAGIC # displayHTML("""
-# MAGIC # <div>Declared various utility methods:</div>
-# MAGIC # <li>Declared <b style="color:green">untilStreamIsReady(<i>name:String</i>)</b> to control workflow</li>
-# MAGIC # <br/>
-# MAGIC # <div>All done!</div>
-# MAGIC # """)
-# MAGIC None # Suppress output
+# %scala
+
+# val cleaned_username = spark.conf.get("cleaned_username")
+
+# def untilStreamIsReady(name:String):Unit = {
+#   val queries = spark.streams.active.filter(_.name == name)
+
+#   if (queries.length == 0) {
+#     println("The stream is not active.")
+#   } else {
+#     while (queries(0).isActive && queries(0).recentProgress.length == 0) {
+#       // wait until there is any type of progress
+#     }
+
+#     if (queries(0).isActive) {
+#       queries(0).awaitTermination(5*1000)
+#       println("The stream is active and ready.")
+#     } else {
+#       println("The stream is not active.")
+#     }
+#   }
+# }
+
+# displayHTML("""
+# <div>Declared various utility methods:</div>
+# <li>Declared <b style="color:green">untilStreamIsReady(<i>name:String</i>)</b> to control workflow</li>
+# <br/>
+# <div>All done!</div>
+# """)
+None # Suppress output
+

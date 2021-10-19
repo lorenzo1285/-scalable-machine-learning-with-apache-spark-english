@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -126,7 +125,7 @@ search_space = {
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC 
 # MAGIC `fmin()` generates new hyperparameter configurations to use for your `objective_function`. It will evaluate 4 models in total, using the information from the previous models to make a more informative decision for the the next hyperparameter to try. 
 # MAGIC 
@@ -171,7 +170,6 @@ with mlflow.start_run():
   mlflow.log_param("numTrees", best_num_trees)
   mlflow.log_metric("rmse", rmse)
   mlflow.spark.log_model(pipelineModel, "model")
-
 
 # COMMAND ----------
 

@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC # Hyperopt Lab
 # MAGIC 
 # MAGIC The [Hyperopt library](https://github.com/hyperopt/hyperopt) allows for parallel hyperparameter tuning using either random search or Tree of Parzen Estimators (TPE). With MLflow, we can record the hyperparameters and corresponding metrics for each hyperparameter combination. You can read more on [SparkTrials w/ Hyperopt](https://github.com/hyperopt/hyperopt/blob/master/docs/templates/scaleout/spark.md).
@@ -32,7 +31,7 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv").drop(["zipcode"], axis=1)
+df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/")).drop(["zipcode"], axis=1)
 
 # split 80/20 train-test
 X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1),
@@ -42,8 +41,7 @@ X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1),
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now we need to define an `objective_function` where you evaluate the [random forest's](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) predictions using R2.
+# MAGIC %md Now we need to define an `objective_function` where you evaluate the [random forest's](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) predictions using R2.
 # MAGIC 
 # MAGIC In the code below, compute the `r2` and return it (remember we are trying to maximize R2, so we need to return it as a negative value).
 

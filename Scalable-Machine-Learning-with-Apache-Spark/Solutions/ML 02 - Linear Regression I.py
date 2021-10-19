@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Regression: Predicting Rental Price
+# MAGIC %md # Regression: Predicting Rental Price
 # MAGIC 
 # MAGIC In this notebook, we will use the dataset we cleansed in the previous lab to predict Airbnb rental prices in San Francisco.
 # MAGIC 
@@ -55,8 +53,7 @@ print(trainRepartitionDF.count())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Linear Regression
+# MAGIC %md ## Linear Regression
 # MAGIC 
 # MAGIC We are going to build a very simple model predicting `price` just given the number of `bedrooms`.
 # MAGIC 
@@ -76,8 +73,7 @@ display(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC There do appear some outliers in our dataset for the price ($10,000 a night??). Just keep this in mind when we are building our models :).
+# MAGIC %md There do appear some outliers in our dataset for the price ($10,000 a night??). Just keep this in mind when we are building our models :).
 # MAGIC 
 # MAGIC We will use [LinearRegression](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html?highlight=linearregression#pyspark.ml.regression.LinearRegression) to build our first model.
 # MAGIC 
@@ -94,8 +90,7 @@ lr = LinearRegression(featuresCol="bedrooms", labelCol="price")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Vector Assembler
+# MAGIC %md ## Vector Assembler
 # MAGIC 
 # MAGIC What went wrong? Turns out that the Linear Regression **estimator** (`.fit()`) expected a column of Vector type as input.
 # MAGIC 
@@ -118,8 +113,7 @@ lrModel = lr.fit(vecTrainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Inspect the model
+# MAGIC %md ## Inspect the model
 
 # COMMAND ----------
 
@@ -143,8 +137,7 @@ predDF.select("bedrooms", "features", "price", "prediction").show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate Model
+# MAGIC %md ## Evaluate Model
 # MAGIC 
 # MAGIC Let's see how our linear regression model with just one variable does. Does it beat our baseline model?
 
@@ -159,8 +152,7 @@ print(f"RMSE is {rmse}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Wahoo! Our RMSE is better than our baseline model. However, it's still not that great. Let's see how we can further decrease it in future notebooks.
+# MAGIC %md Wahoo! Our RMSE is better than our baseline model. However, it's still not that great. Let's see how we can further decrease it in future notebooks.
 
 # COMMAND ----------
 

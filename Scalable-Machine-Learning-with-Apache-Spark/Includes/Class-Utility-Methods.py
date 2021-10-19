@@ -1,5 +1,4 @@
 # Databricks notebook source
-
 # # Databricks notebook source
 # def get_cloud():
 #   with open("/databricks/common/conf/deploy.conf") as f:
@@ -62,13 +61,13 @@ def getUsername() -> str:
 # Get the user's userhome
 def getUserhome() -> str:
   username = getUsername()
-  return f"file:///dbfs/user/{username}/dbacademy"
+  return f"dbfs:/user/{username}/dbacademy"
 
   # cloud = get_cloud()
   # if cloud == "GCP":
-  #   return f"file:///dbacademy/{username}"
+  #   return f"dbfs:/dbacademy/{username}"
   # else:
-  #  return f"file:///dbfs/user/{username}/dbacademy"
+  #  return f"dbfs:/user/{username}/dbacademy"
 
 def getModuleName() -> str: 
   # This will/should fail if module-name is not defined in the Classroom-Setup notebook
@@ -107,7 +106,7 @@ def assertDbrVersion(expected:str, latestMajor:int=latestDbrMajor, latestMinor:i
   expMajor = latestMajor
   expMinor = latestMinor
   
-  if expected and expected != "{{dbr}}":
+  if expected and expected != "DBR 9.1 ML":
     expMajor = int(expected.split(".")[0])
     expMinor = int(expected.split(".")[1])
 
@@ -169,7 +168,7 @@ def createUserDatabase(courseType:str, username:str, moduleName:str, lessonName:
 
     
 #############################################
-# LEGACY TESTING FUNCTIONS
+# Legacy testing functions
 #############################################
 
 # Test results dict to store results

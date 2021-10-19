@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
-# MAGIC # Install Datasets
+# MAGIC %md-sandbox # Install Datasets
 # MAGIC 
 # MAGIC We need to "install" the datasets this course uses by copying them from its current location in the cloud to your local filesystem.
 # MAGIC 

@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # AutoML
+# MAGIC %md # AutoML
 # MAGIC 
 # MAGIC [Databricks AutoML](https://docs.databricks.com/applications/machine-learning/automl.html) helps you automatically build machine learning models both through a UI and programmatically. It prepares the dataset for model training and then performs and records a set of trials (using HyperOpt), creating, tuning, and evaluating multiple models. 
 # MAGIC 
@@ -24,8 +22,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Currently, AutoML uses a combination of XGBoost and sklearn (only single node models) but optimizes the hyperparameters within each.
+# MAGIC %md Currently, AutoML uses a combination of XGBoost and sklearn (only single node models) but optimizes the hyperparameters within each.
 
 # COMMAND ----------
 
@@ -35,8 +32,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC We can now use AutoML to search for the optimal [regression](https://docs.databricks.com/applications/machine-learning/automl.html#regression) model.
+# MAGIC %md We can now use AutoML to search for the optimal [regression](https://docs.databricks.com/applications/machine-learning/automl.html#regression) model. 
 # MAGIC 
 # MAGIC Required parameters:
 # MAGIC * `dataset` - Input Spark or pandas DataFrame that contains training features and targets. If using a Spark DataFrame, it will convert it to a Pandas DataFrame under the hood by calling .toPandas() - just be careful you don't OOM!
@@ -55,7 +51,7 @@ summary = automl.regress(trainDF, target_col="price", primary_metric="rmse", tim
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC 
 # MAGIC After running the previous cell, you will notice two notebooks and an MLflow experiment:
 # MAGIC * `Data exploration notebook` - we can see a Profiling Report which organizes the input columns and discusses values, frequency and other information
@@ -72,8 +68,7 @@ print(summary.best_trial)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now we can test the model that we got from AutoML against our test data. We'll be using [mlflow.pyfunc.spark_udf](https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf) to register our model as a UDF and apply it in parallel to our test data.
+# MAGIC %md Now we can test the model that we got from AutoML against our test data. We'll be using [mlflow.pyfunc.spark_udf](https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf) to register our model as a UDF and apply it in parallel to our test data.
 
 # COMMAND ----------
 
@@ -93,7 +88,6 @@ from pyspark.ml.evaluation import RegressionEvaluator
 regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
 rmse = regressionEvaluator.evaluate(predDF)
 print(f"RMSE on test dataset: {rmse:.3f}")
-
 
 # COMMAND ----------
 

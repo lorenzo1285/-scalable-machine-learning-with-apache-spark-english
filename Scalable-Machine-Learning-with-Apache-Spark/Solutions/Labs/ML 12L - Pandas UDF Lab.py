@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Pandas UDF Lab
+# MAGIC %md # Pandas UDF Lab
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC - Perform model inference at scale using a Pandas UDF created from MLflow
@@ -34,7 +32,7 @@ from sklearn.model_selection import train_test_split
 
 with mlflow.start_run(run_name="sklearn-random-forest") as run:
   # Import the data
-  df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv")
+  df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/"))
   X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
 
   # Create model, train it, and create predictions
@@ -56,8 +54,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's convert our Pandas DataFrame to a Spark DataFrame for distributed inference.
+# MAGIC %md Let's convert our Pandas DataFrame to a Spark DataFrame for distributed inference.
 
 # COMMAND ----------
 
@@ -65,8 +62,7 @@ sparkDF = spark.createDataFrame(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### MLflow UDF
+# MAGIC %md ### MLflow UDF
 # MAGIC 
 # MAGIC Here, instead of using `mlflow.sklearn.load_model(model_path)`, we would like to use `mlflow.pyfunc.spark_udf()`.
 # MAGIC 
@@ -98,7 +94,6 @@ predict = mlflow.pyfunc.spark_udf(spark, model_path)
 
 features = X_train.columns
 display(sparkDF.withColumn("prediction", predict(*features)))
-
 
 # COMMAND ----------
 

@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Time Series Forecasting
+# MAGIC %md # Time Series Forecasting
 # MAGIC 
 # MAGIC Working with time series data is an often under-represented skill in data science.  In this notebook, you explore three main approaches to time series: Prophet, ARIMA, and exponential smoothing.
 # MAGIC 
@@ -31,8 +29,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### [Time Series](https://en.wikipedia.org/wiki/Time_series)
+# MAGIC %md ### [Time Series](https://en.wikipedia.org/wiki/Time_series)
 # MAGIC 
 # MAGIC A time series is a series of data points indexed (or listed or graphed) in time order. Most commonly, a time series is a sequence taken at successive equally spaced points in time. Thus it is a sequence of discrete-time data. Examples of time series include:<br><br>
 # MAGIC 
@@ -56,8 +53,7 @@ display(spark_df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Convert the Spark DataFrame to a Pandas DataFrame.
+# MAGIC %md Convert the Spark DataFrame to a Pandas DataFrame.
 
 # COMMAND ----------
 
@@ -65,8 +61,7 @@ df = spark_df.toPandas()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Looking at the data, the time column (what time of day the data was reported) is not especially relevant to our forecast, so we can go ahead and drop it.
+# MAGIC %md Looking at the data, the time column (what time of day the data was reported) is not especially relevant to our forecast, so we can go ahead and drop it.
 
 # COMMAND ----------
 
@@ -75,8 +70,7 @@ df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Prophet
+# MAGIC %md ### Prophet
 # MAGIC [Facebook's Prophet](https://facebook.github.io/prophet/) is widely considered the easiest way to forecast because it generally does all the heavy lifting for the user. Let's take a look at how Prophet works with our dataset.
 
 # COMMAND ----------
@@ -90,8 +84,7 @@ logging.getLogger("py4j").setLevel(logging.ERROR)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Prophet expects certain column names for its input DataFrame. The date column must be renamed ds, and the column to be forecast should be renamed y. Let's go ahead and forecast the number of confirmed patients in South Korea.
+# MAGIC %md Prophet expects certain column names for its input DataFrame. The date column must be renamed ds, and the column to be forecast should be renamed y. Let's go ahead and forecast the number of confirmed patients in South Korea.
 
 # COMMAND ----------
 
@@ -102,8 +95,7 @@ prophet_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Next, let's specify how many days we want to forecast for. We can do this using the `Prophet.make_future_dataframe` method. With the size of our data, let's take a look at the numbers a month from now.
+# MAGIC %md Next, let's specify how many days we want to forecast for. We can do this using the `Prophet.make_future_dataframe` method. With the size of our data, let's take a look at the numbers a month from now. 
 # MAGIC 
 # MAGIC We can see dates up to one month in the future.
 
@@ -116,8 +108,7 @@ prophet_future.tail()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Finally, we can run the `predict` method to forecast our data points. The `yhat` column contains the forecasted values. You can also look at the entire DataFrame to see what other values Prophet generates.
+# MAGIC %md Finally, we can run the `predict` method to forecast our data points. The `yhat` column contains the forecasted values. You can also look at the entire DataFrame to see what other values Prophet generates.
 
 # COMMAND ----------
 
@@ -126,8 +117,7 @@ prophet_forecast[['ds', 'yhat']].tail()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's take a look at a graph representation of our forecast using `plot`
+# MAGIC %md Let's take a look at a graph representation of our forecast using `plot`
 
 # COMMAND ----------
 
@@ -135,8 +125,7 @@ prophet_plot = prophet_obj.plot(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC We can also use `plot_components` to get a more detailed look at our forecast.
+# MAGIC %md We can also use `plot_components` to get a more detailed look at our forecast.
 
 # COMMAND ----------
 
@@ -144,8 +133,7 @@ prophet_plot2 = prophet_obj.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC We can also use Prophet to identify [changepoints](https://facebook.github.io/prophet/docs/trend_changepoints.html), points where the dataset had an abrupt change. This is especially useful for our dataset because it could identify time periods where Coronavirus cases spiked.
+# MAGIC %md We can also use Prophet to identify [changepoints](https://facebook.github.io/prophet/docs/trend_changepoints.html), points where the dataset had an abrupt change. This is especially useful for our dataset because it could identify time periods where Coronavirus cases spiked.
 
 # COMMAND ----------
 
@@ -160,8 +148,7 @@ print(prophet_obj.changepoints)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Next, let's find out if there's any correlation between holidays in South Korea and increases in confirmed cases. We can use the built-in `add_country_holidays` [method](https://facebook.github.io/prophet/docs/seasonality,_holiday_effects,_and_regressors.html#built-in-country-holidays) to find out about any trends.
+# MAGIC %md Next, let's find out if there's any correlation between holidays in South Korea and increases in confirmed cases. We can use the built-in `add_country_holidays` [method](https://facebook.github.io/prophet/docs/seasonality,_holiday_effects,_and_regressors.html#built-in-country-holidays) to find out about any trends.
 # MAGIC 
 # MAGIC You can find a complete list of country codes [here](https://github.com/dr-prodigy/python-holidays/blob/master/holidays/countries/).
 
@@ -175,8 +162,7 @@ prophet_holiday.fit(prophet_df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC You can check what holidays are included by running the following cell.
+# MAGIC %md You can check what holidays are included by running the following cell.
 
 # COMMAND ----------
 
@@ -190,8 +176,7 @@ prophet_plot_holiday = prophet_holiday.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### ARIMA
+# MAGIC %md ### ARIMA
 # MAGIC 
 # MAGIC ARIMA stands for Auto-Regressive (AR) Integrated (I) Moving Average (MA). An ARIMA model is a form of regression analysis that gauges the strength of one dependent variable relative to other changing variables.
 # MAGIC 
@@ -205,8 +190,7 @@ prophet_plot_holiday = prophet_holiday.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Start with making our new ARIMA DataFrame. Since we already forecast the confirmed cases using Prophet, let's take a look at predictions for released patients.
+# MAGIC %md Start with making our new ARIMA DataFrame. Since we already forecast the confirmed cases using Prophet, let's take a look at predictions for released patients.
 
 # COMMAND ----------
 
@@ -217,8 +201,7 @@ arima_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC The first step of creating an ARIMA model is to find the d-parameter by making sure your dataset is stationary. This is easy to check using an [Augmented Dickey Fuller Test](https://en.wikipedia.org/wiki/Augmented_Dickey%E2%80%93Fuller_test) from the `statsmodels` library.
+# MAGIC %md The first step of creating an ARIMA model is to find the d-parameter by making sure your dataset is stationary. This is easy to check using an [Augmented Dickey Fuller Test](https://en.wikipedia.org/wiki/Augmented_Dickey%E2%80%93Fuller_test) from the `statsmodels` library. 
 # MAGIC 
 # MAGIC Since the P-value is larger than the ADF statistic, we will have to difference the dataset. Differencing helps stabilize the mean of the dataset, therefore removing the influence of past trends and seasonality on your data.
 
@@ -233,8 +216,7 @@ print(f'p-value: {result[1]}')
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC To difference the dataset, call `diff` on the value column. We are looking for a near-stationary series which roams around a defined mean and an ACF plot that reaches zero fairly quickly. After looking at our graphs, we can determine that our d-parameter should either be 1 or 2.
+# MAGIC %md To difference the dataset, call `diff` on the value column. We are looking for a near-stationary series which roams around a defined mean and an ACF plot that reaches zero fairly quickly. After looking at our graphs, we can determine that our d-parameter should either be 1 or 2.
 
 # COMMAND ----------
 
@@ -260,8 +242,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC In the next section we'll find the required number of AR terms using the Partial Autocorrection Plot. This is the p-parameter.
+# MAGIC %md In the next section we'll find the required number of AR terms using the Partial Autocorrection Plot. This is the p-parameter.
 # MAGIC 
 # MAGIC Partial Autocorrection is the correlation between a series and its lag. From the graphs, our p-parameter should be 1.
 
@@ -278,8 +259,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Finally, we'll find the q-parameter by looking at the ACF plot to find the number of Moving Average terms. A Moving Average incorporates the dependency between an observation and a residual error applied to lagged observations. From the graphs, our q-parameter should be 1.
+# MAGIC %md Finally, we'll find the q-parameter by looking at the ACF plot to find the number of Moving Average terms. A Moving Average incorporates the dependency between an observation and a residual error applied to lagged observations. From the graphs, our q-parameter should be 1.
 
 # COMMAND ----------
 
@@ -292,8 +272,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Once we have found our p, d, and q parameter values, we can fit our ARIMA model by passing the parameters in. The following cell shows a summary of the model including dataset information and model coefficients.
+# MAGIC %md Once we have found our p, d, and q parameter values, we can fit our ARIMA model by passing the parameters in. The following cell shows a summary of the model including dataset information and model coefficients.
 
 # COMMAND ----------
 
@@ -307,8 +286,7 @@ print(arima_fit.summary())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Finally, let's split our data into train and test data to test the accuracy of our model. Note that since we have to split the data sequentially for time series, functions like sklearn's `train_test_split` cannot be used here.
+# MAGIC %md Finally, let's split our data into train and test data to test the accuracy of our model. Note that since we have to split the data sequentially for time series, functions like sklearn's `train_test_split` cannot be used here.
 
 # COMMAND ----------
 
@@ -320,8 +298,7 @@ test_df = arima_df[split_ind: ]
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC To forecast we use Out of Sample Cross Validation. We can see from the graph that our forecast is slightly more linear than the actual values but overall the values are pretty close to expected.
+# MAGIC %md To forecast we use Out of Sample Cross Validation. We can see from the graph that our forecast is slightly more linear than the actual values but overall the values are pretty close to expected.
 
 # COMMAND ----------
 
@@ -343,8 +320,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Exponential Smoothing
+# MAGIC %md ### Exponential Smoothing
 # MAGIC 
 # MAGIC [Exponential smoothing](https://en.wikipedia.org/wiki/Exponential_smoothing) is a rule of thumb technique for smoothing time series data using the exponential window function. Whereas in the simple moving average the past observations are weighted equally, exponential functions are used to assign exponentially decreasing weights over time. It is an easily learned and easily applied procedure for making some determination based on prior assumptions by the user, such as seasonality. Exponential smoothing is often used for analysis of time-series data.
 # MAGIC 
@@ -360,8 +336,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Since we have already forecast the other two columns, let's take a look at a forecast for the number of coronavirus related deaths.
+# MAGIC %md Since we have already forecast the other two columns, let's take a look at a forecast for the number of coronavirus related deaths.
 
 # COMMAND ----------
 
@@ -372,8 +347,7 @@ exp_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Holt's Linear Smoothing only works on data points that are greater than 0, therefore we have to drop the corresponding rows. Additionally, we need to set the index of our DataFrame to the date column.
+# MAGIC %md Holt's Linear Smoothing only works on data points that are greater than 0, therefore we have to drop the corresponding rows. Additionally, we need to set the index of our DataFrame to the date column.
 
 # COMMAND ----------
 
@@ -383,8 +357,7 @@ exp_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Luckily, statsmodel does most of the work for us. However, we still have to tweak the parameters to get an accurate forecast. The available parameters here are α or `smoothing_level` and β or `smoothing_slope`. α defines the smoothing factor of the level and β defines the smoothing factor of the trend.
+# MAGIC %md Luckily, statsmodel does most of the work for us. However, we still have to tweak the parameters to get an accurate forecast. The available parameters here are α or `smoothing_level` and β or `smoothing_slope`. α defines the smoothing factor of the level and β defines the smoothing factor of the trend.
 # MAGIC 
 # MAGIC In the cell below, we are trying three different kinds of predictions. The first, Holt's Linear Trend, forecasts with a linear trend. The second, Exponential Trend, forecasts with an exponential trend. The third, Additive Damped Trend, damps the forecast trend linearly.
 
@@ -403,8 +376,7 @@ exp_forecast3 = exp_fit3.forecast(30).rename("Additive damped trend")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC After plotting the three models, we can see that the standard Holt's Linear, and the Exponential trend lines give very similar forecasts while the Additive Damped trend gives a slightly lower number of deceased patients.
+# MAGIC %md After plotting the three models, we can see that the standard Holt's Linear, and the Exponential trend lines give very similar forecasts while the Additive Damped trend gives a slightly lower number of deceased patients.
 
 # COMMAND ----------
 
@@ -419,8 +391,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC We can zoom in on the forecast part of our graph to see the graph in more detail.
+# MAGIC %md We can zoom in on the forecast part of our graph to see the graph in more detail.
 # MAGIC 
 # MAGIC We can see that the exponential trendline starts in-line with the linear trendline but slowly starts resembling an exponential trend towards the end of the graph. The damped trendline starts and ends below the other trendlines.
 
@@ -433,7 +404,6 @@ exp_forecast3.plot(legend=True, color="green")
 plt.ylabel("Number of Deceased Patients")
 plt.xlabel("Day Number")
 plt.show()
-
 
 # COMMAND ----------
 

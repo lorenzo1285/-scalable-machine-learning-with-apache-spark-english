@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -28,8 +27,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Load in Model & Data
+# MAGIC %md ## Load in Model & Data
 # MAGIC 
 # MAGIC We are loading in a repartitioned version of our dataset (100 partitions instead of 4) to see more incremental progress of the streaming predictions.
 
@@ -45,8 +43,7 @@ schema = spark.read.parquet(repartitionedPath).schema
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Simulate streaming data
+# MAGIC %md ## Simulate streaming data
 # MAGIC 
 # MAGIC **NOTE**: You must specify a schema when creating a streaming source DataFrame.
 
@@ -60,8 +57,7 @@ streamingData = (spark
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Make Predictions
+# MAGIC %md ## Make Predictions
 
 # COMMAND ----------
 
@@ -94,8 +90,7 @@ untilStreamIsReady("pred_stream_1p")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC While this is running, take a look at the new Structured Streaming tab in the Spark UI.
+# MAGIC %md While this is running, take a look at the new Structured Streaming tab in the Spark UI.
 
 # COMMAND ----------
 
@@ -111,19 +106,18 @@ display(
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now that we are done, make sure to stop the stream
+# MAGIC %md Now that we are done, make sure to stop the stream
 
 # COMMAND ----------
 
 for stream in spark.streams.active:
   print(f"Stopping {stream.name}")
-  stream.stop() # Stop the stream
+  stream.stop()             # Stop the active stream
+  stream.awaitTermination() # Wait for it to actually stop
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### What about Model Export?
+# MAGIC %md ### What about Model Export?
 # MAGIC 
 # MAGIC * [ONNX](https://onnx.ai/)
 # MAGIC   * ONNX is very popular in the deep learning community allowing developers to switch between libraries and languages, but only has experimental support for MLlib.
@@ -135,8 +129,7 @@ for stream in spark.streams.active:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Low-Latency Serving Solutions
+# MAGIC %md ### Low-Latency Serving Solutions
 # MAGIC 
 # MAGIC Low-latency serving can operate as quickly as tens to hundreds of milliseconds.  Custom solutions are normally backed by Docker and/or Flask (though Flask generally isn't recommended in production unless significant precations are taken).  Managed solutions also include:<br><br>
 # MAGIC 

@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Training with Pandas Function API
+# MAGIC %md # Training with Pandas Function API
 # MAGIC 
 # MAGIC This notebook demonstrates how to use Pandas Function API to manage and scale machine learning models for IoT devices. 
 # MAGIC 
@@ -22,8 +20,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Create dummy data with:
+# MAGIC %md Create dummy data with:
 # MAGIC - `device_id`: 10 different devices
 # MAGIC - `record_id`: 10k unique records
 # MAGIC - `feature_1`: a feature for model training
@@ -47,8 +44,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Define the return schema
+# MAGIC %md Define the return schema
 
 # COMMAND ----------
 
@@ -63,8 +59,7 @@ trainReturnSchema = t.StructType([
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Define a pandas function that takes all the data for a given device, train a model, saves it as a nested run, and returns a spark object with the above schema
+# MAGIC %md Define a pandas function that takes all the data for a given device, train a model, saves it as a nested run, and returns a spark object with the above schema
 
 # COMMAND ----------
 
@@ -114,8 +109,7 @@ def train_model(df_pandas: pd.DataFrame) -> pd.DataFrame:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Apply the pandas function to grouped data.
+# MAGIC %md Apply the pandas function to grouped data. 
 # MAGIC 
 # MAGIC Note that the way you would apply this in practice depends largely on where the data for inference is located. In this example, we'll reuse the training data which contains our device and run id's.
 
@@ -139,8 +133,7 @@ display(combinedDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Define a pandas function to apply the model.  *This needs only one read from DBFS per device.*
+# MAGIC %md Define a pandas function to apply the model.  *This needs only one read from DBFS per device.*
 
 # COMMAND ----------
 
@@ -169,7 +162,6 @@ def apply_model(df_pandas: pd.DataFrame) -> pd.DataFrame:
 
 predictionDF = combinedDF.groupby("device_id").applyInPandas(apply_model, schema=applyReturnSchema)
 display(predictionDF)
-
 
 # COMMAND ----------
 

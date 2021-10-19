@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md
 # MAGIC # Data Cleansing with Airbnb
 # MAGIC 
 # MAGIC We're going to start by doing some exploratory data analysis & cleansing. We will be using the SF Airbnb rental dataset from [Inside Airbnb](http://insideairbnb.com/get-the-data.html).
@@ -79,7 +78,7 @@ display(baseDF)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC ### Fixing Data Types
 # MAGIC 
 # MAGIC Take a look at the schema above. You'll notice that the `price` field got picked up as string. For our task, we need it to be a numeric (double type) field. 
@@ -126,8 +125,7 @@ display(fixedPriceDF.select("price").describe())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC There are some super-expensive listings. But it's the data scientist's job to decide what to do with them. We can certainly filter the "free" Airbnbs though.
+# MAGIC %md There are some super-expensive listings. But it's the data scientist's job to decide what to do with them. We can certainly filter the "free" Airbnbs though.
 # MAGIC 
 # MAGIC Let's see first how many listings we can find where the *price* is zero.
 
@@ -173,8 +171,7 @@ display(minNightsDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Nulls
+# MAGIC %md ### Nulls
 # MAGIC 
 # MAGIC There are a lot of different ways to handle null values. Sometimes, null can actually be a key indicator of the thing you are trying to predict (e.g. if you don't fill in certain portions of a form, probability of it getting approved decreases).
 # MAGIC 
@@ -193,8 +190,7 @@ display(minNightsDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Impute: Cast to Double
+# MAGIC %md ### Impute: Cast to Double
 # MAGIC 
 # MAGIC SparkML's [Imputer](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.Imputer.html?highlight=imputer#pyspark.ml.feature.Imputer) requires all fields be of type double. Let's cast all integer fields to double.
 
@@ -214,8 +210,7 @@ print(f"Columns converted from Integer to Double:\n - {columns}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Add in dummy variable if we will impute any value.
+# MAGIC %md Add in dummy variable if we will impute any value.
 
 # COMMAND ----------
 
@@ -243,8 +238,7 @@ display(doublesDF.describe())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Transformers and Estimators
+# MAGIC %md ### Transformers and Estimators
 # MAGIC 
 # MAGIC **Transformer**: Accepts a DataFrame as input, and returns a new DataFrame with one or more columns appended to it. Transformers do not learn any parameters from your
 # MAGIC data and simply apply rule-based transformations to either prepare data for model training or generate predictions using a trained MLlib model. They have a `.transform()` method.
@@ -273,8 +267,7 @@ imputedDF.write.format("delta").mode("overwrite").save(outputPath)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## What's needed for the lab
+# MAGIC %md ## What's needed for the lab
 # MAGIC * [Train-test split](https://en.wikipedia.org/wiki/Training,_validation,_and_test_sets)
 # MAGIC * [RMSE](https://en.wikipedia.org/wiki/Root-mean-square_deviation)
 

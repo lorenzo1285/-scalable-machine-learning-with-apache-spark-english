@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -9,6 +8,7 @@
 # COMMAND ----------
 
 # MAGIC %md-sandbox
+# MAGIC 
 # MAGIC <img src="http://spark-mooc.github.io/web-assets/images/cs110x/movie-camera.png" style="float:right; height: 200px; margin: 10px; border: 1px solid #ddd; border-radius: 15px 15px 15px 15px; padding: 10px"/>
 # MAGIC 
 # MAGIC # Predicting Movie Ratings
@@ -162,7 +162,7 @@ als = ALS(userCol="userId", itemCol="movieId", ratingCol="rating", maxIter=5, se
 
 # COMMAND ----------
 
-# TEST  - Run this cell to test your solution.
+# Test our solution
 assert als.getItemCol() == "movieId", f"Incorrect choice of {als.getItemCol()} for ALS item column."
 assert als.getUserCol() == "userId", f"Incorrect choice of {als.getUserCol()} for ALS user column."
 assert als.getRatingCol() == "rating", f"Incorrect choice of {als.getRatingCol()} for ALS rating column."
@@ -198,7 +198,7 @@ print(f"The best model was trained with rank {myModel.rank}")
 
 # COMMAND ----------
 
-# TEST - Run this cell to test your solution.
+# Test our solution
 assert myModel.rank == 12, f"Unexpected value for best rank. Expected 12, got {myModel.rank}"
 
 # COMMAND ----------
@@ -350,18 +350,16 @@ predictedRatingsDF.createOrReplaceTempView("predictions")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's take a look at the raw predictions:
+# MAGIC %md Let's take a look at the raw predictions:
 
 # COMMAND ----------
 
-# MAGIC %sql
+# MAGIC %sql 
 # MAGIC SELECT * FROM predictions
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now print out the 25 movies with the highest predicted ratings. We will only include movies that have at least 75 ratings in total.
+# MAGIC %md Now print out the 25 movies with the highest predicted ratings. We will only include movies that have at least 75 ratings in total.
 
 # COMMAND ----------
 

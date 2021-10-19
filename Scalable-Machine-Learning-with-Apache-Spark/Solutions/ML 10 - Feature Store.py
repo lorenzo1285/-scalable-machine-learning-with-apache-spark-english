@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Feature Store
+# MAGIC %md # Feature Store
 # MAGIC 
 # MAGIC The [Databricks Feature Store](https://docs.databricks.com/applications/machine-learning/feature-store.html) is a centralized repository of features. It enables feature sharing and discovery across your organization and also ensures that the same feature computation code is used for model training and inference.
 # MAGIC 
@@ -40,8 +38,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's load in our data and generate a unique ID for each listing. The `index` column will serve as the "key" of the feature table and used to lookup features.
+# MAGIC %md Let's load in our data and generate a unique ID for each listing. The `index` column will serve as the "key" of the feature table and used to lookup features.  
 
 # COMMAND ----------
 
@@ -51,8 +48,7 @@ display(airbnb_df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Create a new database and unique table name (in case you re-run the notebook multiple times)
+# MAGIC %md Create a new database and unique table name (in case you re-run the notebook multiple times)
 
 # COMMAND ----------
 
@@ -62,8 +58,7 @@ print(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's start creating a [Feature Store Client](https://docs.databricks.com/applications/machine-learning/feature-store.html#create-a-feature-table-in-databricks-feature-store) so we can populate our feature store.
+# MAGIC %md Let's start creating a [Feature Store Client](https://docs.databricks.com/applications/machine-learning/feature-store.html#create-a-feature-table-in-databricks-feature-store) so we can populate our feature store.
 
 # COMMAND ----------
 
@@ -73,8 +68,7 @@ fs = feature_store.FeatureStoreClient()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC #### Create Feature Table
+# MAGIC %md #### Create Feature Table
 # MAGIC 
 # MAGIC Next, we can create the Feature Table using the `create_feature_table` method.
 # MAGIC 
@@ -137,16 +131,14 @@ fs.create_feature_table(
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now let's explore the UI and see how it tracks the tables that we created. Navigate to the UI by first ensuring that you are in the Machine Learning workspace, and then clicking on the Feature Store icon on the bottom-left of the navigation bar.
+# MAGIC %md Now let's explore the UI and see how it tracks the tables that we created. Navigate to the UI by first ensuring that you are in the Machine Learning workspace, and then clicking on the Feature Store icon on the bottom-left of the navigation bar.
 # MAGIC 
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/mlflow/FS_Nav.png" alt="step12" width="150"/>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC In this screenshot, we can see the feature table that we created.
+# MAGIC %md In this screenshot, we can see the feature table that we created.
 # MAGIC <br>
 # MAGIC <br>
 # MAGIC Note the section of `Producers`. This section indicates which notebook produces the feature table.
@@ -189,18 +181,19 @@ display(inference_data_df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Build a training dataset that will use the indicated "key" to lookup features from the feature table and also the online feature `score_diff_from_last_month`. We will use [FeatureLookup](https://docs.databricks.com/dev-tools/api/python/latest/feature-store/databricks.feature_store.entities.feature_lookup.html) and if you specify no features, it will return all of them except the primary key.
+# MAGIC %md 
+# MAGIC Build a training dataset that will use the indicated "key" to lookup features from the feature table and also the online feature `score_diff_from_last_month`. We will use [FeatureLookup](https://docs.databricks.com/dev-tools/api/python/latest/feature-store/databricks.feature_store.entities.feature_lookup.html) and if you specify no features, it will return all of them except the primary key. 
 
 # COMMAND ----------
 
 def load_data(table_name, lookup_key):
   model_feature_lookups = [FeatureLookup(table_name=table_name, lookup_key=lookup_key)]
-  #model_feature_lookups = [FeatureLookup(table_name=table_name, feature_name=f, lookup_key="index") for f in numeric_features_df.columns if f!="index"]
+  
   # fs.create_training_set will look up features in model_feature_lookups with matched key from inference_data_df
   training_set = fs.create_training_set(inference_data_df, model_feature_lookups, label="price", exclude_columns="index")
   training_pd = training_set.load_df().toPandas()
-  ## Create train and test datasets
+  
+  # Create train and test datasets
   X = training_pd.drop("price", axis=1)
   y = training_pd["price"]
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -245,7 +238,7 @@ train_model(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC Now, view the run from MLflow UI. You can find the model parameters logged with MLflow autolog.
 # MAGIC <br>
 # MAGIC <br>
@@ -277,13 +270,13 @@ train_model(table_name)
 
 ## For sake of simplicity, we will just predict on the same inference_data_df
 batch_input_df = inference_data_df.drop("price") # Exclude true label
-predictions_df = fs.score_batch(f"models:/feature_store_airbnb_{cleaned_username}/0", 
+predictions_df = fs.score_batch(f"models:/feature_store_airbnb_{cleaned_username}/1", 
                                   batch_input_df, result_type="double")
 display(predictions_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC ### Overwrite feature table
 # MAGIC Lastly, we'll condense some of the review columns and update the feature table: we'll do this by calculating the average review score for each listing.
 
@@ -318,22 +311,12 @@ fs.write_table(
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Retrain the model with updated training dataset. 
-
-# COMMAND ----------
-
-train_model(table_name)
-
-# COMMAND ----------
-
-# MAGIC %md
+# MAGIC %md 
 # MAGIC ### Explore the feature permission, lineage and freshness from Feature Store UI
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC On the UI, we can see that:
+# MAGIC %md On the UI, we can see that:
 # MAGIC - A new column has been added to the feature list;
 # MAGIC - Columns that we deleted are also still present. However, the deleted features will have `null` as their values when we read in the table;
 # MAGIC - The "Models" column are populated, listing models use the features from the table
@@ -343,8 +326,7 @@ train_model(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now, let's read in the feature data from the Feature Store. By default, `fs.read_table()` reads in the latest version of the feature table. To read in the specific version of feature table, you can optionally specify the argument `as_of_delta_timestamp` by passing a date in a timestamp format or string.
+# MAGIC %md Now, let's read in the feature data from the Feature Store. By default, `fs.read_table()` reads in the latest version of the feature table. To read in the specific version of feature table, you can optionally specify the argument `as_of_delta_timestamp` by passing a date in a timestamp format or string.
 # MAGIC 
 # MAGIC 
 # MAGIC Note that the values of the deleted columns have been replaced by `null`.
@@ -356,8 +338,7 @@ display(fs.read_table(name=table_name))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC If you need to use the features for real-time serving, you can publish your features to an [online store](https://docs.databricks.com/applications/machine-learning/feature-store.html#publish-features-to-an-online-feature-store).
+# MAGIC %md If you need to use the features for real-time serving, you can publish your features to an [online store](https://docs.databricks.com/applications/machine-learning/feature-store.html#publish-features-to-an-online-feature-store).
 # MAGIC 
 # MAGIC We can perform control who has permissions to the feature table on the UI.
 # MAGIC 

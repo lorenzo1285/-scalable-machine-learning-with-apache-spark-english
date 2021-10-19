@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Classification: Logistic Regression
+# MAGIC %md # Classification: Logistic Regression
 # MAGIC 
 # MAGIC Up until this point, we have only examined regression use cases. Now let's take a look at how to handle classification.
 # MAGIC 
@@ -30,8 +28,7 @@ airbnbDF = spark.read.format("delta").load(filePath)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Baseline Model
+# MAGIC %md ## Baseline Model
 # MAGIC 
 # MAGIC Before we build any Machine Learning models, we want to build a baseline model to compare to. We are going to start by predicting if a host is a [superhost](https://www.airbnb.com/superhost). 
 # MAGIC 
@@ -59,8 +56,7 @@ predDF = labelDF.withColumn("prediction", lit(0.0))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate model
+# MAGIC %md ## Evaluate model
 # MAGIC 
 # MAGIC For right now, let's use accuracy as our metric. This is available from [MulticlassClassificationEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.MulticlassClassificationEvaluator.html?highlight=multiclassclassificationevaluator#pyspark.ml.evaluation.MulticlassClassificationEvaluator).
 
@@ -73,8 +69,7 @@ print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Train-Test Split
+# MAGIC %md ## Train-Test Split
 # MAGIC 
 # MAGIC Alright! Now we have built a baseline model. The next step is to split our data into a train-test split.
 
@@ -85,8 +80,7 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Visualize
+# MAGIC %md ## Visualize
 # MAGIC 
 # MAGIC Let's look at the relationship between `review_scores_rating` and `label` in our training dataset.
 
@@ -96,8 +90,7 @@ display(trainDF.select("review_scores_rating", "label"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Logistic Regression
+# MAGIC %md ## Logistic Regression
 # MAGIC 
 # MAGIC Now build a [logistic regression model](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.LogisticRegression.html?highlight=logisticregression#pyspark.ml.classification.LogisticRegression) using all of the features (HINT: use RFormula). Put the pre-processing step and the Logistic Regression Model into a Pipeline.
 
@@ -120,8 +113,7 @@ predDF = pipelineModel.transform(testDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate
+# MAGIC %md ## Evaluate
 # MAGIC 
 # MAGIC What is AUROC useful for? Try adding additional evaluation metrics, like Area Under PR Curve.
 
@@ -141,14 +133,13 @@ print(f"The area under the PR curve: {bcEvaluator.evaluate(predDF):.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Add Hyperparameter Tuning
+# MAGIC %md ## Add Hyperparameter Tuning
 # MAGIC 
 # MAGIC Try changing the hyperparameters of the logistic regression model using the cross-validator. By how much can you improve your metrics? 
 
 # COMMAND ----------
 
-# ANSWER - these are NOT the optimal hyperparameters, but to show you how to accomplish the task
+# ANSWER
 from pyspark.ml.tuning import ParamGridBuilder
 from pyspark.ml.tuning import CrossValidator
 
@@ -168,8 +159,7 @@ predDF = pipelineModel.transform(testDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate again
+# MAGIC %md ## Evaluate again
 
 # COMMAND ----------
 
@@ -181,8 +171,7 @@ print(f"The area under the ROC curve: {bcEvaluator.evaluate(predDF):.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Super Bonus
+# MAGIC %md ## Super Bonus
 # MAGIC 
 # MAGIC Try using MLflow to track your experiments!
 

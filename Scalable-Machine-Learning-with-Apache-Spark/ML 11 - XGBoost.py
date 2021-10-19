@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # XGBoost
+# MAGIC %md # XGBoost
 # MAGIC 
 # MAGIC Up until this point, we have only used SparkML. Let's look a third party library for Gradient Boosted Trees. 
 # MAGIC  
@@ -26,8 +24,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Data Preparation
+# MAGIC %md ## Data Preparation
 # MAGIC 
 # MAGIC Let's go ahead and index all of our categorical features, and set our label to be `log(price)`.
 
@@ -53,8 +50,7 @@ pipeline = Pipeline(stages=[stringIndexer, vecAssembler])
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Pyspark Distributed XGBoost
+# MAGIC %md ### Pyspark Distributed XGBoost
 # MAGIC 
 # MAGIC Let's create our distributed XGBoost model. While technically not part of MLlib, you can integrate [XGBoost](https://databricks.github.io/spark-deep-learning/_modules/sparkdl/xgboost/xgboost.html) into your ML Pipelines. 
 # MAGIC 
@@ -78,8 +74,7 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate
+# MAGIC %md ## Evaluate
 # MAGIC 
 # MAGIC Now we can evaluate how well our XGBoost model performed. Don't forget to exponentiate!
 
@@ -95,8 +90,7 @@ display(expXgboostDF.select("price", "prediction"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Compute some metrics.
+# MAGIC %md Compute some metrics.
 
 # COMMAND ----------
 
@@ -111,8 +105,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Alternative Gradient Boosted Approaches
+# MAGIC %md ## Alternative Gradient Boosted Approaches
 # MAGIC 
 # MAGIC There are lots of other gradient boosted approaches, such as [CatBoost](https://catboost.ai/), [LightGBM](https://github.com/microsoft/LightGBM), vanilla gradient boosted trees in [SparkML](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.GBTClassifier.html?highlight=gbt#pyspark.ml.classification.GBTClassifier)/[scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html), etc. Each of these has their respective [pros and cons](https://towardsdatascience.com/catboost-vs-light-gbm-vs-xgboost-5f93620723db) that you can read more about. 
 

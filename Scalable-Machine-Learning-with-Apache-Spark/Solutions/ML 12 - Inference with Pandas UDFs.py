@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Inference with Pandas UDFs
+# MAGIC %md # Inference with Pandas UDFs
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC - Build a scikit-learn model, track it with MLflow, and apply it at scale using the Pandas Scalar Iterator UDFs and `mapInPandas()`
@@ -22,8 +20,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Train sklearn model and log it with MLflow
+# MAGIC %md Train sklearn model and log it with MLflow
 
 # COMMAND ----------
 
@@ -34,7 +31,7 @@ from sklearn.model_selection import train_test_split
 
 with mlflow.start_run(run_name="sklearn-random-forest") as run:
   # Import the data
-  df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv").drop(["zipcode"], axis=1)
+  df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/")).drop(["zipcode"], axis=1)
   X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
 
   # Create model
@@ -46,8 +43,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Create Spark DataFrame
+# MAGIC %md Create Spark DataFrame
 
 # COMMAND ----------
 
@@ -55,8 +51,7 @@ sparkDF = spark.createDataFrame(X_test)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Pandas/Vectorized UDFs
+# MAGIC %md ### Pandas/Vectorized UDFs
 # MAGIC 
 # MAGIC As of Spark 2.3, there are Pandas UDFs available in Python to improve the efficiency of UDFs. Pandas UDFs utilize Apache Arrow to speed up computation. Let's see how that helps improve our processing time.
 # MAGIC 
@@ -87,7 +82,7 @@ display(prediction_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC ### Pandas Scalar Iterator UDF
 # MAGIC 
 # MAGIC If your model is very large, then there is high overhead for the Pandas UDF to repeatedly load the same model for every batch in the same Python worker process. In Spark 3.0, Pandas UDFs can accept an iterator of pandas.Series or pandas.DataFrame so that you can load the model only once instead of loading it for every series in the iterator.
@@ -118,7 +113,7 @@ display(prediction_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC ### Pandas Function API
 # MAGIC 
 # MAGIC Instead of using a Pandas UDF, we can use a Pandas Function API. This new category in Apache Spark 3.0 enables you to directly apply a Python native function, which takes and outputs Pandas instances against a PySpark DataFrame. Pandas Functions APIs supported in Apache Spark 3.0 are: grouped map, map, and co-grouped map.
@@ -137,8 +132,7 @@ display(sparkDF.mapInPandas(predict, """`host_total_listings_count` DOUBLE,`neig
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Or you can define the schema like this below.
+# MAGIC %md Or you can define the schema like this below.
 
 # COMMAND ----------
 
@@ -147,7 +141,6 @@ from pyspark.sql.types import DoubleType
 
 schema = sparkDF.withColumn("prediction", lit(None).cast(DoubleType())).schema
 display(sparkDF.mapInPandas(predict, schema)) 
-
 
 # COMMAND ----------
 

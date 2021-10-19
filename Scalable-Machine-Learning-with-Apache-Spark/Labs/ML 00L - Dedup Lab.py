@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md 
 # MAGIC # De-Duping Data
 # MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Instructions
 # MAGIC 
@@ -35,7 +34,7 @@
 # MAGIC * Write the result as a Parquet file, as designated by *destFile*.
 # MAGIC * The final Parquet "file" must contain 8 part files (8 files ending in ".parquet").
 # MAGIC 
-# MAGIC <img alt="Hint" title="Hint" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.3em" src="https://files.training.databricks.com/static/images/icon-light-bulb.svg"/>&nbsp;**Hint:** The initial dataset contains 103,000 records.<br/>
+# MAGIC <img src="https://files.training.databricks.com/images/icon_hint_24.png"/>&nbsp;**Hint:** The initial dataset contains 103,000 records.<br/>
 # MAGIC The de-duplicated result haves 100,000 records.
 
 # COMMAND ----------
@@ -94,7 +93,6 @@ clearYourResults()
 validateYourAnswer("01 Parquet File Exists", 1276280174, partFiles)
 validateYourAnswer("02 Expected 100000 Records", 972882115, finalCount)
 summarizeYourResults()
-
 
 # COMMAND ----------
 

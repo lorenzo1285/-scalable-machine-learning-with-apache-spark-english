@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,15 +7,13 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Hyperparameter Tuning with Random Forests
+# MAGIC %md # Hyperparameter Tuning with Random Forests
 # MAGIC 
 # MAGIC In this lab, you will convert the Airbnb problem to a classification dataset, build a random forest classifier, and tune some hyperparameters of the random forest.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC  - Perform grid search on a random forest
-# MAGIC  - Get the feature importances across the forest
-# MAGIC  - Save the model
+# MAGIC  - Generate feature importance scores and classification metrics
 # MAGIC  - Identify differences between scikit-learn's Random Forest and SparkML's
 # MAGIC  
 # MAGIC You can read more about the distributed implementation of Random Forests in the Spark [source code](https://github.com/apache/spark/blob/master/mllib/src/main/scala/org/apache/spark/ml/tree/impl/RandomForest.scala#L42).
@@ -27,8 +24,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## From Regression to Classification
+# MAGIC %md ## From Regression to Classification
 # MAGIC 
 # MAGIC In this case, we'll turn the Airbnb housing dataset into a classification problem to **classify between high and low price listings.**  Our `class` column will be:<br><br>
 # MAGIC 
@@ -61,8 +57,7 @@ vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Why can't we OHE?
+# MAGIC %md ## Why can't we OHE?
 # MAGIC 
 # MAGIC **Question:** What would go wrong if we One Hot Encoded our variables before passing them into the random forest?
 # MAGIC 
@@ -70,8 +65,7 @@ vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Random Forest
+# MAGIC %md ## Random Forest
 # MAGIC 
 # MAGIC Create a Random Forest classifer called `rf` with the `labelCol`=`priceClass`, `maxBins`=`40`, and `seed`=`42` (for reproducibility).
 # MAGIC 
@@ -104,14 +98,13 @@ rf = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
-# MAGIC ## Evaluator
+# MAGIC %md ## Evaluator
 # MAGIC 
 # MAGIC In the past, we used a `RegressionEvaluator`.  For classification, we can use a [BinaryClassificationEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.BinaryClassificationEvaluator.html?highlight=binaryclass#pyspark.ml.evaluation.BinaryClassificationEvaluator) if we have two classes or [MulticlassClassificationEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.MulticlassClassificationEvaluator.html?highlight=multiclass#pyspark.ml.evaluation.MulticlassClassificationEvaluator) for more than two classes.
 # MAGIC 
 # MAGIC Create a `BinaryClassificationEvaluator` with `areaUnderROC` as the metric.
 # MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> [Read more on ROC curves here.](https://en.wikipedia.org/wiki/Receiver_operating_characteristic)  In essence, it compares true positive and false positives.
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> [Read more on ROC curves here.](https://en.wikipedia.org/wiki/Receiver_operating_characteristic)  In essence, it compares true positive and false positives.
 
 # COMMAND ----------
 
@@ -119,8 +112,7 @@ rf = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Cross Validation
+# MAGIC %md ## Cross Validation
 # MAGIC 
 # MAGIC We are going to do 3-Fold cross-validation, with `parallelism`=4, and set the `seed`=42 on the cross-validator for reproducibility.
 # MAGIC 
@@ -136,8 +128,7 @@ cv = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Pipeline
+# MAGIC %md ## Pipeline
 # MAGIC 
 # MAGIC Let's fit the pipeline with our cross validator to our training data (this may take a few minutes).
 
@@ -151,8 +142,7 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Hyperparameter
+# MAGIC %md ## Hyperparameter
 # MAGIC 
 # MAGIC Which hyperparameter combination performed the best?
 
@@ -167,8 +157,7 @@ print(rfModel.explainParams())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Feature Importance
+# MAGIC %md ## Feature Importance
 
 # COMMAND ----------
 
@@ -180,13 +169,11 @@ topFeatures
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Do those features make sense? Would you use those features when picking an Airbnb rental?
+# MAGIC %md Do those features make sense? Would you use those features when picking an Airbnb rental?
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Apply Model to test set
+# MAGIC %md ## Apply Model to test set
 
 # COMMAND ----------
 
@@ -198,8 +185,7 @@ print(f"Area under ROC is {areaUnderROC:.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Save Model
+# MAGIC %md ## Save Model
 # MAGIC 
 # MAGIC Save the model to `<userhome>/machine-learning/rf_pipeline_model`.
 
@@ -209,8 +195,7 @@ print(f"Area under ROC is {areaUnderROC:.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Sklearn vs SparkML
+# MAGIC %md ## Sklearn vs SparkML
 # MAGIC 
 # MAGIC [Sklearn RandomForestRegressor](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) vs [SparkML RandomForestRegressor](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.RandomForestRegressor.html?highlight=randomfore#pyspark.ml.regression.RandomForestRegressor).
 # MAGIC 

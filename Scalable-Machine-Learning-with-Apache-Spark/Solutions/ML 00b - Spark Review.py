@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Spark Review
+# MAGIC %md # Spark Review
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC  - Create a Spark DataFrame
@@ -28,8 +26,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Spark DataFrame
+# MAGIC %md ## Spark DataFrame
 
 # COMMAND ----------
 
@@ -45,8 +42,7 @@ df.count()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Why were no Spark jobs kicked off above? Well, we didn't have to actually "touch" our data, so Spark didn't need to execute anything across the cluster.
+# MAGIC %md Why were no Spark jobs kicked off above? Well, we didn't have to actually "touch" our data, so Spark didn't need to execute anything across the cluster.
 
 # COMMAND ----------
 
@@ -54,8 +50,7 @@ display(df.sample(.001))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Views
+# MAGIC %md ## Views
 # MAGIC 
 # MAGIC How can I access this in SQL?
 
@@ -70,8 +65,7 @@ df.createOrReplaceTempView("df_temp")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Count
+# MAGIC %md ## Count
 # MAGIC 
 # MAGIC Let's see how many records we have.
 
@@ -81,8 +75,7 @@ df.count()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Spark UI
+# MAGIC %md ## Spark UI
 # MAGIC 
 # MAGIC Open up the Spark UI - what are the shuffle read and shuffle write fields? The command below should give you a clue.
 
@@ -92,8 +85,7 @@ df.rdd.getNumPartitions()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Cache
+# MAGIC %md ## Cache
 # MAGIC 
 # MAGIC For repeated access, it will be much faster if we cache our data.
 
@@ -103,8 +95,7 @@ df.cache().count()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Re-run Count
+# MAGIC %md ## Re-run Count
 # MAGIC 
 # MAGIC Wow! Look at how much faster it is now!
 
@@ -127,8 +118,7 @@ df.limit(10).toPandas()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## What's new in [Spark 3.0](https://www.youtube.com/watch?v=l6SuXvhorDY&feature=emb_logo)
+# MAGIC %md ## What's new in [Spark 3.0](https://www.youtube.com/watch?v=l6SuXvhorDY&feature=emb_logo)
 # MAGIC * [Adaptive Query Execution](https://www.youtube.com/watch?v=jzrEc4r90N8&feature=emb_logo)
 # MAGIC   * Dynamic query optimization that happens in the middle of your query based on runtime statistics
 # MAGIC     * Dynamically coalesce shuffle partitions

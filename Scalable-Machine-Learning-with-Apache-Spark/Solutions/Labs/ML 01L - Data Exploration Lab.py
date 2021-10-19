@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Data Exploration
+# MAGIC %md # Data Exploration
 # MAGIC 
 # MAGIC In this notebook, we will use the dataset we cleansed in the previous lab to do some Exploratory Data Analysis (EDA).
 # MAGIC 
@@ -25,7 +23,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC Let's keep 80% for the training set and set aside 20% of our data for the test set. We will use the [randomSplit](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit) method.
 # MAGIC 
 # MAGIC We will discuss more about the train-test split later, but throughout this notebook, do your data exploration on `trainDF`.
@@ -144,8 +142,7 @@ displayHTML("""
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Baseline Model
+# MAGIC %md ## Baseline Model
 # MAGIC 
 # MAGIC Before we build any Machine Learning models, we want to build a baseline model to compare to. We also want to determine a metric to evaluate our model. Let's use RMSE here.
 # MAGIC 
@@ -176,8 +173,7 @@ predDF = (testDF
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate model
+# MAGIC %md ## Evaluate model
 # MAGIC 
 # MAGIC We are going to use SparkML's [RegressionEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.RegressionEvaluator.html?highlight=regressionevaluator#pyspark.ml.evaluation.RegressionEvaluator) to compute the [RMSE](https://en.wikipedia.org/wiki/Root-mean-square_deviation) for our average price and median price predictions. We will dig into evaluators in more detail in the next notebook.
 
@@ -193,8 +189,7 @@ print(f"The RMSE for predicting the median price is: {regressionMedianEvaluator.
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Wow! We can see that always predicting median or mean doesn't do too well for our dataset. Let's see if we can improve this with a machine learning model!
+# MAGIC %md Wow! We can see that always predicting median or mean doesn't do too well for our dataset. Let's see if we can improve this with a machine learning model!
 
 # COMMAND ----------
 

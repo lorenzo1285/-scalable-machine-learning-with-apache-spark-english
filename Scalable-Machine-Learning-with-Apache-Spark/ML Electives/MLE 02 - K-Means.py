@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Distributed K-Means
+# MAGIC %md # Distributed K-Means
 # MAGIC 
 # MAGIC In this notebook, we are going to use K-Means to cluster our data. We will be using the Iris dataset, which has labels (the type of iris), but we will only use the labels to evaluate the model, not to train it. 
 # MAGIC 
@@ -178,8 +176,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC So let's take a look at what's happening here in the distributed setting.
+# MAGIC %md So let's take a look at what's happening here in the distributed setting.
 
 # COMMAND ----------
 
@@ -188,23 +185,19 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC <img src="https://files.training.databricks.com/images/Mapstage2.png" height=500px>
+# MAGIC %md <img src="https://files.training.databricks.com/images/Mapstage2.png" height=500px>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC <img src="https://files.training.databricks.com/images/ReduceStage.png" height=500px>
+# MAGIC %md <img src="https://files.training.databricks.com/images/ReduceStage.png" height=500px>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC <img src="https://files.training.databricks.com/images/Communication.png" height=500px>
+# MAGIC %md <img src="https://files.training.databricks.com/images/Communication.png" height=500px>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Take Aways
+# MAGIC %md ## Take Aways
 # MAGIC 
 # MAGIC When designing/choosing distributed ML algorithms
 # MAGIC * Communication is key!

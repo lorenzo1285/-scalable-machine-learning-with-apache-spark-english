@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Delta Review
+# MAGIC %md # Delta Review
 # MAGIC 
 # MAGIC There are a few key operations necessary to understand and make use of [Delta Lake](https://docs.delta.io/latest/quick-start.html#create-a-table).
 # MAGIC 
@@ -24,8 +22,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
-# MAGIC ###Why Delta Lake?<br><br>
+# MAGIC %md ###Why Delta Lake?<br><br>
 # MAGIC 
 # MAGIC <div style="img align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://user-images.githubusercontent.com/20408077/87175470-4d8e1580-c29e-11ea-8f33-0ee14348a2c1.png" width="500"/>
@@ -41,8 +38,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ###Creating a Delta Table
+# MAGIC %md ###Creating a Delta Table
 # MAGIC First we need to read the Airbnb dataset as a Spark DataFrame
 
 # COMMAND ----------
@@ -54,8 +50,7 @@ display(airbnbDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC The cell below converts the data to a Delta table using the schema provided by the Spark DataFrame.
+# MAGIC %md The cell below converts the data to a Delta table using the schema provided by the Spark DataFrame.
 
 # COMMAND ----------
 
@@ -66,8 +61,7 @@ airbnbDF.write.format("delta").mode("overwrite").save(deltaPath)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC You can also create a Delta table in the metastore.
+# MAGIC %md You can also create a Delta table in the metastore.
 
 # COMMAND ----------
 
@@ -78,8 +72,7 @@ airbnbDF.write.format("delta").mode("overwrite").saveAsTable("deltaReview")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Delta supports partitioning your data using unique values in a specified column. Let's partition by the neighborhood column. Partitioning by neighborhood gives us a point of quick comparison between different parts of San Francisco.
+# MAGIC %md Delta supports partitioning your data using unique values in a specified column. Let's partition by the neighborhood column. Partitioning by neighborhood gives us a point of quick comparison between different parts of San Francisco.
 
 # COMMAND ----------
 
@@ -87,8 +80,7 @@ airbnbDF.write.format("delta").mode("overwrite").partitionBy("neighbourhood_clea
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ###Understanding the [Transaction Log](https://databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html)
+# MAGIC %md ###Understanding the [Transaction Log](https://databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html)
 # MAGIC Let's take a look at the Delta Transaction Log. We can see how Delta stores the different neighborhood partitions in separate files. Additionally, we can also see a directory called _delta_log.
 
 # COMMAND ----------
@@ -97,8 +89,7 @@ display(dbutils.fs.ls(deltaPath))
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
-# MAGIC <div style="img align: center; line-height: 0; padding-top: 9px;">
+# MAGIC %md <div style="img align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://user-images.githubusercontent.com/20408077/87174138-609fe600-c29c-11ea-90cc-84df0c1357f1.png" width="500"/>
 # MAGIC </div>
 # MAGIC 
@@ -110,8 +101,7 @@ display(dbutils.fs.ls(deltaPath + "/_delta_log/"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Next, let's take a look at a Transaction Log File.
+# MAGIC %md Next, let's take a look at a Transaction Log File.
 # MAGIC 
 # MAGIC The [four columns](https://docs.databricks.com/delta/delta-utility.html) each represent a different part of the very first commit to the Delta Table, creating the table.
 # MAGIC - The add column has statistics about the DataFrame as a whole and individual columns.
@@ -125,8 +115,7 @@ display(spark.read.json(deltaPath + "/_delta_log/00000000000000000000.json"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC One key difference between these two transaction logs is the size of the JSON file, this file has 39 rows compared to the previous 4. To understand why, let's take a look at the commitInfo column. We can see that in the operationParameters section, partitionBy has been filled in by the "neighbourhood_cleansed" column. Furthermore, if we look at the add section on row 3, we can see that a new section called partitionValues has appeared. As we saw above, Delta stores partitions separately in memory, however, it stores information about these partitions in the same transaction log file.
+# MAGIC %md One key difference between these two transaction logs is the size of the JSON file, this file has 39 rows compared to the previous 4. To understand why, let's take a look at the commitInfo column. We can see that in the operationParameters section, partitionBy has been filled in by the "neighbourhood_cleansed" column. Furthermore, if we look at the add section on row 3, we can see that a new section called partitionValues has appeared. As we saw above, Delta stores partitions separately in memory, however, it stores information about these partitions in the same transaction log file.
 
 # COMMAND ----------
 
@@ -134,8 +123,7 @@ display(spark.read.json(deltaPath + "/_delta_log/00000000000000000001.json"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Finally, let's take a look at the files inside one of the Neighborhood partitions. The file inside corresponds to the partition commit (file 01) in the _delta_log directory.
+# MAGIC %md Finally, let's take a look at the files inside one of the Neighborhood partitions. The file inside corresponds to the partition commit (file 01) in the _delta_log directory.
 
 # COMMAND ----------
 
@@ -143,8 +131,7 @@ display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Reading data from your Delta table
+# MAGIC %md ### Reading data from your Delta table
 
 # COMMAND ----------
 
@@ -153,8 +140,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC #Updating your Delta Table
+# MAGIC %md #Updating your Delta Table
 # MAGIC 
 # MAGIC Let's filter for rows where the host is a superhost.
 
@@ -174,8 +160,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's look at the files in the Bayview partition post-update. Remember, the different files in this directory are snapshots of your DataFrame corresponding to different commits.
+# MAGIC %md Let's look at the files in the Bayview partition post-update. Remember, the different files in this directory are snapshots of your DataFrame corresponding to different commits.
 
 # COMMAND ----------
 
@@ -183,13 +168,11 @@ display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC #Delta Time Travel
+# MAGIC %md #Delta Time Travel
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Oops, actually we need the entire dataset! You can access a previous version of your Delta Table using [Delta Time Travel](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html). Use the following two cells to access your version history. Delta Lake will keep a 30 day version history by default, but if necessary, Delta can store a version history for longer.
+# MAGIC %md Oops, actually we need the entire dataset! You can access a previous version of your Delta Table using [Delta Time Travel](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html). Use the following two cells to access your version history. Delta Lake will keep a 30 day version history by default, but if necessary, Delta can store a version history for longer.
 
 # COMMAND ----------
 
@@ -203,8 +186,7 @@ spark.sql(f"CREATE TABLE train_delta USING DELTA LOCATION '{deltaPath}'")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Using the `versionAsOf` option allows you to easily access previous versions of our Delta Table.
+# MAGIC %md Using the `versionAsOf` option allows you to easily access previous versions of our Delta Table.
 
 # COMMAND ----------
 
@@ -213,27 +195,28 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC You can also access older versions using a timestamp.
+# MAGIC %md You can also access older versions using a timestamp.
 # MAGIC 
 # MAGIC Replace the timestamp string with the information from your version history. Note that you can use a date without the time information if necessary.
 
 # COMMAND ----------
 
-# TODO
-timeStampString = <FILL_IN>
+# Use your own timestamp 
+# timeStampString = "FILL_IN"
+
+# OR programatically get the first verion's timestamp value
+timeStampString = str(spark.sql("DESCRIBE HISTORY train_delta").collect()[-1]["timestamp"])
+
 df = spark.read.format("delta").option("timestampAsOf", timeStampString).load(deltaPath)
 display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now that we're happy with our Delta Table, we can clean up our directory using `VACUUM`. Vacuum accepts a retention period in hours as an input.
+# MAGIC %md Now that we're happy with our Delta Table, we can clean up our directory using `VACUUM`. Vacuum accepts a retention period in hours as an input.
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Uh-oh, our code doesn't run! By default, to prevent accidentally vacuuming recent commits, Delta Lake will not let users vacuum a period under 7 days or 168 hours. Once vacuumed, you cannot return to a prior commit through time travel, only your most recent Delta Table will be saved.
+# MAGIC %md Uh-oh, our code doesn't run! By default, to prevent accidentally vacuuming recent commits, Delta Lake will not let users vacuum a period under 7 days or 168 hours. Once vacuumed, you cannot return to a prior commit through time travel, only your most recent Delta Table will be saved.
 
 # COMMAND ----------
 
@@ -244,8 +227,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC We can workaround this by setting a spark configuration that will bypass the default retention period check.
+# MAGIC %md We can workaround this by setting a spark configuration that will bypass the default retention period check.
 
 # COMMAND ----------
 
@@ -257,8 +239,7 @@ deltaTable.vacuum(0)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's take a look at our Delta Table files now. After vacuuming, the directory only holds the partition of our most recent Delta Table commit.
+# MAGIC %md Let's take a look at our Delta Table files now. After vacuuming, the directory only holds the partition of our most recent Delta Table commit.
 
 # COMMAND ----------
 
@@ -266,14 +247,12 @@ display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Since vacuuming deletes files referenced by the Delta Table, we can no longer access past versions. The code below should throw an error.
+# MAGIC %md Since vacuuming deletes files referenced by the Delta Table, we can no longer access past versions. The code below should throw an error.
 
 # COMMAND ----------
 
 # df = spark.read.format("delta").option("versionAsOf", 0).load(deltaPath)
 # display(df)
-
 
 # COMMAND ----------
 

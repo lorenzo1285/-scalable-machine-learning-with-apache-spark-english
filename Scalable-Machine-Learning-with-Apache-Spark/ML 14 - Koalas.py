@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://raw.githubusercontent.com/databricks/koalas/master/Koalas-logo.png" width="220"/>
 # MAGIC </div>
@@ -25,8 +24,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
-# MAGIC ### [Performance](https://databricks.com/blog/2019/08/22/guest-blog-how-virgin-hyperloop-one-reduced-processing-time-from-hours-to-minutes-with-koalas.html)
+# MAGIC %md ### [Performance](https://databricks.com/blog/2019/08/22/guest-blog-how-virgin-hyperloop-one-reduced-processing-time-from-hours-to-minutes-with-koalas.html)
 # MAGIC 
 # MAGIC <div style="img align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://databricks.com/wp-content/uploads/2019/08/koalas-image4.png" width="1000"/>
@@ -40,8 +38,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## InternalFrame
+# MAGIC %md ## InternalFrame
 # MAGIC 
 # MAGIC The InternalFrame holds the current Spark DataFrame and internal immutable metadata.
 # MAGIC 
@@ -53,8 +50,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## InternalFrame Metadata Updates Only
+# MAGIC %md ## InternalFrame Metadata Updates Only
 # MAGIC 
 # MAGIC Sometimes the update of Spark DataFrame is not needed but of metadata only, then new structure will be like this.
 # MAGIC 
@@ -62,8 +58,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## InternalFrame Inplace Updates
+# MAGIC %md ## InternalFrame Inplace Updates
 # MAGIC 
 # MAGIC On the other hand, sometimes Koalas DataFrame updates internal state instead of returning a new DataFrame, for example, the argument  inplace=True is provided, then new structure will be like this.
 # MAGIC 
@@ -71,8 +66,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Read in the dataset
+# MAGIC %md ### Read in the dataset
 # MAGIC 
 # MAGIC * PySpark
 # MAGIC * pandas
@@ -84,8 +78,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Read in Parquet with PySpark
+# MAGIC %md Read in Parquet with PySpark
 
 # COMMAND ----------
 
@@ -94,20 +87,18 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Read in Parquet with pandas
+# MAGIC %md Read in Parquet with pandas
 
 # COMMAND ----------
 
 import pandas as pd
 
-pdDF = pd.read_parquet(f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/")
+pdDF = pd.read_parquet(f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/".replace("dbfs:/", "/dbfs/"))
 pdDF.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Read in Parquet with Koalas. You'll notice Koalas generates an index column for you, like in pandas.
+# MAGIC %md Read in Parquet with Koalas. You'll notice Koalas generates an index column for you, like in pandas.
 # MAGIC 
 # MAGIC Koalas also supports reading from Delta (`read_delta`), but pandas does not support that yet.
 
@@ -120,8 +111,7 @@ kdf.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### [Index Types](https://koalas.readthedocs.io/en/latest/user_guide/options.html#default-index-type)
+# MAGIC %md ### [Index Types](https://koalas.readthedocs.io/en/latest/user_guide/options.html#default-index-type)
 # MAGIC 
 # MAGIC ![](https://files.training.databricks.com/images/301/koalas_index.png)
 
@@ -133,13 +123,11 @@ kdf_dist_sequence.head()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Converting to Koalas DataFrame to/from Spark DataFrame
+# MAGIC %md ### Converting to Koalas DataFrame to/from Spark DataFrame
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Creating a Koalas DataFrame from PySpark DataFrame
+# MAGIC %md Creating a Koalas DataFrame from PySpark DataFrame
 
 # COMMAND ----------
 
@@ -148,8 +136,7 @@ display(kdf)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Alternative way of creating a Koalas DataFrame from PySpark DataFrame
+# MAGIC %md Alternative way of creating a Koalas DataFrame from PySpark DataFrame
 
 # COMMAND ----------
 
@@ -158,8 +145,7 @@ display(kdf)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Go from a Koalas DataFrame to a Spark DataFrame
+# MAGIC %md Go from a Koalas DataFrame to a Spark DataFrame
 
 # COMMAND ----------
 
@@ -167,13 +153,11 @@ display(kdf.to_spark())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Value Counts
+# MAGIC %md ### Value Counts
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Get value counts of the different property types with PySpark
+# MAGIC %md Get value counts of the different property types with PySpark
 
 # COMMAND ----------
 
@@ -181,8 +165,7 @@ display(df.groupby("property_type").count().orderBy("count", ascending=False))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Get value counts of the different property types with Koalas
+# MAGIC %md Get value counts of the different property types with Koalas
 
 # COMMAND ----------
 
@@ -190,8 +173,7 @@ kdf["property_type"].value_counts()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Visualizations with Koalas DataFrames
+# MAGIC %md ### Visualizations with Koalas DataFrames
 
 # COMMAND ----------
 
@@ -205,8 +187,7 @@ graph_kdf.plot.hist(x="bedrooms", y="price", bins=200)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### SQL on Koalas DataFrames
+# MAGIC %md ### SQL on Koalas DataFrames
 
 # COMMAND ----------
 
@@ -214,8 +195,7 @@ ks.sql("select distinct(property_type) from {kdf}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Interesting Facts
+# MAGIC %md ### Interesting Facts
 # MAGIC 
 # MAGIC * With Koalas you can read from Delta Tables and read in a directory of files
 # MAGIC * If you use apply on a Koalas DF and that DF is <1000 (by default), Koalas will use pandas as a shortcut - this can be adjusted using `compute.shortcut_limit`

@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Linear Regression II Lab
+# MAGIC %md # Linear Regression II Lab
 # MAGIC 
 # MAGIC Alright! We're making progress. Still not a great RMSE or R2, but better than the baseline or just using a single feature.
 # MAGIC 
@@ -63,8 +61,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Log Scale
+# MAGIC %md ## Log Scale
 # MAGIC 
 # MAGIC Now that we have verified we get the same result using RFormula as above, we are going to improve upon our model. If you recall, our price dependent variable appears to be log-normally distributed, so we are going to try to predict it on the log scale.
 # MAGIC 
@@ -92,8 +89,7 @@ predDF = pipelineModel.transform(logTestDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Exponentiate
+# MAGIC %md ## Exponentiate
 # MAGIC 
 # MAGIC In order to interpret our RMSE, we need to convert our predictions back from logarithmic scale.
 

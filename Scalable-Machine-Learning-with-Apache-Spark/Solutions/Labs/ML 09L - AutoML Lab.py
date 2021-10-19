@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # AutoML Lab
+# MAGIC %md # AutoML Lab
 # MAGIC 
 # MAGIC [Databricks AutoML](https://docs.databricks.com/applications/machine-learning/automl.html) helps you automatically build machine learning models both through a UI and programmatically. It prepares the dataset for model training and then performs and records a set of trials (using HyperOpt), creating, tuning, and evaluating multiple models. 
 # MAGIC 
@@ -24,8 +22,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Currently, AutoML uses a combination of XGBoost and sklearn (only single node models) but optimizes the hyperparameters within each.
+# MAGIC %md Currently, AutoML uses a combination of XGBoost and sklearn (only single node models) but optimizes the hyperparameters within each.
 
 # COMMAND ----------
 
@@ -35,8 +32,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Use the UI
+# MAGIC %md ### Use the UI
 # MAGIC 
 # MAGIC Instead of programmatically building our models, we can also use the UI. But first we need to register our dataset as a table.
 
@@ -47,29 +43,25 @@ trainDF.write.mode("overwrite").saveAsTable(f"{cleaned_username}.autoMLTable")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC First, make sure that you have selected the Machine Learning role on the left, before selecting start AutoML on the workspace homepage.
+# MAGIC %md First, make sure that you have selected the Machine Learning role on the left, before selecting start AutoML on the workspace homepage.
 # MAGIC 
 # MAGIC <img src="http://files.training.databricks.com/images/301/AutoML_1_2.png" alt="step12" width="750"/>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Select `regression` as the problem type, as well as the table we created in the previous cell. Then, select `price` as the column to predict.
+# MAGIC %md Select `regression` as the problem type, as well as the table we created in the previous cell. Then, select `price` as the column to predict.
 # MAGIC 
 # MAGIC <img src="http://files.training.databricks.com/images/301/AutoML_UI.png" alt="ui" width="750"/>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC In the advanced configuration dropdown, change the evaluation metric to rmse, timeout to 5 minutes, and the maximum number of runs to 20.
+# MAGIC %md In the advanced configuration dropdown, change the evaluation metric to rmse, timeout to 5 minutes, and the maximum number of runs to 20.
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/301/AutoML_Advanced.png" alt="advanced" width="500"/>
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Finally, we can start our run. Once completed, we can view the tuned model by clicking on the edit best model button.
+# MAGIC %md Finally, we can start our run. Once completed, we can view the tuned model by clicking on the edit best model button.
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/301/AutoMLResultsUpdated.png" alt="results" width="1000"/>
 

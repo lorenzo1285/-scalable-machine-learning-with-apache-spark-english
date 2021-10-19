@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # MLflow Lab
+# MAGIC %md # MLflow Lab
 # MAGIC 
 # MAGIC In this lab we will explore the path to moving models to production with MLflow using the following steps:
 # MAGIC 
@@ -38,7 +36,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC 
 # MAGIC Data versioning is an advantage of using Delta Lake, which preserves previous versions of datasets so that you can restore later.
 # MAGIC 
@@ -99,21 +97,17 @@ display(spark.sql(f"DESCRIBE HISTORY delta.`{trainDeltaPath}`"))
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md
 # MAGIC 
 # MAGIC By default Delta tables [keep a commit history of 30 days](https://docs.databricks.com/delta/delta-batch.html#data-retention). This retention period can be adjusted by setting `delta.logRetentionDuration`, which will determine how far back in time you can go. Note that setting this can result in storage costs to go up. 
 # MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> Be aware that versioning with Delta in this manner may not be feasible as a long term solution. The retention period of Delta tables can be increased, but with that comes additional costs to storage. Alternative methods of data versioning when training models and tracking to MLflow is to save copies of the datasets, either as an MLflow artifact (for a small dataset), or save to a separate distributed location and record the location of the underlying dataset as a tag in MLflow
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> Be aware that versioning with Delta in this manner may not be feasible as a long term solution. The retention period of Delta tables can be increased, but with that comes additional costs to storage. Alternative methods of data versioning when training models and tracking to MLflow is to save copies of the datasets, either as an MLflow artifact (for a small dataset), or save to a separate distributed location and record the location of the underlying dataset as a tag in MLflow
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC 
-# MAGIC ### Step 2. Log initial run to MLflow and move to staging in Model Registry
-
-# COMMAND ----------
-
-# MAGIC %md
+# MAGIC ### Step 2. Log initial run to MLflow
 # MAGIC 
 # MAGIC Let's first log a run to MLflow where we use all features. We use the same approach with RFormula as before. This time however, let's also log both the version of our data and the data path to MLflow. 
 
@@ -158,22 +152,18 @@ with mlflow.start_run(run_name="lr_model") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC 
 # MAGIC ### Step 3. Register model and move to staging using MLflow Model Registry
-
-# COMMAND ----------
-
-# MAGIC %md-sandbox
 # MAGIC 
 # MAGIC We are happy with the performance of the above model and want to move it to staging. Let's create the model and register it to the MLflow model registry.
 # MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> Make sure the path to `model_uri` matches the subdirectory (the second argument to `mlflow.log_model()`) included above.
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> Make sure the path to `model_uri` matches the subdirectory (the second argument to `mlflow.log_model()`) included above.
 
 # COMMAND ----------
 
 model_name = f"{cleaned_username}_mllib_lr"
-model_uri = f"runs:/{runID}/model" # NOTE: confirm that this path is corrrect
+model_uri = f"runs:/{runID}/model"
 
 model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 
@@ -181,24 +171,23 @@ model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC Check the current status of the model.
+# MAGIC Transition model to staging.
 
 # COMMAND ----------
 
 from mlflow.tracking.client import MlflowClient
 
 client = MlflowClient()
-model_version_details = client.get_model_version(name=model_name, version=1)
 
-model_version_details.status
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC Define a utility method to wait until the model is ready
+client.transition_model_version_stage(
+  name=model_name,
+  version=1,
+  stage="Staging"
+)
 
 # COMMAND ----------
 
+# Define a utility method to wait until the model is ready
 def wait_for_model(model_name, version, stage="None", status="READY", timeout=300):
   import time
   
@@ -216,7 +205,10 @@ def wait_for_model(model_name, version, stage="None", status="READY", timeout=30
     
   raise Exception(f"The model {model_name} v{version} was not {status} after {timeout} seconds: {last_status}/{last_stage}")
 
-wait_for_model(model_name, 1)
+# COMMAND ----------
+
+# Force our notebook to block until the model is ready
+wait_for_model(model_name, 1, stage="Staging")
 
 # COMMAND ----------
 
@@ -233,7 +225,7 @@ client.update_registered_model(
 
 # COMMAND ----------
 
-wait_for_model(model_details.name, 1)
+wait_for_model(model_details.name, 1, stage="Staging")
 
 # COMMAND ----------
 
@@ -255,7 +247,7 @@ testNew = testDelta.withColumn("log_price", log(col("price")))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC Save the updated DataFrames to `trainDeltaPath` and `testDeltaPath`, respectively, passing the `mergeSchema` option to safely evolve its schema.
 
 # COMMAND ----------
@@ -276,7 +268,7 @@ set(trainNew.schema.fields) ^ set(trainDelta.schema.fields)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC 
 # MAGIC Let's review the Delta history of our `train_delta` table and load in the most recent versions of our train and test Delta tables.
 
@@ -295,10 +287,6 @@ testDeltaNew = spark.read.format("delta").option("versionAsOf", data_version).lo
 # MAGIC %md
 # MAGIC 
 # MAGIC ### Step 5. Use `log_price` as target and track run with MLflow
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC 
 # MAGIC Retrain the model on the updated data and compare its performance to the original, logging results to MLflow.
 
@@ -341,10 +329,6 @@ with mlflow.start_run(run_name="lr_log_model") as run:
 # MAGIC %md
 # MAGIC 
 # MAGIC ### Step 6. Compare performance across runs by looking at Delta table versions 
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC 
 # MAGIC Use MLflow's [`mlflow.search_runs`](https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.search_runs) API to identify runs according to the version of data the run was trained on. Let's compare our runs according to our data versions.
 # MAGIC 
@@ -375,12 +359,8 @@ mlflow.search_runs(<FILL_IN>)
 # MAGIC %md
 # MAGIC 
 # MAGIC ### Step 7. Move best performing model to production using MLflow model registry
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC 
-# MAGIC Get the most recent model version and move it to production
+# MAGIC Get the most recent model version and move it to production.
 
 # COMMAND ----------
 
@@ -406,14 +386,6 @@ wait_for_model(model_name, new_model_version)
 
 # COMMAND ----------
 
-client.transition_model_version_stage(
-  name=model_name,
-  version=new_model_version,
-  stage="Staging"
-)
-
-# COMMAND ----------
-
 # TODO
 # Move Model into Production
 client.transition_model_version_stage(
@@ -426,7 +398,7 @@ wait_for_model(model_name, new_model_version, "Production")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC 
 # MAGIC Have a look at the MLflow model registry UI to check that your models have been successfully registered. You should see that version 1 of your model is now in staging, with version 2 in production.
 
@@ -441,8 +413,11 @@ wait_for_model(model_name, new_model_version, "Production")
 client.transition_model_version_stage(
   name=model_name,
   version=1,
-  stage="Archived",
+  stage="Archived"
 )
+
+# COMMAND ----------
+
 wait_for_model(model_name, 1, "Archived")
 
 # COMMAND ----------
@@ -450,14 +425,16 @@ wait_for_model(model_name, 1, "Archived")
 client.transition_model_version_stage(
   name=model_name,
   version=2,
-  stage="Archived",
+  stage="Archived"
 )
+
+# COMMAND ----------
+
 wait_for_model(model_name, 2, "Archived")
 
 # COMMAND ----------
 
 client.delete_registered_model(model_name)
-
 
 # COMMAND ----------
 

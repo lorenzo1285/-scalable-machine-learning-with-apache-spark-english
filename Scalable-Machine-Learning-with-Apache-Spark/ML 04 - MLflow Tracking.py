@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -26,7 +25,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md
 # MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-4/mlflow-tracking.png" style="height: 400px; margin: 20px"/></div>
 
 # COMMAND ----------
@@ -35,8 +34,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's start by loading in our SF Airbnb Dataset.
+# MAGIC %md Let's start by loading in our SF Airbnb Dataset.
 
 # COMMAND ----------
 
@@ -48,8 +46,7 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### MLflow Tracking
+# MAGIC %md ### MLflow Tracking
 # MAGIC 
 # MAGIC MLflow Tracking is a logging API specific for machine learning and agnostic to libraries and environments that do the training.  It is organized around the concept of **runs**, which are executions of data science code.  Runs are aggregated into **experiments** where many runs can be a part of a given experiment and an MLflow server can host many experiments.
 # MAGIC 
@@ -57,8 +54,7 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Track Runs
+# MAGIC %md ### Track Runs
 # MAGIC 
 # MAGIC Each run can record the following information:<br><br>
 # MAGIC 
@@ -101,7 +97,7 @@ with mlflow.start_run(run_name="LR-Single-Feature") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC There, all done! Let's go through the other two linear regression models and then compare our runs. 
 # MAGIC 
 # MAGIC **Question**: Does anyone remember the RMSE of the other runs?
@@ -136,8 +132,7 @@ with mlflow.start_run(run_name="LR-All-Features") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Finally, we will use Linear Regression to predict the log of the price, due to its log normal distribution.
+# MAGIC %md Finally, we will use Linear Regression to predict the log of the price, due to its log normal distribution. 
 # MAGIC 
 # MAGIC We'll also practice logging artifacts to keep a visual of our log normal histogram.
 
@@ -186,8 +181,7 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC That's it! Now, let's use MLflow to easily look over our work and compare model performance. You can either query past runs programmatically or use the MLflow UI.
+# MAGIC %md That's it! Now, let's use MLflow to easily look over our work and compare model performance. You can either query past runs programmatically or use the MLflow UI.
 
 # COMMAND ----------
 
@@ -208,8 +202,7 @@ client.list_experiments()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC You can also use [search_runs](https://mlflow.org/docs/latest/search-syntax.html) to find all runs for a given experiment.
+# MAGIC %md You can also use [search_runs](https://mlflow.org/docs/latest/search-syntax.html) to find all runs for a given experiment.
 
 # COMMAND ----------
 
@@ -220,8 +213,7 @@ display(runs_df)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Pull the last run and look at metrics.
+# MAGIC %md Pull the last run and look at metrics. 
 
 # COMMAND ----------
 
@@ -234,8 +226,7 @@ runs[0].info.run_id
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Examine the results in the UI.  Look for the following:<br><br>
+# MAGIC %md Examine the results in the UI.  Look for the following:<br><br>
 # MAGIC 
 # MAGIC 1. The `Experiment ID`
 # MAGIC 2. The artifact location.  This is where the artifacts are stored in DBFS.
@@ -254,8 +245,7 @@ runs[0].info.run_id
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Load Saved Model
+# MAGIC %md ### Load Saved Model
 # MAGIC 
 # MAGIC Let's practice [loading](https://www.mlflow.org/docs/latest/python_api/mlflow.spark.html) our logged log-normal model.
 
@@ -265,7 +255,6 @@ model_path = f"runs:/{run.info.run_id}/log-model"
 loaded_model = mlflow.spark.load_model(model_path)
 
 display(loaded_model.transform(testDF))
-
 
 # COMMAND ----------
 

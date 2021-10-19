@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Databricks Best Practices
+# MAGIC %md # Databricks Best Practices
 # MAGIC 
 # MAGIC In this notebook, we will explore a wide array of best practices for working with Databricks.
 # MAGIC 
@@ -21,8 +19,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Slow Running Jobs
+# MAGIC %md ## Slow Running Jobs
 # MAGIC 
 # MAGIC The most common issues with slow running jobs are:<br><br>
 # MAGIC 
@@ -40,8 +37,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Data Access and Security
+# MAGIC %md ## Data Access and Security
 # MAGIC 
 # MAGIC A few notes on data access:<br><br>
 # MAGIC 
@@ -51,8 +47,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Cluster Configuration, Libraries, and Jobs
+# MAGIC %md ## Cluster Configuration, Libraries, and Jobs
 # MAGIC 
 # MAGIC Cluster types are:<br><br>
 # MAGIC 
@@ -71,8 +66,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Library installation best practices:<br><br>
+# MAGIC %md Library installation best practices:<br><br>
 # MAGIC   
 # MAGIC - [Notebook-scoped Python libraries](https://docs.databricks.com/libraries/notebooks-python-libraries.html) ensure users on same cluster can have different libraries.  Also good for saving notebooks with their library dependencies
 # MAGIC - [Init scripts](https://docs.databricks.com/clusters/init-scripts.html) ensure that code is ran before the JVM starts (good for certain libraries or environment configuration)
@@ -80,8 +74,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Jobs best practices:<br><br>
+# MAGIC %md Jobs best practices:<br><br>
 # MAGIC 
 # MAGIC - Use [notebook workflows](https://docs.databricks.com/notebooks/notebook-workflows.html)
 # MAGIC - [Widgets](https://docs.databricks.com/notebooks/widgets.html) work for parameter passing
@@ -92,8 +85,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## CLI and Version Control
+# MAGIC %md ## CLI and Version Control
 # MAGIC 
 # MAGIC The [Databricks CLI](https://github.com/databricks/databricks-cli):<br><br>
 # MAGIC 
@@ -108,8 +100,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Time permitting: exploring the [admin console!](https://docs.databricks.com/administration-guide/index.html)
+# MAGIC %md Time permitting: exploring the [admin console!](https://docs.databricks.com/administration-guide/index.html)
 
 # COMMAND ----------
 

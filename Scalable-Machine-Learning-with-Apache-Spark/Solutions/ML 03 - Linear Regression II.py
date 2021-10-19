@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Linear Regression: Improving our model
+# MAGIC %md # Linear Regression: Improving our model
 # MAGIC 
 # MAGIC In this notebook we will be adding additional features to our model, as well as discuss how to handle categorical features.
 # MAGIC 
@@ -29,8 +27,7 @@ airbnbDF = spark.read.format("delta").load(filePath)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Train/Test Split
+# MAGIC %md ## Train/Test Split
 # MAGIC 
 # MAGIC Let's use the same 80/20 split with the same seed as the previous notebook so we can compare our results apples to apples (unless you changed the cluster config!)
 
@@ -40,8 +37,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Categorical Variables
+# MAGIC %md ## Categorical Variables
 # MAGIC 
 # MAGIC There are a few ways to handle categorical features:
 # MAGIC * Assign them a numeric value
@@ -81,8 +77,7 @@ vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Linear Regression
+# MAGIC %md ## Linear Regression
 # MAGIC 
 # MAGIC Now that we have all of our features, let's build a linear regression model.
 
@@ -94,8 +89,7 @@ lr = LinearRegression(labelCol="price", featuresCol="features")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Pipeline
+# MAGIC %md ## Pipeline
 # MAGIC 
 # MAGIC Let's put all these stages in a Pipeline. A [Pipeline](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.Pipeline.html?highlight=pipeline#pyspark.ml.Pipeline) is a way of organizing all of our transformers and estimators.
 # MAGIC 
@@ -112,8 +106,7 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Saving Models
+# MAGIC %md ## Saving Models
 # MAGIC 
 # MAGIC We can save our models to persistent storage (e.g. DBFS) in case our cluster goes down so we don't have to recompute our results.
 
@@ -124,8 +117,7 @@ pipelineModel.write().overwrite().save(pipelinePath)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Loading models
+# MAGIC %md ## Loading models
 # MAGIC 
 # MAGIC When you load in models, you need to know the type of model you are loading back in (was it a linear regression or logistic regression model?).
 # MAGIC 
@@ -150,8 +142,7 @@ display(predDF.select("features", "price", "prediction"))
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Evaluate model
+# MAGIC %md ## Evaluate model
 # MAGIC 
 # MAGIC ![](https://files.training.databricks.com/images/r2d2.jpg) How is our R2 doing? 
 
@@ -168,8 +159,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC As you can see, our RMSE decreased when compared to the model without one-hot encoding, and the R2 increased as well!
+# MAGIC %md As you can see, our RMSE decreased when compared to the model without one-hot encoding, and the R2 increased as well!
 
 # COMMAND ----------
 

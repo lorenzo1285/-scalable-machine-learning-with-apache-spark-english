@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Random Forests and Hyperparameter Tuning
+# MAGIC %md # Random Forests and Hyperparameter Tuning
 # MAGIC 
 # MAGIC Now let's take a look at how to tune random forests using grid search and cross validation in order to find the optimal hyperparameters.  Using the Databricks Runtime for ML, MLflow automatically logs your experiments with the SparkML cross-validator!
 # MAGIC 
@@ -59,8 +57,7 @@ print(rf.explainParams())
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC There are a lot of hyperparameters we could tune, and it would take a long time to manually configure.
+# MAGIC %md There are a lot of hyperparameters we could tune, and it would take a long time to manually configure.
 # MAGIC 
 # MAGIC Instead of a manual (ad-hoc) approach, let's use Spark's [ParamGridBuilder](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgridbuilder#pyspark.ml.tuning.ParamGridBuilder) to find the optimal hyperparameters in a more systematic approach.
 # MAGIC 
@@ -112,8 +109,7 @@ cv = CrossValidator(estimator=pipeline, evaluator=evaluator, estimatorParamMaps=
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC **Question**: How many models are we training right now?
+# MAGIC %md **Question**: How many models are we training right now?
 
 # COMMAND ----------
 
@@ -121,8 +117,7 @@ cvModel = cv.fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Parallelism Parameter
+# MAGIC %md ## Parallelism Parameter
 # MAGIC 
 # MAGIC Hmmm... that took a long time to run. That's because the models were being trained sequentially rather than in parallel!
 # MAGIC 
@@ -136,7 +131,7 @@ cvModel = cv.setParallelism(4).fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md 
 # MAGIC **Question**: Hmmm... that still took a long time to run. Should we put the pipeline in the cross validator, or the cross validator in the pipeline?
 # MAGIC 
 # MAGIC It depends if there are estimators or transformers in the pipeline. If you have things like StringIndexer (an estimator) in the pipeline, then you have to refit it every time if you put the entire pipeline in the cross validator.
@@ -173,8 +168,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Progress!  Looks like we're out-performing decision trees.
+# MAGIC %md Progress!  Looks like we're out-performing decision trees.
 
 # COMMAND ----------
 

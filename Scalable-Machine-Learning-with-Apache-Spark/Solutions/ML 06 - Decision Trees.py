@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Decision Trees
+# MAGIC %md # Decision Trees
 # MAGIC 
 # MAGIC In the previous notebook, you were working with the parametric model, Linear Regression. We could do some more hyperparameter tuning with the linear regression model, but we're going to try tree based methods and see if our performance improves.
 # MAGIC 
@@ -30,8 +28,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## How to Handle Categorical Features?
+# MAGIC %md ## How to Handle Categorical Features?
 # MAGIC 
 # MAGIC We saw in the previous notebook that we can use StringIndexer/OneHotEncoder/VectorAssembler or RFormula.
 # MAGIC 
@@ -51,8 +48,7 @@ stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputC
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## VectorAssembler
+# MAGIC %md ## VectorAssembler
 # MAGIC 
 # MAGIC Let's use the [VectorAssembler](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.VectorAssembler.html?highlight=vectorassembler#pyspark.ml.feature.VectorAssembler) to combine all of our categorical and numeric inputs.
 
@@ -68,8 +64,7 @@ vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Decision Tree
+# MAGIC %md ## Decision Tree
 # MAGIC 
 # MAGIC Now let's build a [DecisionTreeRegressor](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html?highlight=decisiontreeregressor#pyspark.ml.regression.DecisionTreeRegressor) with the default hyperparameters.
 
@@ -81,8 +76,7 @@ dt = DecisionTreeRegressor(labelCol="price")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Fit Pipeline
+# MAGIC %md ## Fit Pipeline
 # MAGIC 
 # MAGIC The following cell is expected to error, but we subsequently fix this.
 
@@ -99,8 +93,7 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## maxBins
+# MAGIC %md ## maxBins
 # MAGIC 
 # MAGIC What is this parameter [maxBins](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html?highlight=decisiontreeregressor#pyspark.ml.regression.DecisionTreeRegressor.maxBins)? Let's take a look at the PLANET implementation of distributed decision trees to help explain the `maxBins` parameter.
 
@@ -112,15 +105,13 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC In Spark, data is partitioned by row. So when it needs to make a split, each worker has to compute summary statistics for every feature for  each split point. Then these summary statistics have to be aggregated (via tree reduce) for a split to be made.
+# MAGIC %md In Spark, data is partitioned by row. So when it needs to make a split, each worker has to compute summary statistics for every feature for  each split point. Then these summary statistics have to be aggregated (via tree reduce) for a split to be made. 
 # MAGIC 
 # MAGIC Think about it: What if worker 1 had the value `32` but none of the others had it. How could you communicate how good of a split that would be? So, Spark has a maxBins parameter for discretizing continuous variables into buckets, but the number of buckets has to be as large as the categorical variable with the highest cardinality.
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Let's go ahead and increase maxBins to `40`.
+# MAGIC %md Let's go ahead and increase maxBins to `40`.
 
 # COMMAND ----------
 
@@ -128,8 +119,7 @@ dt.setMaxBins(40)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Take two.
+# MAGIC %md Take two.
 
 # COMMAND ----------
 
@@ -137,8 +127,7 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Feature Importance
+# MAGIC %md ## Feature Importance
 # MAGIC 
 # MAGIC Let's go ahead and get the fitted decision tree model, and look at the feature importance scores.
 
@@ -153,8 +142,7 @@ dtModel.featureImportances
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Interpreting Feature Importance
+# MAGIC %md ## Interpreting Feature Importance
 # MAGIC 
 # MAGIC Hmmm... it's a little hard to know what feature 4 vs 11 is. Given that the feature importance scores are "small data", let's use Pandas to help us recover the original column names.
 
@@ -167,8 +155,7 @@ featuresDF
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Why so few features are non-zero?
+# MAGIC %md ## Why so few features are non-zero?
 # MAGIC 
 # MAGIC With SparkML, the default `maxDepth` is 5, so there are only a few features we could consider (we can also split on the same feature many times at different split points).
 # MAGIC 
@@ -204,8 +191,7 @@ display(predDF.select("features", "price", "prediction").orderBy("price", ascend
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Pitfall
+# MAGIC %md ## Pitfall
 # MAGIC 
 # MAGIC What if we get a massive Airbnb rental? It was 20 bedrooms and 20 bathrooms. What will a decision tree predict?
 # MAGIC 
@@ -224,8 +210,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Uh oh!
+# MAGIC %md ## Uh oh!
 # MAGIC 
 # MAGIC This model is way worse than the linear regression model, and it's even worse than just predicting the average value.
 # MAGIC 

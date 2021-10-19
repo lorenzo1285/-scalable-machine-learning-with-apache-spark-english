@@ -1,5 +1,4 @@
 # Databricks notebook source
-# MAGIC 
 # MAGIC %md-sandbox
 # MAGIC 
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -8,8 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC # Linear Regression Lab
+# MAGIC %md # Linear Regression Lab
 # MAGIC 
 # MAGIC In the previous lesson, we predicted price using just one variable: bedrooms. Now, we want to predict price given a few other features.
 # MAGIC 
@@ -56,8 +54,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Examine the coefficients for each of the variables.
+# MAGIC %md Examine the coefficients for each of the variables.
 
 # COMMAND ----------
 
@@ -68,8 +65,7 @@ print(f"intercept: {lrModel.intercept}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Distributed Setting
+# MAGIC %md ## Distributed Setting
 # MAGIC 
 # MAGIC Although we can quickly solve for the parameters when the data is small, the closed form solution doesn't scale well to large datasets. 
 # MAGIC 
@@ -84,8 +80,7 @@ print(f"intercept: {lrModel.intercept}")
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Next Steps
+# MAGIC %md ### Next Steps
 # MAGIC 
 # MAGIC Yikes! We built a pretty bad model. In the next notebook, we will see how we can further improve upon our model.
 
