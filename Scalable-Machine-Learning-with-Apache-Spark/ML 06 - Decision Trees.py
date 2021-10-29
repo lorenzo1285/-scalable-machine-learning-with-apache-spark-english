@@ -22,9 +22,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -41,10 +41,10 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 from pyspark.ml.feature import StringIndexer
 
-categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
-indexOutputCols = [x + "Index" for x in categoricalCols]
+categorical_cols = [field for (field, dataType) in train_df.dtypes if dataType == "string"]
+index_output_cols = [x + "Index" for x in categorical_cols]
 
-stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputCols, handleInvalid="skip")
+string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_output_cols, handleInvalid="skip")
 
 # COMMAND ----------
 
@@ -57,10 +57,10 @@ stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputC
 from pyspark.ml.feature import VectorAssembler
 
 # Filter for just numeric columns (and exclude price, our label)
-numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "price"))]
+numeric_cols = [field for (field, dataType) in train_df.dtypes if ((dataType == "double") & (field != "price"))]
 # Combine output of StringIndexer defined above and numeric columns
-assemblerInputs = indexOutputCols + numericCols
-vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+assembler_inputs = index_output_cols + numeric_cols
+vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features")
 
 # COMMAND ----------
 
@@ -85,11 +85,11 @@ dt = DecisionTreeRegressor(labelCol="price")
 from pyspark.ml import Pipeline
 
 # Combine stages into pipeline
-stages = [stringIndexer, vecAssembler, dt]
+stages = [string_indexer, vec_assembler, dt]
 pipeline = Pipeline(stages=stages)
 
 # Uncomment to perform fit
-# pipelineModel = pipeline.fit(trainDF)
+# pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
@@ -123,7 +123,7 @@ dt.setMaxBins(40)
 
 # COMMAND ----------
 
-pipelineModel = pipeline.fit(trainDF)
+pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
@@ -133,12 +133,12 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-dtModel = pipelineModel.stages[-1]
-display(dtModel)
+dt_model = pipeline_model.stages[-1]
+display(dt_model)
 
 # COMMAND ----------
 
-dtModel.featureImportances
+dt_model.featureImportances
 
 # COMMAND ----------
 
@@ -150,8 +150,8 @@ dtModel.featureImportances
 
 import pandas as pd
 
-featuresDF = pd.DataFrame(list(zip(vecAssembler.getInputCols(), dtModel.featureImportances)), columns=["feature", "importance"])
-featuresDF
+features_df = pd.DataFrame(list(zip(vec_assembler.getInputCols(), dt_model.featureImportances)), columns=["feature", "importance"])
+features_df
 
 # COMMAND ----------
 
@@ -163,11 +163,11 @@ featuresDF
 
 # COMMAND ----------
 
-dbutils.widgets.text("topK", "5")
-topK = int(dbutils.widgets.get("topK"))
+dbutils.widgets.text("top_k", "5")
+top_k = int(dbutils.widgets.get("top_k"))
 
-topFeatures = featuresDF.sort_values(["importance"], ascending=False)[:topK]["feature"].values
-print(topFeatures)
+top_features = features_df.sort_values(["importance"], ascending=False)[:top_k]["feature"].values
+print(top_features)
 
 # COMMAND ----------
 
@@ -185,9 +185,9 @@ print(topFeatures)
 
 # COMMAND ----------
 
-predDF = pipelineModel.transform(testDF)
+pred_df = pipeline_model.transform(test_df)
 
-display(predDF.select("features", "price", "prediction").orderBy("price", ascending=False))
+display(pred_df.select("features", "price", "prediction").orderBy("price", ascending=False))
 
 # COMMAND ----------
 
@@ -201,10 +201,10 @@ display(predDF.select("features", "price", "prediction").orderBy("price", ascend
 
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
 
-rmse = regressionEvaluator.evaluate(predDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
+rmse = regression_evaluator.evaluate(pred_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 

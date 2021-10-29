@@ -44,33 +44,22 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
 
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-trainDeltaPath = userhome + "/machine-learning-p/train.delta"
-testDeltaPath = userhome + "/machine-learning-p/test.delta"
+train_delta_path = working_dir + "/train.delta"
+test_delta_path = working_dir + "/test.delta"
 
 # In case paths already exists
-dbutils.fs.rm(trainDeltaPath, True)
-dbutils.fs.rm(testDeltaPath, True)
+dbutils.fs.rm(train_delta_path, True)
+dbutils.fs.rm(test_delta_path, True)
 
-(trainDF
-  .write
-  .mode("overwrite")
-  .format("delta")
-  .save(trainDeltaPath)
-)
-
-(testDF
-  .write
-  .mode("overwrite")
-  .format("delta")
-  .save(testDeltaPath)
-)
+train_df.write.mode("overwrite").format("delta").save(train_delta_path)
+test_df.write.mode("overwrite").format("delta").save(test_delta_path)
 
 # COMMAND ----------
 
@@ -82,8 +71,8 @@ dbutils.fs.rm(testDeltaPath, True)
 
 # ANSWER
 data_version = 0
-trainDelta = spark.read.format("delta").option("versionAsOf", data_version).load(trainDeltaPath)  
-testDelta = spark.read.format("delta").option("versionAsOf", data_version).load(testDeltaPath)
+train_delta = spark.read.format("delta").option("versionAsOf", data_version).load(train_delta_path)  
+test_delta = spark.read.format("delta").option("versionAsOf", data_version).load(test_delta_path)
 
 # COMMAND ----------
 
@@ -93,7 +82,7 @@ testDelta = spark.read.format("delta").option("versionAsOf", data_version).load(
 
 # COMMAND ----------
 
-display(spark.sql(f"DESCRIBE HISTORY delta.`{trainDeltaPath}`"))
+display(spark.sql(f"DESCRIBE HISTORY delta.`{train_delta_path}`"))
 
 # COMMAND ----------
 
@@ -122,32 +111,31 @@ from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.feature import RFormula
 
 with mlflow.start_run(run_name="lr_model") as run:
-  
-  # Log parameters
-  mlflow.log_param("label", "price-all-features")
-  mlflow.log_param("data_version", data_version)
-  mlflow.log_param("data_path", trainDeltaPath)    
-    
-  # Create pipeline
-  rFormula = RFormula(formula="price ~ .", featuresCol="features", labelCol="price", handleInvalid="skip")
-  lr = LinearRegression(labelCol="price", featuresCol="features")
-  pipeline = Pipeline(stages = [rFormula, lr])
-  model = pipeline.fit(trainDelta)
-  
-  # Log pipeline
-  mlflow.spark.log_model(model, "model")
+    # Log parameters
+    mlflow.log_param("label", "price-all-features")
+    mlflow.log_param("data_version", data_version)
+    mlflow.log_param("data_path", train_delta_path)    
 
-  # Create predictions and metrics
-  predDF = model.transform(testDelta)
-  regressionEvaluator = RegressionEvaluator(labelCol="price", predictionCol="prediction")
-  rmse = regressionEvaluator.setMetricName("rmse").evaluate(predDF)
-  r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
-  
-  # Log metrics
-  mlflow.log_metric("rmse", rmse)
-  mlflow.log_metric("r2", r2)
-  
-  runID = run.info.run_id
+    # Create pipeline
+    r_formula = RFormula(formula="price ~ .", featuresCol="features", labelCol="price", handleInvalid="skip")
+    lr = LinearRegression(labelCol="price", featuresCol="features")
+    pipeline = Pipeline(stages = [r_formula, lr])
+    model = pipeline.fit(train_delta)
+
+    # Log pipeline
+    mlflow.spark.log_model(model, "model")
+
+    # Create predictions and metrics
+    pred_df = model.transform(test_delta)
+    regression_evaluator = RegressionEvaluator(labelCol="price", predictionCol="prediction")
+    rmse = regression_evaluator.setMetricName("rmse").evaluate(pred_df)
+    r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
+
+    # Log metrics
+    mlflow.log_metric("rmse", rmse)
+    mlflow.log_metric("r2", r2)
+
+    run_id = run.info.run_id
 
 # COMMAND ----------
 
@@ -162,7 +150,7 @@ with mlflow.start_run(run_name="lr_model") as run:
 # COMMAND ----------
 
 model_name = f"{cleaned_username}_mllib_lr"
-model_uri = f"runs:/{runID}/model"
+model_uri = f"runs:/{run_id}/model"
 
 model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 
@@ -179,30 +167,30 @@ from mlflow.tracking.client import MlflowClient
 client = MlflowClient()
 
 client.transition_model_version_stage(
-  name=model_name,
-  version=1,
-  stage="Staging"
+    name=model_name,
+    version=1,
+    stage="Staging"
 )
 
 # COMMAND ----------
 
 # Define a utility method to wait until the model is ready
 def wait_for_model(model_name, version, stage="None", status="READY", timeout=300):
-  import time
-  
-  last_stage = "unknown"
-  last_status = "unknown"
-  
-  for i in range(timeout):
-    model_version_details = client.get_model_version(name=model_name, version=version)
-    last_stage = str(model_version_details.current_stage)
-    last_status = str(model_version_details.status)
-    if last_status == str(status) and last_stage == str(stage):
-      return
-      
-    time.sleep(1)
-    
-  raise Exception(f"The model {model_name} v{version} was not {status} after {timeout} seconds: {last_status}/{last_stage}")
+    import time
+
+    last_stage = "unknown"
+    last_status = "unknown"
+
+    for i in range(timeout):
+        model_version_details = client.get_model_version(name=model_name, version=version)
+        last_stage = str(model_version_details.current_stage)
+        last_status = str(model_version_details.status)
+        if last_status == str(status) and last_stage == str(stage):
+            return
+
+        time.sleep(1)
+
+    raise Exception(f"The model {model_name} v{version} was not {status} after {timeout} seconds: {last_status}/{last_stage}")
 
 # COMMAND ----------
 
@@ -219,8 +207,8 @@ wait_for_model(model_name, 1, stage="Staging")
 
 # ANSWER
 client.update_registered_model(
-  name=model_details.name,
-  description="This model forecasts Airbnb housing list prices based on various listing inputs."
+    name=model_details.name,
+    description="This model forecasts Airbnb housing list prices based on various listing inputs."
 )
 
 # COMMAND ----------
@@ -242,19 +230,19 @@ wait_for_model(model_details.name, 1, stage="Staging")
 from pyspark.sql.functions import col, log, exp
 
 # Create a new log_price column for both train and test datasets
-trainNew = trainDelta.withColumn("log_price", log(col("price")))
-testNew = testDelta.withColumn("log_price", log(col("price")))
+train_new = train_delta.withColumn("log_price", log(col("price")))
+test_new = test_delta.withColumn("log_price", log(col("price")))
 
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC Save the updated DataFrames to `trainDeltaPath` and `testDeltaPath`, respectively, passing the `mergeSchema` option to safely evolve its schema.
+# MAGIC Save the updated DataFrames to `train_delta_path` and `test_delta_path`, respectively, passing the `mergeSchema` option to safely evolve its schema.
 
 # COMMAND ----------
 
 # ANSWER
-trainNew.write.option("mergeSchema", "true").format("delta").mode("overwrite").save(trainDeltaPath)
-testNew.write.option("mergeSchema", "true").format("delta").mode("overwrite").save(testDeltaPath)
+train_new.write.option("mergeSchema", "true").format("delta").mode("overwrite").save(train_delta_path)
+test_new.write.option("mergeSchema", "true").format("delta").mode("overwrite").save(test_delta_path)
 
 # COMMAND ----------
 
@@ -264,7 +252,7 @@ testNew.write.option("mergeSchema", "true").format("delta").mode("overwrite").sa
 
 # COMMAND ----------
 
-set(trainNew.schema.fields) ^ set(trainDelta.schema.fields)
+set(train_new.schema.fields) ^ set(train_delta.schema.fields)
 
 # COMMAND ----------
 
@@ -274,13 +262,13 @@ set(trainNew.schema.fields) ^ set(trainDelta.schema.fields)
 
 # COMMAND ----------
 
-display(spark.sql(f"DESCRIBE HISTORY delta.`{trainDeltaPath}`"))
+display(spark.sql(f"DESCRIBE HISTORY delta.`{train_delta_path}`"))
 
 # COMMAND ----------
 
 data_version = 1
-trainDeltaNew = spark.read.format("delta").option("versionAsOf", data_version).load(trainDeltaPath)  
-testDeltaNew = spark.read.format("delta").option("versionAsOf", data_version).load(testDeltaPath)
+train_delta_new = spark.read.format("delta").option("versionAsOf", data_version).load(train_delta_path)  
+test_delta_new = spark.read.format("delta").option("versionAsOf", data_version).load(test_delta_path)
 
 # COMMAND ----------
 
@@ -293,36 +281,35 @@ testDeltaNew = spark.read.format("delta").option("versionAsOf", data_version).lo
 # COMMAND ----------
 
 with mlflow.start_run(run_name="lr_log_model") as run:
-  
-  # Log parameters
-  mlflow.log_param("label", "log-price")
-  mlflow.log_param("data_version", data_version)
-  mlflow.log_param("data_path", trainDeltaPath)    
- 
-  # Create pipeline
-  rFormula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip")  
-  lr = LinearRegression(labelCol="log_price", predictionCol="log_prediction")
-  pipeline = Pipeline(stages = [rFormula, lr])
-  pipelineModel = pipeline.fit(trainDeltaNew)
-   
-  # Log model and update the registered model
-  mlflow.spark.log_model(
-    spark_model=pipelineModel,
-    artifact_path="log-model",
-    registered_model_name=model_name,
-  )  
-  
-  # Create predictions and metrics
-  predDF = pipelineModel.transform(testDelta)
-  expDF = predDF.withColumn("prediction", exp(col("log_prediction")))
-  rmse = regressionEvaluator.setMetricName("rmse").evaluate(expDF)
-  r2 = regressionEvaluator.setMetricName("r2").evaluate(expDF)
-  
-  # Log metrics
-  mlflow.log_metric("rmse", rmse)
-  mlflow.log_metric("r2", r2)  
-  
-  runID = run.info.run_id
+    # Log parameters
+    mlflow.log_param("label", "log-price")
+    mlflow.log_param("data_version", data_version)
+    mlflow.log_param("data_path", train_delta_path)    
+
+    # Create pipeline
+    r_formula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip")  
+    lr = LinearRegression(labelCol="log_price", predictionCol="log_prediction")
+    pipeline = Pipeline(stages = [r_formula, lr])
+    pipeline_model = pipeline.fit(train_delta_new)
+
+    # Log model and update the registered model
+    mlflow.spark.log_model(
+        spark_model=pipeline_model,
+        artifact_path="log-model",
+        registered_model_name=model_name
+    )  
+
+    # Create predictions and metrics
+    pred_df = pipeline_model.transform(test_delta)
+    exp_df = pred_df.withColumn("prediction", exp(col("log_prediction")))
+    rmse = regression_evaluator.setMetricName("rmse").evaluate(exp_df)
+    r2 = regression_evaluator.setMetricName("r2").evaluate(exp_df)
+
+    # Log metrics
+    mlflow.log_metric("rmse", rmse)
+    mlflow.log_metric("r2", r2)  
+
+    run_id = run.info.run_id
 
 # COMMAND ----------
 
@@ -339,14 +326,14 @@ with mlflow.start_run(run_name="lr_log_model") as run:
 # ANSWER
 data_version = 0
 
-mlflow.search_runs(filter_string=f"params.data_path='{trainDeltaPath}' and params.data_version='{data_version}'")
+mlflow.search_runs(filter_string=f"params.data_path='{train_delta_path}' and params.data_version='{data_version}'")
 
 # COMMAND ----------
 
 # ANSWER
 data_version = 1
 
-mlflow.search_runs(filter_string=f"params.data_path='{trainDeltaPath}' and params.data_version='{data_version}'")
+mlflow.search_runs(filter_string=f"params.data_path='{train_delta_path}' and params.data_version='{data_version}'")
 
 # COMMAND ----------
 
@@ -370,9 +357,9 @@ new_model_version = max([model_version_info.version for model_version_info in mo
 # COMMAND ----------
 
 client.update_model_version(
-  name=model_name,
-  version=new_model_version,
-  description="This model version was built using a MLlib Linear Regression model with all features and log_price as predictor."
+    name=model_name,
+    version=new_model_version,
+    description="This model version was built using a MLlib Linear Regression model with all features and log_price as predictor."
 )
 
 # COMMAND ----------
@@ -389,9 +376,9 @@ wait_for_model(model_name, new_model_version)
 # ANSWER
 # Move Model into Production
 client.transition_model_version_stage(
-  name=model_name,
-  version=new_model_version,
-  stage="Production"
+    name=model_name,
+    version=new_model_version,
+    stage="Production"
 )
 
 # COMMAND ----------
@@ -413,9 +400,9 @@ wait_for_model(model_name, new_model_version, "Production")
 # COMMAND ----------
 
 client.transition_model_version_stage(
-  name=model_name,
-  version=1,
-  stage="Archived"
+    name=model_name,
+    version=1,
+    stage="Archived"
 )
 
 # COMMAND ----------
@@ -425,9 +412,9 @@ wait_for_model(model_name, 1, "Archived")
 # COMMAND ----------
 
 client.transition_model_version_stage(
-  name=model_name,
-  version=2,
-  stage="Archived"
+    name=model_name,
+    version=2,
+    stage="Archived"
 )
 
 # COMMAND ----------

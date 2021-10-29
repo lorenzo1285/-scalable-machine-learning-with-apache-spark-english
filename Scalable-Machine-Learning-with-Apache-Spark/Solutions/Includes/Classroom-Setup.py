@@ -111,36 +111,3 @@ def untilStreamIsReady(name):
 
 None # Suppress output
 
-# COMMAND ----------
-
-# %scala
-
-# val cleaned_username = spark.conf.get("cleaned_username")
-
-# def untilStreamIsReady(name:String):Unit = {
-#   val queries = spark.streams.active.filter(_.name == name)
-
-#   if (queries.length == 0) {
-#     println("The stream is not active.")
-#   } else {
-#     while (queries(0).isActive && queries(0).recentProgress.length == 0) {
-#       // wait until there is any type of progress
-#     }
-
-#     if (queries(0).isActive) {
-#       queries(0).awaitTermination(5*1000)
-#       println("The stream is active and ready.")
-#     } else {
-#       println("The stream is not active.")
-#     }
-#   }
-# }
-
-# displayHTML("""
-# <div>Declared various utility methods:</div>
-# <li>Declared <b style="color:green">untilStreamIsReady(<i>name:String</i>)</b> to control workflow</li>
-# <br/>
-# <div>All done!</div>
-# """)
-None # Suppress output
-

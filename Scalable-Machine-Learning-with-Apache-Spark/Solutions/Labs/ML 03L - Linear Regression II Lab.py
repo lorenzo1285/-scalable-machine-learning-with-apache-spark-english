@@ -23,9 +23,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -46,16 +46,16 @@ from pyspark.ml.feature import RFormula
 from pyspark.ml.regression import LinearRegression
 from pyspark.ml.evaluation import RegressionEvaluator
 
-rFormula = RFormula(formula="price ~ .", featuresCol="features", labelCol="price", handleInvalid="skip") # Look at handleInvalid
+r_formula = RFormula(formula="price ~ .", featuresCol="features", labelCol="price", handleInvalid="skip") # Look at handleInvalid
 
 lr = LinearRegression(labelCol="price", featuresCol="features")
-pipeline = Pipeline(stages = [rFormula, lr])
-pipelineModel = pipeline.fit(trainDF)
-predDF = pipelineModel.transform(testDF)
+pipeline = Pipeline(stages=[r_formula, lr])
+pipeline_model = pipeline.fit(train_df)
+pred_df = pipeline_model.transform(test_df)
 
-regressionEvaluator = RegressionEvaluator(labelCol="price", predictionCol="prediction")
-rmse = regressionEvaluator.setMetricName("rmse").evaluate(predDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
+regression_evaluator = RegressionEvaluator(labelCol="price", predictionCol="prediction")
+rmse = regression_evaluator.setMetricName("rmse").evaluate(pred_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 
@@ -71,22 +71,22 @@ print(f"R2 is {r2}")
 
 from pyspark.sql.functions import log
 
-display(trainDF.select(log("price")))
+display(train_df.select(log("price")))
 
 # COMMAND ----------
 
 # ANSWER
 from pyspark.sql.functions import col, log
 
-logTrainDF = trainDF.withColumn("log_price", log(col("price")))
-logTestDF = testDF.withColumn("log_price", log(col("price")))
+log_train_df = train_df.withColumn("log_price", log(col("price")))
+log_test_df = test_df.withColumn("log_price", log(col("price")))
 
-rFormula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip") 
+r_formula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip") 
 
 lr.setLabelCol("log_price").setPredictionCol("log_pred")
-pipeline = Pipeline(stages = [rFormula, lr])
-pipelineModel = pipeline.fit(logTrainDF)
-predDF = pipelineModel.transform(logTestDF)
+pipeline = Pipeline(stages=[r_formula, lr])
+pipeline_model = pipeline.fit(log_train_df)
+pred_df = pipeline_model.transform(log_test_df)
 
 # COMMAND ----------
 
@@ -97,13 +97,12 @@ predDF = pipelineModel.transform(logTestDF)
 # COMMAND ----------
 
 # ANSWER
-
 from pyspark.sql.functions import col, exp
 
-expDF = predDF.withColumn("prediction", exp(col("log_pred")))
+exp_df = pred_df.withColumn("prediction", exp(col("log_pred")))
 
-rmse = regressionEvaluator.setMetricName("rmse").evaluate(expDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(expDF)
+rmse = regression_evaluator.setMetricName("rmse").evaluate(exp_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(exp_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 

@@ -31,7 +31,7 @@
 # MAGIC 
 # MAGIC * Remove duplicates. It doesn't matter which record you keep; it only matters that you keep one of them.
 # MAGIC * Preserve the data format of the columns. For example, if you write the first name column in all lower-case, you haven't met this requirement.
-# MAGIC * Write the result as a Parquet file, as designated by *destFile*.
+# MAGIC * Write the result as a Parquet file, as designated by *dest_file*.
 # MAGIC * The final Parquet "file" must contain 8 part files (8 files ending in ".parquet").
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/icon_hint_24.png"/>&nbsp;**Hint:** The initial dataset contains 103,000 records.<br/>
@@ -50,10 +50,6 @@
 
 # COMMAND ----------
 
-# MAGIC %run "../Includes/Initialize-Labs"
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC 
 # MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Hints
@@ -67,14 +63,14 @@
 
 # ANSWER
 
-sourceFile = f"{datasets_dir}/dataframes/people-with-dups.txt"
-destFile = userhome + "/people.parquet"
+source_file = f"{datasets_dir}/dataframes/people-with-dups.txt"
+dest_file = userhome + "/people.parquet"
 
 # In case it already exists
-dbutils.fs.rm(destFile, True)
+dbutils.fs.rm(dest_file, True)
 
 # First, let's see what the file looks like.
-print(dbutils.fs.head(sourceFile))
+print(dbutils.fs.head(source_file))
 
 # COMMAND ----------
 
@@ -88,29 +84,29 @@ spark.conf.set("spark.sql.shuffle.partitions", 8)
 # ANSWER
 
 df = (spark
-    .read
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .option("sep", ":")
-    .csv(sourceFile))
+      .read
+      .option("header", "true")
+      .option("inferSchema", "true")
+      .option("sep", ":")
+      .csv(source_file))
 
 # COMMAND ----------
 
 # ANSWER
 from pyspark.sql.functions import  col, lower, translate
 
-dedupedDF = (df
-  .select(col("*"),
-      lower(col("firstName")).alias("lcFirstName"),
-      lower(col("lastName")).alias("lcLastName"),
-      lower(col("middleName")).alias("lcMiddleName"),
-      translate(col("ssn"), "-", "").alias("ssnNums")
-      # regexp_replace(col("ssn"), "-", "").alias("ssnNums")
-      # regexp_replace(col("ssn"), """^(\d{3})(\d{2})(\d{4})$""", "$1-$2-$3").alias("ssnNums")
-   )
-  .dropDuplicates(["lcFirstName", "lcMiddleName", "lcLastName", "ssnNums", "gender", "birthDate", "salary"])
-  .drop("lcFirstName", "lcMiddleName", "lcLastName", "ssnNums")
-)
+deduped_df = (df
+              .select(col("*"),
+                      lower(col("firstName")).alias("lcFirstName"),
+                      lower(col("lastName")).alias("lcLastName"),
+                      lower(col("middleName")).alias("lcMiddleName"),
+                      translate(col("ssn"), "-", "").alias("ssnNums")
+                      # regexp_replace(col("ssn"), "-", "").alias("ssnNums")
+                      # regexp_replace(col("ssn"), """^(\d{3})(\d{2})(\d{4})$""", "$1-$2-$3").alias("ssnNums")
+                     )
+             .dropDuplicates(["lcFirstName", "lcMiddleName", "lcLastName", "ssnNums", "gender", "birthDate", "salary"])
+             .drop("lcFirstName", "lcMiddleName", "lcLastName", "ssnNums")
+            )
 
 # COMMAND ----------
 
@@ -118,38 +114,36 @@ dedupedDF = (df
 
 # Now we can save the results. We'll also re-read them and count them, just as a final check.
 # Just for fun, we'll use the Snappy compression codec. It's not as compact as Gzip, but it's much faster.
-(dedupedDF.write
-   .mode("overwrite")
-   .parquet(destFile)
-)
-dedupedDF = spark.read.parquet(destFile)
-print("Total Records: {0:,}".format( dedupedDF.count() ))
+deduped_df.write.mode("overwrite").parquet(dest_file)
+
+deduped_df = spark.read.parquet(dest_file)
+print(f"Total Records: {deduped_df.count()}")
 
 # COMMAND ----------
 
 # ANSWER
 
-display(dbutils.fs.ls(destFile))
+display(dbutils.fs.ls(dest_file))
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ##![Spark Logo Tiny](https://s3-us-west-2.amazonaws.com/curriculum-release/images/105/logo_spark_tiny.png) Validate Your Answer
 # MAGIC 
-# MAGIC At the bare minimum, we can verify that you wrote the parquet file out to **destFile** and that you have the right number of records.
+# MAGIC At the bare minimum, we can verify that you wrote the parquet file out to **dest_file** and that you have the right number of records.
 # MAGIC 
 # MAGIC Running the following cell to confirm your result:
 
 # COMMAND ----------
 
-partFiles = len(list(filter(lambda f: f.path.endswith(".parquet"), dbutils.fs.ls(destFile))))
+part_files = len(list(filter(lambda f: f.path.endswith(".parquet"), dbutils.fs.ls(dest_file))))
 
-finalDF = spark.read.parquet(destFile)
-finalCount = finalDF.count()
+final_df = spark.read.parquet(dest_file)
+final_count = final_df.count()
 
 clearYourResults()
-validateYourAnswer("01 Parquet File Exists", 1276280174, partFiles)
-validateYourAnswer("02 Expected 100000 Records", 972882115, finalCount)
+validateYourAnswer("01 Parquet File Exists", 1276280174, part_files)
+validateYourAnswer("02 Expected 100000 Records", 972882115, final_count)
 summarizeYourResults()
 
 # COMMAND ----------

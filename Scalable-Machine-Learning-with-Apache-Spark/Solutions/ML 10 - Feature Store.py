@@ -42,8 +42,8 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnb_df = spark.read.format("delta").load(filePath).withColumn("index", monotonically_increasing_id())
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path).coalesce(1).withColumn("index", monotonically_increasing_id())
 display(airbnb_df)
 
 # COMMAND ----------
@@ -92,7 +92,7 @@ numeric_cols = [x.name for x in airbnb_df.schema.fields if (x.dataType == Double
 
 @feature_table
 def select_numeric_features(data):
-  return data.select(["index"] + numeric_cols)
+    return data.select(["index"] + numeric_cols)
 
 numeric_features_df = select_numeric_features(airbnb_df)
 display(numeric_features_df)
@@ -123,9 +123,9 @@ fs.create_feature_table(
 # MAGIC )
 # MAGIC 
 # MAGIC fs.write_table(
-# MAGIC   name=table_name,
-# MAGIC   df=numeric_features_df,
-# MAGIC   mode="overwrite"
+# MAGIC     name=table_name,
+# MAGIC     df=numeric_features_df,
+# MAGIC     mode="overwrite"
 # MAGIC )
 # MAGIC ```
 
@@ -187,17 +187,17 @@ display(inference_data_df)
 # COMMAND ----------
 
 def load_data(table_name, lookup_key):
-  model_feature_lookups = [FeatureLookup(table_name=table_name, lookup_key=lookup_key)]
-  
-  # fs.create_training_set will look up features in model_feature_lookups with matched key from inference_data_df
-  training_set = fs.create_training_set(inference_data_df, model_feature_lookups, label="price", exclude_columns="index")
-  training_pd = training_set.load_df().toPandas()
-  
-  # Create train and test datasets
-  X = training_pd.drop("price", axis=1)
-  y = training_pd["price"]
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-  return X_train, X_test, y_train, y_test, training_set
+    model_feature_lookups = [FeatureLookup(table_name=table_name, lookup_key=lookup_key)]
+
+    # fs.create_training_set will look up features in model_feature_lookups with matched key from inference_data_df
+    training_set = fs.create_training_set(inference_data_df, model_feature_lookups, label="price", exclude_columns="index")
+    training_pd = training_set.load_df().toPandas()
+
+    # Create train and test datasets
+    X = training_pd.drop("price", axis=1)
+    y = training_pd["price"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    return X_train, X_test, y_train, y_test, training_set
 
 X_train, X_test, y_train, y_test, training_set = load_data(table_name, "index")
 X_train.head()
@@ -211,28 +211,38 @@ X_train.head()
 
 # COMMAND ----------
 
+from mlflow.tracking.client import MlflowClient
+
+client = MlflowClient()
+try:
+    client.delete_registered_model(f"feature_store_airbnb_{cleaned_username}") # Deleting model if already created
+except:
+    None
+
+# COMMAND ----------
+
 def train_model(table_name):
-  X_train, X_test, y_train, y_test, training_set = load_data(table_name, "index")
-  
-  ## fit and log model
-  with mlflow.start_run() as run:
+    X_train, X_test, y_train, y_test, training_set = load_data(table_name, "index")
 
-    rf = RandomForestRegressor(max_depth=3, n_estimators=20, random_state=42)
-    rf.fit(X_train, y_train)
-    y_pred = rf.predict(X_test)
+    ## fit and log model
+    with mlflow.start_run() as run:
 
-    mlflow.log_metric("mse", mean_squared_error(y_test, y_pred))
-    mlflow.log_metric("r2", r2_score(y_test, y_pred))
+        rf = RandomForestRegressor(max_depth=3, n_estimators=20, random_state=42)
+        rf.fit(X_train, y_train)
+        y_pred = rf.predict(X_test)
 
-    fs.log_model(
-      model=rf,
-      artifact_path="feature-store-model", # NOTE: There is a bug in writing files to repos
-      flavor=mlflow.sklearn,
-      training_set=training_set,
-      registered_model_name=f"feature_store_airbnb_{cleaned_username}",
-      input_example=X_train[:5],
-      signature=infer_signature(X_train, y_train)
-    )
+        mlflow.log_metric("mse", mean_squared_error(y_test, y_pred))
+        mlflow.log_metric("r2", r2_score(y_test, y_pred))
+
+        fs.log_model(
+            model=rf,
+            artifact_path="feature-store-model",
+            flavor=mlflow.sklearn,
+            training_set=training_set,
+            registered_model_name=f"feature_store_airbnb_{cleaned_username}",
+            input_example=X_train[:5],
+            signature=infer_signature(X_train, y_train)
+        )
     
 train_model(table_name)
 
@@ -257,7 +267,7 @@ train_model(table_name)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC The `feature_store_model` is registered in the MLflow model registery as well. You can find it in `Models` page. It is also logged at the feature store page, indicating which features in the feature table are used for the model. We will exam feature/model lineage through the UI together later.
+# MAGIC The `feature_store_model` is registered in the MLflow model registry as well. You can find it in `Models` page. It is also logged at the feature store page, indicating which features in the feature table are used for the model. We will exam feature/model lineage through the UI together later.
 
 # COMMAND ----------
 
@@ -287,11 +297,11 @@ review_columns = ["review_scores_accuracy", "review_scores_cleanliness", "review
                  "review_scores_communication", "review_scores_location", "review_scores_value"]
 @feature_table
 def select_numeric_features(data):
-  result = (data.select(["index"] + numeric_cols)
-            .withColumn("average_review_score", expr("+".join(review_columns)) / lit(len(review_columns)))
-            .drop(*review_columns)
-           )
-  return result
+    result = (data.select(["index"] + numeric_cols)
+              .withColumn("average_review_score", expr("+".join(review_columns)) / lit(len(review_columns)))
+              .drop(*review_columns)
+             )
+    return result
 
 condensed_review_df = select_numeric_features(airbnb_df)
 display(condensed_review_df)
@@ -304,9 +314,9 @@ display(condensed_review_df)
 # COMMAND ----------
 
 fs.write_table(
-  name=table_name,
-  df=condensed_review_df,
-  mode="overwrite"
+    name=table_name,
+    df=condensed_review_df,
+    mode="overwrite"
 )
 
 # COMMAND ----------

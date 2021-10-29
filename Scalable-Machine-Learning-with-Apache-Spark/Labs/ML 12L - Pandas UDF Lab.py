@@ -31,26 +31,26 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 
 with mlflow.start_run(run_name="sklearn-random-forest") as run:
-  # Import the data
-  df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/"))
-  X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
+    # Import the data
+    df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/"))
+    X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
 
-  # Create model, train it, and create predictions
-  rf = RandomForestRegressor(n_estimators=100, max_depth=10)
-  rf.fit(X_train, y_train)
-  predictions = rf.predict(X_test)
+    # Create model, train it, and create predictions
+    rf = RandomForestRegressor(n_estimators=100, max_depth=10)
+    rf.fit(X_train, y_train)
+    predictions = rf.predict(X_test)
 
-  # Log model
-  mlflow.sklearn.log_model(rf, "random-forest-model")
+    # Log model
+    mlflow.sklearn.log_model(rf, "random-forest-model")
 
-  # Log params
-  mlflow.log_param("n_estimators", 100)
-  mlflow.log_param("max_depth", 10)
+    # Log params
+    mlflow.log_param("n_estimators", 100)
+    mlflow.log_param("max_depth", 10)
 
-  # Log metrics
-  mlflow.log_metric("mse", mean_squared_error(y_test, predictions))
-  mlflow.log_metric("mae", mean_absolute_error(y_test, predictions))  
-  mlflow.log_metric("r2", r2_score(y_test, predictions))  
+    # Log metrics
+    mlflow.log_metric("mse", mean_squared_error(y_test, predictions))
+    mlflow.log_metric("mae", mean_absolute_error(y_test, predictions))  
+    mlflow.log_metric("r2", r2_score(y_test, predictions))  
 
 # COMMAND ----------
 
@@ -58,7 +58,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-sparkDF = spark.createDataFrame(df)
+spark_df = spark.createDataFrame(df)
 
 # COMMAND ----------
 
@@ -93,7 +93,7 @@ predict = mlflow.pyfunc.spark_udf(<FILL_IN>)
 # TODO
 
 features = X_train.columns
-display(sparkDF.withColumn("prediction", <FILL_IN>))
+display(spark_df.withColumn("prediction", <FILL_IN>))
 
 # COMMAND ----------
 

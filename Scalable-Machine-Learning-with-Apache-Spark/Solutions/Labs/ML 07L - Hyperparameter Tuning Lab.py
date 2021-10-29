@@ -37,23 +37,26 @@ from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.ml import Pipeline
 from pyspark.sql.functions import col
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
 
-airbnbDF = (spark.read.format("delta").load(filePath)
-  .withColumn("priceClass", (col("price") >= 150).cast("int"))
-  .drop("price")
-)
+airbnb_df = (spark
+            .read
+            .format("delta")
+            .load(file_path)
+            .withColumn("priceClass", (col("price") >= 150).cast("int"))
+            .drop("price")
+           )
 
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
-categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
-indexOutputCols = [x + "Index" for x in categoricalCols]
+categorical_cols = [field for (field, dataType) in train_df.dtypes if dataType == "string"]
+index_output_cols = [x + "Index" for x in categorical_cols]
 
-stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputCols, handleInvalid="skip")
+string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_output_cols, handleInvalid="skip")
 
-numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "priceClass"))]
-assemblerInputs = indexOutputCols + numericCols
-vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+numeric_cols = [field for (field, dataType) in train_df.dtypes if ((dataType == "double") & (field != "priceClass"))]
+assembler_inputs = index_output_cols + numeric_cols
+vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features")
 
 # COMMAND ----------
 
@@ -85,7 +88,7 @@ rf = RandomForestClassifier(labelCol="priceClass", maxBins=40, seed=42)
 # MAGIC 
 # MAGIC There are a lot of hyperparameters we could tune, and it would take a long time to manually configure.
 # MAGIC 
-# MAGIC Let's use Spark's [ParamGridBuilder](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgrid#pyspark.ml.tuning.ParamGridBuilder) to find the optimal hyperparameters in a more systematic approach.
+# MAGIC Let's use Spark's [ParamGridBuilder](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgrid#pyspark.ml.tuning.ParamGridBuilder) to find the optimal hyperparameters in a more systematic approach. Call this variable `param_grid`.
 # MAGIC 
 # MAGIC Let's define a grid of hyperparameters to test:
 # MAGIC   - maxDepth: max depth of the decision tree (Use the values `2, 5, 10`)
@@ -99,10 +102,10 @@ rf = RandomForestClassifier(labelCol="priceClass", maxBins=40, seed=42)
 
 from pyspark.ml.tuning import ParamGridBuilder
 
-paramGrid = (ParamGridBuilder()
-            .addGrid(rf.maxDepth, [2, 5, 10])
-            .addGrid(rf.numTrees, [10, 20, 100])
-            .build())
+param_grid = (ParamGridBuilder()
+              .addGrid(rf.maxDepth, [2, 5, 10])
+              .addGrid(rf.numTrees, [10, 20, 100])
+              .build())
 
 # COMMAND ----------
 
@@ -119,7 +122,7 @@ paramGrid = (ParamGridBuilder()
 # ANSWER
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 
-evaluator = BinaryClassificationEvaluator(labelCol="priceClass")
+evaluator = BinaryClassificationEvaluator(labelCol="priceClass", metricName="areaUnderROC")
 
 # COMMAND ----------
 
@@ -134,7 +137,7 @@ evaluator = BinaryClassificationEvaluator(labelCol="priceClass")
 # ANSWER
 from pyspark.ml.tuning import CrossValidator
 
-cv = CrossValidator(estimator=rf, evaluator=evaluator, estimatorParamMaps=paramGrid,
+cv = CrossValidator(estimator=rf, evaluator=evaluator, estimatorParamMaps=param_grid,
                     numFolds=3, parallelism=4, seed=42)
 
 # COMMAND ----------
@@ -145,11 +148,11 @@ cv = CrossValidator(estimator=rf, evaluator=evaluator, estimatorParamMaps=paramG
 
 # COMMAND ----------
 
-stages = [stringIndexer, vecAssembler, cv]
+stages = [string_indexer, vec_assembler, cv]
 
 pipeline = Pipeline(stages=stages)
 
-pipelineModel = pipeline.fit(trainDF)
+pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
@@ -159,12 +162,12 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-cvModel = pipelineModel.stages[-1]
-rfModel = cvModel.bestModel
+cv_model = pipeline_model.stages[-1]
+rf_model = cv_model.bestModel
 
-# list(zip(cvModel.getEstimatorParamMaps(), cvModel.avgMetrics))
+# list(zip(cv_model.getEstimatorParamMaps(), cv_model.avgMetrics))
 
-print(rfModel.explainParams())
+print(rf_model.explainParams())
 
 # COMMAND ----------
 
@@ -174,9 +177,9 @@ print(rfModel.explainParams())
 
 import pandas as pd
 
-pandasDF = pd.DataFrame(list(zip(vecAssembler.getInputCols(), rfModel.featureImportances)), columns=["feature", "importance"])
-topFeatures = pandasDF.sort_values(["importance"], ascending=False)
-topFeatures
+pandas_df = pd.DataFrame(list(zip(vec_assembler.getInputCols(), rf_model.featureImportances)), columns=["feature", "importance"])
+top_features = pandas_df.sort_values(["importance"], ascending=False)
+top_features
 
 # COMMAND ----------
 
@@ -190,20 +193,20 @@ topFeatures
 
 # ANSWER
 
-predDF = pipelineModel.transform(testDF)
-areaUnderROC = evaluator.evaluate(predDF)
-print(f"Area under ROC is {areaUnderROC:.2f}")
+pred_df = pipeline_model.transform(test_df)
+area_under_roc = evaluator.evaluate(pred_df)
+print(f"Area under ROC is {area_under_roc:.2f}")
 
 # COMMAND ----------
 
 # MAGIC %md ## Save Model
 # MAGIC 
-# MAGIC Save the model to `<userhome>/machine-learning/rf_pipeline_model`.
+# MAGIC Save the model to `working_dir` (variable defined in Classroom-Setup)
 
 # COMMAND ----------
 
 # ANSWER
-pipelineModel.write().overwrite().save(userhome + "/machine-learning/rf_pipeline_model")
+pipeline_model.write().overwrite().save(working_dir)
 
 # COMMAND ----------
 

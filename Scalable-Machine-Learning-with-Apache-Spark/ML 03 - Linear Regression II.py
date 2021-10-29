@@ -22,8 +22,8 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
@@ -33,7 +33,7 @@ airbnbDF = spark.read.format("delta").load(filePath)
 
 # COMMAND ----------
 
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -53,12 +53,12 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 from pyspark.ml.feature import OneHotEncoder, StringIndexer
 
-categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
-indexOutputCols = [x + "Index" for x in categoricalCols]
-oheOutputCols = [x + "OHE" for x in categoricalCols]
+categorical_cols = [field for (field, dataType) in train_df.dtypes if dataType == "string"]
+index_output_cols = [x + "Index" for x in categorical_cols]
+ohe_output_cols = [x + "OHE" for x in categorical_cols]
 
-stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputCols, handleInvalid="skip")
-oheEncoder = OneHotEncoder(inputCols=indexOutputCols, outputCols=oheOutputCols)
+string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_output_cols, handleInvalid="skip")
+ohe_encoder = OneHotEncoder(inputCols=index_output_cols, outputCols=ohe_output_cols)
 
 # COMMAND ----------
 
@@ -71,9 +71,9 @@ oheEncoder = OneHotEncoder(inputCols=indexOutputCols, outputCols=oheOutputCols)
 
 from pyspark.ml.feature import VectorAssembler
 
-numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "price"))]
-assemblerInputs = oheOutputCols + numericCols
-vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+numeric_cols = [field for (field, dataType) in train_df.dtypes if ((dataType == "double") & (field != "price"))]
+assembler_inputs = ohe_output_cols + numeric_cols
+vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features")
 
 # COMMAND ----------
 
@@ -99,10 +99,10 @@ lr = LinearRegression(labelCol="price", featuresCol="features")
 
 from pyspark.ml import Pipeline
 
-stages = [stringIndexer, oheEncoder, vecAssembler, lr]
+stages = [string_indexer, ohe_encoder, vec_assembler, lr]
 pipeline = Pipeline(stages=stages)
 
-pipelineModel = pipeline.fit(trainDF)
+pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
@@ -112,8 +112,7 @@ pipelineModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
-pipelinePath = userhome + "/machine-learning/lr_pipeline_model"
-pipelineModel.write().overwrite().save(pipelinePath)
+pipeline_model.write().overwrite().save(working_dir)
 
 # COMMAND ----------
 
@@ -127,7 +126,7 @@ pipelineModel.write().overwrite().save(pipelinePath)
 
 from pyspark.ml import PipelineModel
 
-savedPipelineModel = PipelineModel.load(pipelinePath)
+saved_pipeline_model = PipelineModel.load(working_dir)
 
 # COMMAND ----------
 
@@ -136,9 +135,9 @@ savedPipelineModel = PipelineModel.load(pipelinePath)
 
 # COMMAND ----------
 
-predDF = savedPipelineModel.transform(testDF)
+pred_df = saved_pipeline_model.transform(test_df)
 
-display(predDF.select("features", "price", "prediction"))
+display(pred_df.select("features", "price", "prediction"))
 
 # COMMAND ----------
 
@@ -150,10 +149,10 @@ display(predDF.select("features", "price", "prediction"))
 
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
 
-rmse = regressionEvaluator.evaluate(predDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
+rmse = regression_evaluator.evaluate(pred_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 

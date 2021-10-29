@@ -25,8 +25,8 @@ import pandas as pd
 # Load in a Dataset from sklearn and convert to a Spark DataFrame
 iris = load_iris()
 iris_pd = pd.concat([pd.DataFrame(iris.data, columns=iris.feature_names), pd.DataFrame(iris.target, columns=["label"])], axis=1)
-irisDF = spark.createDataFrame(iris_pd)
-display(irisDF)
+iris_df = spark.createDataFrame(iris_pd)
+display(iris_df)
 
 # COMMAND ----------
 
@@ -37,9 +37,9 @@ display(irisDF)
 
 from pyspark.ml.feature import VectorAssembler
 
-vecAssembler = VectorAssembler(inputCols=["sepal length (cm)", "sepal width (cm)"], outputCol="features")
-irisTwoFeaturesDF = vecAssembler.transform(irisDF)
-display(irisTwoFeaturesDF)
+vec_assembler = VectorAssembler(inputCols=["sepal length (cm)", "sepal width (cm)"], outputCol="features")
+iris_two_features_df = vec_assembler.transform(iris_df)
+display(iris_two_features_df)
 
 # COMMAND ----------
 
@@ -47,31 +47,31 @@ from pyspark.ml.clustering import KMeans
 
 kmeans = KMeans(k=3, seed=221, maxIter=20)
 
-#  Call fit on the estimator and pass in irisTwoFeaturesDF
-model = kmeans.fit(irisTwoFeaturesDF)
+#  Call fit on the estimator and pass in iris_two_features_df
+model = kmeans.fit(iris_two_features_df)
 
 # Obtain the clusterCenters from the KMeansModel
 centers = model.clusterCenters()
 
 # Use the model to transform the DataFrame by adding cluster predictions
-transformedDF = model.transform(irisTwoFeaturesDF)
+transformed_df = model.transform(iris_two_features_df)
 
 print(centers)
 
 # COMMAND ----------
 
-modelCenters = []
+model_centers = []
 iterations = [0, 2, 4, 7, 10, 20]
 for i in iterations:
     kmeans = KMeans(k=3, seed=221, maxIter=i)
-    model = kmeans.fit(irisTwoFeaturesDF)
-    modelCenters.append(model.clusterCenters())   
+    model = kmeans.fit(iris_two_features_df)
+    model_centers.append(model.clusterCenters())   
 
 # COMMAND ----------
 
-print("modelCenters:")
-for centroids in modelCenters:
-  print(centroids)
+print("model_centers:")
+for centroids in model_centers:
+    print(centroids)
 
 # COMMAND ----------
 
@@ -88,15 +88,14 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
 
-def prepareSubplot(xticks, yticks, figsize=(10.5, 6), hideLabels=False, gridColor="#999999", 
-                gridWidth=1.0, subplots=(1, 1)):
+def prepare_subplot(xticks, yticks, figsize=(10.5, 6), hideLabels=False, gridColor="#999999", gridWidth=1.0, subplots=(1, 1)):
     """Template for generating the plot layout."""
-    fig, axList = plt.subplots(subplots[0], subplots[1], figsize=figsize, facecolor="white", 
+    fig, ax_list = plt.subplots(subplots[0], subplots[1], figsize=figsize, facecolor="white", 
                                edgecolor="white")
-    if not isinstance(axList, np.ndarray):
-        axList = np.array([axList])
+    if not isinstance(ax_list, np.ndarray):
+        ax_list = np.array([ax_list])
     
-    for ax in axList.flatten():
+    for ax in ax_list.flatten():
         ax.axes.tick_params(labelcolor="#999999", labelsize="10")
         for axis, ticks in [(ax.get_xaxis(), xticks), (ax.get_yaxis(), yticks)]:
             axis.set_ticks_position("none")
@@ -106,30 +105,30 @@ def prepareSubplot(xticks, yticks, figsize=(10.5, 6), hideLabels=False, gridColo
         ax.grid(color=gridColor, linewidth=gridWidth, linestyle="-")
         map(lambda position: ax.spines[position].set_visible(False), ["bottom", "top", "left", "right"])
         
-    if axList.size == 1:
-        axList = axList[0]  # Just return a single axes object for a regular plot
-    return fig, axList
+    if ax_list.size == 1:
+        ax_list = ax_list[0]  # Just return a single axes object for a regular plot
+    return fig, ax_list
 
 # COMMAND ----------
 
-data = irisTwoFeaturesDF.select("features", "label").collect()
+data = iris_two_features_df.select("features", "label").collect()
 features, labels = zip(*data)
 
 x, y = zip(*features)
-centers = modelCenters[5]
-centroidX, centroidY = zip(*centers)
-colorMap = "Set1"
+centers = model_centers[5]
+centroid_x, centroid_y = zip(*centers)
+color_map = "Set1"
 
-fig, ax = prepareSubplot(np.arange(-1, 1.1, .4), np.arange(-1, 1.1, .4), figsize=(8,6))
-plt.scatter(x, y, s=14**2, c=labels, edgecolors="#8cbfd0", alpha=0.80, cmap=colorMap)
-plt.scatter(centroidX, centroidY, s=22**2, marker="*", c="yellow")
-cmap = cm.get_cmap(colorMap)
+fig, ax = prepare_subplot(np.arange(-1, 1.1, .4), np.arange(-1, 1.1, .4), figsize=(8,6))
+plt.scatter(x, y, s=14**2, c=labels, edgecolors="#8cbfd0", alpha=0.80, cmap=color_map)
+plt.scatter(centroid_x, centroid_y, s=22**2, marker="*", c="yellow")
+cmap = cm.get_cmap(color_map)
 
-colorIndex = [.5, .99, .0]
+color_index = [.5, .99, .0]
 for i, (x,y) in enumerate(centers):
-    print(cmap(colorIndex[i]))
+    print(cmap(color_index[i]))
     for size in [.10, .20, .30, .40, .50]:
-        circle1=plt.Circle((x,y),size,color=cmap(colorIndex[i]), alpha=.10, linewidth=2)
+        circle1=plt.Circle((x,y), size, color=cmap(color_index[i]), alpha=.10, linewidth=2)
         ax.add_artist(circle1)
 
 ax.set_xlabel("Sepal Length"), ax.set_ylabel("Sepal Width")
@@ -144,31 +143,31 @@ fig
 
 x, y = zip(*features)
 
-oldCentroidX, oldCentroidY = None, None
+old_centroid_x, old_centroid_y = None, None
 
-fig, axList = prepareSubplot(np.arange(-1, 1.1, .4), np.arange(-1, 1.1, .4), figsize=(11, 15),
+fig, ax_list = prepare_subplot(np.arange(-1, 1.1, .4), np.arange(-1, 1.1, .4), figsize=(11, 15),
                              subplots=(3, 2))
-axList = axList.flatten()
+ax_list = ax_list.flatten()
 
-for i,ax in enumerate(axList[:]):
+for i,ax in enumerate(ax_list[:]):
     ax.set_title("K-means for {0} iterations".format(iterations[i]), color="#999999")
-    centroids = modelCenters[i]
-    centroidX, centroidY = zip(*centroids)
+    centroids = model_centers[i]
+    centroid_x, centroid_y = zip(*centroids)
     
-    ax.scatter(x, y, s=10**2, c=labels, edgecolors="#8cbfd0", alpha=0.80, cmap=colorMap, zorder=0)
-    ax.scatter(centroidX, centroidY, s=16**2, marker="*", c="yellow", zorder=2)
-    if oldCentroidX and oldCentroidY:
-      ax.scatter(oldCentroidX, oldCentroidY, s=16**2, marker="*", c="grey", zorder=1)
-    cmap = cm.get_cmap(colorMap)
+    ax.scatter(x, y, s=10**2, c=labels, edgecolors="#8cbfd0", alpha=0.80, cmap=color_map, zorder=0)
+    ax.scatter(centroid_x, centroid_y, s=16**2, marker="*", c="yellow", zorder=2)
+    if old_centroid_x and old_centroid_y:
+      ax.scatter(old_centroid_x, old_centroid_y, s=16**2, marker="*", c="grey", zorder=1)
+    cmap = cm.get_cmap(color_map)
     
-    colorIndex = [.5, .99, 0.]
+    color_index = [.5, .99, 0.]
     for i, (x1,y1) in enumerate(centroids):
-      print(cmap(colorIndex[i]))
-      circle1=plt.Circle((x1,y1),.35,color=cmap(colorIndex[i]), alpha=.40)
+      print(cmap(color_index[i]))
+      circle1=plt.Circle((x1,y1),.35,color=cmap(color_index[i]), alpha=.40)
       ax.add_artist(circle1)
     
     ax.set_xlabel("Sepal Length"), ax.set_ylabel("Sepal Width")
-    oldCentroidX, oldCentroidY = centroidX, centroidY
+    old_centroid_x, old_centroid_y = centroid_x, centroid_y
 
 plt.tight_layout()
 

@@ -43,9 +43,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, valDF, testDF = airbnbDF.randomSplit([.6, .2, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, val_df, test_df = airbnb_df.randomSplit([.6, .2, .2], seed=42)
 
 # COMMAND ----------
 
@@ -59,20 +59,18 @@ from pyspark.ml import Pipeline
 from pyspark.ml.regression import RandomForestRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
 
-categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
-indexOutputCols = [x + "Index" for x in categoricalCols]
+categorical_cols = [field for (field, dataType) in train_df.dtypes if dataType == "string"]
+index_output_cols = [x + "Index" for x in categorical_cols]
 
-stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputCols, handleInvalid="skip")
+string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_output_cols, handleInvalid="skip")
 
-numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "price"))]
-assemblerInputs = indexOutputCols + numericCols
-vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+numeric_cols = [field for (field, dataType) in train_df.dtypes if ((dataType == "double") & (field != "price"))]
+assembler_inputs = index_output_cols + numeric_cols
+vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features")
 
 rf = RandomForestRegressor(labelCol="price", maxBins=40, seed=42)
-
-pipeline = Pipeline(stages=[stringIndexer, vecAssembler, rf])
-
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price")
+pipeline = Pipeline(stages=[string_indexer, vec_assembler, rf])
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price")
 
 # COMMAND ----------
 
@@ -91,19 +89,19 @@ regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="
 # COMMAND ----------
 
 def objective_function(params):    
-  # set the hyperparameters that we want to tune
-  max_depth = params["max_depth"]
-  num_trees = params["num_trees"]
-  
-  with mlflow.start_run():
-    estimator = pipeline.copy({rf.maxDepth: max_depth, rf.numTrees: num_trees})
-    model = estimator.fit(trainDF)
+    # set the hyperparameters that we want to tune
+    max_depth = params["max_depth"]
+    num_trees = params["num_trees"]
 
-    preds = model.transform(valDF)
-    rmse = regressionEvaluator.evaluate(preds)
-    mlflow.log_metric("rmse", rmse)
+    with mlflow.start_run():
+        estimator = pipeline.copy({rf.maxDepth: max_depth, rf.numTrees: num_trees})
+        model = estimator.fit(train_df)
 
-  return rmse
+        preds = model.transform(val_df)
+        rmse = regression_evaluator.evaluate(preds)
+        mlflow.log_metric("rmse", rmse)
+
+    return rmse
 
 # COMMAND ----------
 
@@ -119,8 +117,8 @@ def objective_function(params):
 from hyperopt import hp
 
 search_space = {
-  "max_depth": hp.quniform("max_depth", 2, 5, 1),
-  "num_trees": hp.quniform("num_trees", 10, 100, 1)
+    "max_depth": hp.quniform("max_depth", 2, 5, 1),
+    "num_trees": hp.quniform("num_trees", 10, 100, 1)
 }
 
 # COMMAND ----------
@@ -156,20 +154,20 @@ best_hyperparam = fmin(fn=objective_function,
 
 # Retrain model on train & validation dataset and evaluate on test dataset
 with mlflow.start_run():
-  best_max_depth = best_hyperparam["max_depth"]
-  best_num_trees = best_hyperparam["num_trees"]
-  estimator = pipeline.copy({rf.maxDepth: best_max_depth, rf.numTrees: best_num_trees})
-  combinedDF = trainDF.union(valDF) # Combine train & validation together
-  
-  pipelineModel = estimator.fit(combinedDF)
-  predDF = pipelineModel.transform(testDF)
-  rmse = regressionEvaluator.evaluate(predDF)
+    best_max_depth = best_hyperparam["max_depth"]
+    best_num_trees = best_hyperparam["num_trees"]
+    estimator = pipeline.copy({rf.maxDepth: best_max_depth, rf.numTrees: best_num_trees})
+    combined_df = train_df.union(val_df) # Combine train & validation together
 
-  # Log param and metrics for the final model
-  mlflow.log_param("maxDepth", best_max_depth)
-  mlflow.log_param("numTrees", best_num_trees)
-  mlflow.log_metric("rmse", rmse)
-  mlflow.spark.log_model(pipelineModel, "model")
+    pipeline_model = estimator.fit(combined_df)
+    pred_df = pipeline_model.transform(test_df)
+    rmse = regression_evaluator.evaluate(pred_df)
+
+    # Log param and metrics for the final model
+    mlflow.log_param("maxDepth", best_max_depth)
+    mlflow.log_param("numTrees", best_num_trees)
+    mlflow.log_metric("rmse", rmse)
+    mlflow.spark.log_model(pipeline_model, "model")
 
 # COMMAND ----------
 

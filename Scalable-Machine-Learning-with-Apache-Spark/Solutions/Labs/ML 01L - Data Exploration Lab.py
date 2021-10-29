@@ -26,13 +26,13 @@
 # MAGIC %md 
 # MAGIC Let's keep 80% for the training set and set aside 20% of our data for the test set. We will use the [randomSplit](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit) method.
 # MAGIC 
-# MAGIC We will discuss more about the train-test split later, but throughout this notebook, do your data exploration on `trainDF`.
+# MAGIC We will discuss more about the train-test split later, but throughout this notebook, do your data exploration on `train_df`.
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -41,7 +41,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-display(trainDF.select("price"))
+display(train_df.select("price"))
 
 # COMMAND ----------
 
@@ -54,7 +54,7 @@ display(trainDF.select("price"))
 
 from pyspark.sql.functions import log
 
-display(trainDF.select(log("price")))
+display(train_df.select(log("price")))
 
 # COMMAND ----------
 
@@ -67,7 +67,7 @@ display(trainDF.select(log("price")))
 
 # COMMAND ----------
 
-display(trainDF)
+display(train_df)
 
 # COMMAND ----------
 
@@ -76,7 +76,7 @@ display(trainDF)
 
 # COMMAND ----------
 
-display(trainDF.groupBy("room_type").count())
+display(train_df.groupBy("room_type").count())
 
 # COMMAND ----------
 
@@ -89,10 +89,10 @@ display(trainDF.groupBy("room_type").count())
 
 from pyspark.sql.functions import col
 
-display(trainDF
-  .groupBy("neighbourhood_cleansed").count()
-  .orderBy(col("count").desc())
-)
+display(train_df
+        .groupBy("neighbourhood_cleansed").count()
+        .orderBy(col("count").desc())
+       )
 
 # COMMAND ----------
 
@@ -106,12 +106,9 @@ display(trainDF
 
 from pyspark.sql.functions import col
 
-lat_long_price_values = trainDF.select(col("latitude"), col("longitude"), col("price")/600).collect()
+lat_long_price_values = train_df.select(col("latitude"), col("longitude"), col("price")/600).collect()
 
-lat_long_price_strings = [
-  "[{}, {}, {}]".format(lat, long, price) 
-  for lat, long, price in lat_long_price_values
-]
+lat_long_price_strings = [f"[{lat}, {long}, {price}]" for lat, long, price in lat_long_price_values]
 
 v = ",\n".join(lat_long_price_strings)
 
@@ -148,8 +145,8 @@ displayHTML("""
 # MAGIC 
 # MAGIC For this dataset, let's build a baseline model that always predict the average price and one that always predicts the [median](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.approxQuantile.html?highlight=approxquantile#pyspark.sql.DataFrame.approxQuantile) price, and see how we do. Do this in two separate steps:
 # MAGIC 
-# MAGIC 0. `trainDF`: Extract the average and median price from `trainDF`, and store them in the variables `avgPrice` and `medianPrice`, respectively.
-# MAGIC 0. `testDF`: Create two additional columns called `avgPrediction` and `medianPrediction` with the average and median price from `trainDF`, respectively. Call the resulting DataFrame `predDF`. 
+# MAGIC 0. `train_df`: Extract the average and median price from `train_df`, and store them in the variables `avg_price` and `median_price`, respectively.
+# MAGIC 0. `test_df`: Create two additional columns called `avgPrediction` and `medianPrediction` with the average and median price from `train_df`, respectively. Call the resulting DataFrame `pred_df`. 
 # MAGIC 
 # MAGIC Some useful functions:
 # MAGIC * [avg()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.avg.html?highlight=avg#pyspark.sql.functions.avg)
@@ -164,12 +161,12 @@ displayHTML("""
 
 from pyspark.sql.functions import avg, lit
 
-avgPrice = trainDF.select(avg("price")).first()[0]
-medianPrice = trainDF.approxQuantile("price", probabilities=[0.5], relativeError=0.01)[0]
+avg_price = train_df.select(avg("price")).first()[0]
+median_price = train_df.approxQuantile("price", probabilities=[0.5], relativeError=0.01)[0]
 
-predDF = (testDF
-          .withColumn("avgPrediction", lit(avgPrice))
-          .withColumn("medianPrediction", lit(medianPrice)))
+pred_df = (test_df
+          .withColumn("avgPrediction", lit(avg_price))
+          .withColumn("medianPrediction", lit(median_price)))
 
 # COMMAND ----------
 
@@ -181,11 +178,11 @@ predDF = (testDF
 
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regressionMeanEvaluator = RegressionEvaluator(predictionCol="avgPrediction", labelCol="price", metricName="rmse")
-print(f"The RMSE for predicting the average price is: {regressionMeanEvaluator.evaluate(predDF)}")
+regression_mean_evaluator = RegressionEvaluator(predictionCol="avgPrediction", labelCol="price", metricName="rmse")
+print(f"The RMSE for predicting the average price is: {regression_mean_evaluator.evaluate(pred_df)}")
 
 regressionMedianEvaluator = RegressionEvaluator(predictionCol="medianPrediction", labelCol="price", metricName="rmse")
-print(f"The RMSE for predicting the median price is: {regressionMedianEvaluator.evaluate(predDF)}")
+print(f"The RMSE for predicting the median price is: {regressionMedianEvaluator.evaluate(pred_df)}")
 
 # COMMAND ----------
 

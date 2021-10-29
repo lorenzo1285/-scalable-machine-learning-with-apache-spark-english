@@ -43,11 +43,12 @@
 
 file_path = f"{datasets_dir}/COVID/coronavirusdataset/Time.csv"
 
-spark_df = (spark.read
-  .option("inferSchema", True)
-  .option("header", True)
-  .csv(file_path)
-)
+spark_df = (spark
+            .read
+            .option("inferSchema", True)
+            .option("header", True)
+            .csv(file_path)
+           )
   
 display(spark_df)
 

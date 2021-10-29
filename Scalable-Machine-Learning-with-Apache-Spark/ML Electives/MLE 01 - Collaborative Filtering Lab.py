@@ -60,13 +60,13 @@ display(files)
 
 # COMMAND ----------
 
-moviesDF = spark.read.parquet(f"{datasets_dir}/movielens/movies.parquet/").cache()
-ratingsDF = spark.read.parquet(f"{datasets_dir}/movielens/ratings.parquet/").cache()
+movies_df = spark.read.parquet(f"{datasets_dir}/movielens/movies.parquet/").cache()
+ratings_df = spark.read.parquet(f"{datasets_dir}/movielens/ratings.parquet/").cache()
 
-ratingsCount = ratingsDF.count()
-moviesCount = moviesDF.count()
+ratings_count = ratings_df.count()
+movies_count = movies_df.count()
 
-print(f"There are {ratingsCount} ratings and {moviesCount} movies in the datasets")
+print(f"There are {ratings_count} ratings and {movies_count} movies in the datasets")
 
 # COMMAND ----------
 
@@ -75,11 +75,11 @@ print(f"There are {ratingsCount} ratings and {moviesCount} movies in the dataset
 
 # COMMAND ----------
 
-display(moviesDF)
+display(movies_df)
 
 # COMMAND ----------
 
-display(ratingsDF)
+display(ratings_df)
 
 # COMMAND ----------
 
@@ -91,7 +91,7 @@ display(ratingsDF)
 # MAGIC %md
 # MAGIC ### (2a) Creating a Training Set
 # MAGIC 
-# MAGIC Before we jump into using machine learning, we need to break up the `ratingsDF` dataset into two DataFrames:
+# MAGIC Before we jump into using machine learning, we need to break up the `ratings_df` dataset into two DataFrames:
 # MAGIC * A training set, which we will use to train models
 # MAGIC * A test set, which we will use for our experiments
 # MAGIC 
@@ -102,12 +102,12 @@ display(ratingsDF)
 # TODO
 # We'll hold out 80% for training and leave 20% for testing 
 seed = 42
-(trainingDF, testDF) = <FILL_IN>
+train_df, test_df = <FILL_IN>
 
-print(f"Training: {trainingDF.count()}, test: {testDF.count()}")
+print(f"Training: {train_df.count()}, test: {test_df.count()}")
 
-trainingDF.show(3)
-testDF.show(3)
+train_df.show(3)
+test_df.show(3)
 
 # COMMAND ----------
 
@@ -121,14 +121,14 @@ testDF.show(3)
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.sql.functions import lit, avg
 
-averageRating = trainingDF.select(avg("rating")).first()[0]
+average_rating = train_df.select(avg("rating")).first()[0]
 
-benchmarkDF = trainingDF.withColumn("prediction", lit(averageRating))
+benchmark_df = train_df.withColumn("prediction", lit(average_rating))
 
-regEval = RegressionEvaluator(predictionCol="prediction", labelCol="rating", metricName="rmse")
-baselineRmse = regEval.evaluate(benchmarkDF)
+reg_eval = RegressionEvaluator(predictionCol="prediction", labelCol="rating", metricName="rmse")
+baseline_rmse = reg_eval.evaluate(benchmark_df)
 
-print(f"Baseline RMSE: {baselineRmse:.3}")
+print(f"Baseline RMSE: {baseline_rmse:.3}")
 
 # COMMAND ----------
 
@@ -138,9 +138,9 @@ print(f"Baseline RMSE: {baselineRmse:.3}")
 # MAGIC In this part, we will use the Apache Spark ML Pipeline implementation of Alternating Least Squares, [ALS](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.recommendation.ALS.html?highlight=als#pyspark.ml.recommendation.ALS). To determine the best values for the hyperparameters, we will use ALS to train several models, and then we will select the best model and use the parameters from that model in the rest of this lab exercise.
 # MAGIC 
 # MAGIC The process we will use for determining the best model is as follows:
-# MAGIC 1. Pick a set of model parameters. The most important parameter to model is the *rank*, which is the number of columns in the Users matrix or the number of rows in the Movies matrix. In general, a lower rank will mean higher error on the training dataset, but a high rank may lead to [overfitting](https://en.wikipedia.org/wiki/Overfitting).  We will train models with ranks of 4 and 12 using the `trainingDF` dataset.
+# MAGIC 1. Pick a set of model hyperparameters. The most important hyperparameter to model is the *rank*, which is the number of columns in the Users matrix or the number of rows in the Movies matrix. In general, a lower rank will mean higher error on the training dataset, but a high rank may lead to [overfitting](https://en.wikipedia.org/wiki/Overfitting).  We will train models with ranks of 4 and 12 using the `train_df` dataset.
 # MAGIC 
-# MAGIC 2. Set the appropriate parameters on the `ALS` object:
+# MAGIC 2. Set the appropriate values:
 # MAGIC     * The "User" column will be set to the values in our `userId` DataFrame column.
 # MAGIC     * The "Item" column will be set to the values in our `movieId` DataFrame column.
 # MAGIC     * The "Rating" column will be set to the values in our `rating` DataFrame column.
@@ -180,53 +180,53 @@ assert als.getRatingCol() == "rating", f"Incorrect choice of {als.getRatingCol()
 from pyspark.ml.tuning import *
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regEval = <FILL_IN> # Create RegressionEvaluator
+reg_eval = <FILL_IN> # Create RegressionEvaluator
 
 grid = (
         <FILL_IN> # Create grid for rank values 4 and 12 
         )
 
 seed = 42
-cv = CrossValidator(<FILL_IN>) # Set number of folds to 3. Add grid, als, regEval, and seed           
+cv = CrossValidator(<FILL_IN>) # Set number of folds to 3. Add grid, als, reg_eval, and seed           
 
-cvModel = cv.fit(trainingDF)
+cv_model = cv.fit(train_df)
 
-myModel = cvModel.bestModel
+my_model = cv_model.bestModel
 
-print(f"The best model was trained with rank {myModel.rank}")
+print(f"The best model was trained with rank {my_model.rank}")
 
 # COMMAND ----------
 
 # Test our solution
-assert myModel.rank == 12, f"Unexpected value for best rank. Expected 12, got {myModel.rank}"
+assert my_model.rank == 12, f"Unexpected value for best rank. Expected 12, got {my_model.rank}"
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ### (2d) Testing Your Model
 # MAGIC 
-# MAGIC So far, we used the `trainingDF` dataset to select the best model. Since we used this dataset to determine what model is best, we cannot use it to test how good the model is; otherwise, we would be very vulnerable to [overfitting](https://en.wikipedia.org/wiki/Overfitting).  To decide how good our model is, we need to use the `testDF` dataset.  We will use the best model you created in part (2b) for predicting the ratings for the test dataset and then we will compute the RMSE.
+# MAGIC So far, we used the `train_df` dataset to select the best model. Since we used this dataset to determine what model is best, we cannot use it to test how good the model is; otherwise, we would be very vulnerable to [overfitting](https://en.wikipedia.org/wiki/Overfitting).  To decide how good our model is, we need to use the `test_df` dataset.  We will use the best model you created in part (2b) for predicting the ratings for the test dataset and then we will compute the RMSE.
 # MAGIC 
 # MAGIC The steps you should perform are:
-# MAGIC * Run a prediction, using `myModel` as created above, on the test dataset (`testDF`), producing a new `predictedTestDF` DataFrame.
-# MAGIC * Use the previously created RMSE evaluator, `regEval` to evaluate the filtered DataFrame.
+# MAGIC * Run a prediction, using `my_model` as created above, on the test dataset (`test_df`), producing a new `predicted_test_df` DataFrame.
+# MAGIC * Use the previously created RMSE evaluator, `reg_eval` to evaluate the filtered DataFrame.
 
 # COMMAND ----------
 
 # TODO
 
-predictedTestDF = myModel.<FILL_IN>
+predicted_test_df = my_model.<FILL_IN>
 
-# Run the previously created RMSE evaluator, regEval, on the predictedTestDF DataFrame
-testRmse = <FILL_IN>
+# Run the previously created RMSE evaluator, reg_eval, on the predicted_test_df DataFrame
+test_rmse = <FILL_IN>
 
-print(f"The model had a RMSE on the test set of {testRmse}")
+print(f"The model had a RMSE on the test set of {test_rmse}")
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## Part 3: Predictions for Yourself
-# MAGIC The ultimate goal of this lab exercise is to predict what movies to recommend to yourself.  In order to do that, you will first need to add ratings for yourself to the `ratingsDF` dataset.
+# MAGIC The ultimate goal of this lab exercise is to predict what movies to recommend to yourself.  In order to do that, you will first need to add ratings for yourself to the `ratings_df` dataset.
 
 # COMMAND ----------
 
@@ -237,8 +237,8 @@ print(f"The model had a RMSE on the test set of {testRmse}")
 
 # COMMAND ----------
 
-moviesDF.createOrReplaceTempView("movies")
-ratingsDF.createOrReplaceTempView("ratings")
+movies_df.createOrReplaceTempView("movies")
+ratings_df.createOrReplaceTempView("ratings")
 
 # COMMAND ----------
 
@@ -255,7 +255,7 @@ ratingsDF.createOrReplaceTempView("ratings")
 # MAGIC %md
 # MAGIC The user ID 0 is unassigned, so we will use it for your ratings. We set the variable `myUserId` to 0 for you. 
 # MAGIC 
-# MAGIC Next, create a new DataFrame called `myRatingsDF`, with your ratings for at least 10 movie ratings. Each entry should be formatted as `(myUserId, movieId, rating)`.  As in the original dataset, ratings should be between 1 and 5 (inclusive). 
+# MAGIC Next, create a new DataFrame called `my_ratings_df`, with your ratings for at least 10 movie ratings. Each entry should be formatted as `(myUserId, movieId, rating)`.  As in the original dataset, ratings should be between 1 and 5 (inclusive). 
 # MAGIC 
 # MAGIC If you have not seen at least 10 of these movies, you can increase the parameter passed to `LIMIT` in the above cell until there are 10 movies that you have seen (or you can also guess what your rating would be for movies you have not seen).
 
@@ -272,24 +272,24 @@ myRatedMovies = [
      #   (myUserId, 260, 5),
 ]
 
-myRatingsDF = spark.createDataFrame(myRatedMovies, ["userId", "movieId", "rating"])
-display(myRatingsDF.limit(10))
+my_ratings_df = spark.createDataFrame(myRatedMovies, ["userId", "movieId", "rating"])
+display(my_ratings_df.limit(10))
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ### (3b) Add Your Movies to Training Dataset
 # MAGIC 
-# MAGIC Now that you have ratings for yourself, you need to add your ratings to the `trainingDF` dataset so that the model you train will incorporate your preferences.  Spark's [union()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.union.html?highlight=union#pyspark.sql.DataFrame.union) transformation combines two DataFrames; use `union()` to create a new training dataset that includes your ratings and the data in the original training dataset.
+# MAGIC Now that you have ratings for yourself, you need to add your ratings to the `train_df` dataset so that the model you train will incorporate your preferences.  Spark's [union()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.union.html?highlight=union#pyspark.sql.DataFrame.union) transformation combines two DataFrames; use `union()` to create a new training dataset that includes your ratings and the data in the original training dataset.
 
 # COMMAND ----------
 
 # TODO
-trainingWithMyRatingsDF = <FILL_IN>
+training_with_my_ratings_df = <FILL_IN>
 
-countDiff = trainingWithMyRatingsDF.count() - trainingDF.count()
-print(f"The training dataset now has {countDiff} more entries than the original training dataset")
-assert (countDiff == myRatingsDF.count())
+count_diff = training_with_my_ratings_df.count() - train_df.count()
+print(f"The training dataset now has {count_diff} more entries than the original training dataset")
+assert (count_diff == myratings_df.count())
 
 # COMMAND ----------
 
@@ -307,28 +307,28 @@ assert (countDiff == myRatingsDF.count())
 als.<FILL_IN>
 
 # Create the model with these parameters
-myRatingsModel = als.<FILL_IN>
+my_ratings_model = als.<FILL_IN>
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ### (3d) Predict Your Ratings
 # MAGIC 
-# MAGIC Now that we have trained a new model, let's predict what ratings you would give to the movies that you did not already provide ratings for. The code below filters out all of the movies you have rated, and creates a `predictedRatingsDF` DataFrame of the predicted ratings for all of your unseen movies.
+# MAGIC Now that we have trained a new model, let's predict what ratings you would give to the movies that you did not already provide ratings for. The code below filters out all of the movies you have rated, and creates a `predicted_ratings_df` DataFrame of the predicted ratings for all of your unseen movies.
 
 # COMMAND ----------
 
 # Create a list of the my rated movie IDs 
-myRatedMovieIds = [x[1] for x in myRatedMovies]
+my_rated_movie_ids = [x[1] for x in myRatedMovies]
 
 # Filter out the movies I already rated.
-notRatedDF = moviesDF.filter(~ moviesDF['ID'].isin(myRatedMovieIds))
+not_rated_df = movies_df.filter(~ movies_df["ID"].isin(my_rated_movie_ids))
 
 # Rename the "ID" column to be "movieId", and add a column with myUserId as "userId".
-myUnratedMoviesDF = notRatedDF.withColumnRenamed('ID', 'movieId').withColumn('userId', lit(myUserId))       
+my_unrated_movies_df = not_rated_df.withColumnRenamed("ID", "movieId").withColumn("userId", lit(myUserId))       
 
-# Use myRatingModel to predict ratings for the movies that I did not manually rate.
-predictedRatingsDF = myRatingsModel.transform(myUnratedMoviesDF)
+# Use my_ratings_model to predict ratings for the movies that I did not manually rate.
+predicted_ratings_df = my_ratings_model.transform(my_unrated_movies_df)
 
 # COMMAND ----------
 
@@ -339,7 +339,7 @@ predictedRatingsDF = myRatingsModel.transform(myUnratedMoviesDF)
 
 # COMMAND ----------
 
-predictedRatingsDF.createOrReplaceTempView("predictions")
+predicted_ratings_df.createOrReplaceTempView("predictions")
 
 # COMMAND ----------
 

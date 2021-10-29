@@ -17,6 +17,8 @@
 # MAGIC  - Register a model using MLflow
 # MAGIC  - Manage the model lifecycle
 # MAGIC  - Archive and delete models
+# MAGIC  
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> If you would like to set up a model serving endpoint, you will need [cluster creation](https://docs.databricks.com/applications/mlflow/model-serving.html#requirements) permissions.
 
 # COMMAND ----------
 
@@ -71,11 +73,11 @@ lr = LinearRegression()
 lr.fit(X_train, y_train)
 
 with mlflow.start_run(run_name="LR Model") as run:
-  signature = infer_signature(X_train, lr.predict(X_train))
-  mlflow.sklearn.log_model(lr, "model", input_example=X_train[:5], signature=signature) # Add input_example for easier serving
-  
-  mlflow.log_params(lr.get_params())
-  mlflow.log_metric("mse", mean_squared_error(y_test, lr.predict(X_test)))
+    signature = infer_signature(X_train, lr.predict(X_train))
+    mlflow.sklearn.log_model(lr, "model", input_example=X_train[:5], signature=signature) # Add input_example for easier serving
+
+    mlflow.log_params(lr.get_params())
+    mlflow.log_metric("mse", mean_squared_error(y_test, lr.predict(X_test)))
 
 # COMMAND ----------
 
@@ -130,8 +132,8 @@ model_version_details.status
 # COMMAND ----------
 
 client.update_registered_model(
-  name=model_details.name,
-  description="This model forecasts Airbnb housing list prices based on various listing inputs."
+    name=model_details.name,
+    description="This model forecasts Airbnb housing list prices based on various listing inputs."
 )
 
 # COMMAND ----------
@@ -141,9 +143,9 @@ client.update_registered_model(
 # COMMAND ----------
 
 client.update_model_version(
-  name=model_details.name,
-  version=model_details.version,
-  description="This model version was built using OLS linear regression with sklearn."
+    name=model_details.name,
+    version=model_details.version,
+    description="This model version was built using OLS linear regression with sklearn."
 )
 
 # COMMAND ----------
@@ -167,9 +169,9 @@ time.sleep(10) # In case the registration is still pending
 # COMMAND ----------
 
 client.transition_model_version_stage(
-  name=model_details.name,
-  version=model_details.version,
-  stage="Production",
+    name=model_details.name,
+    version=model_details.version,
+    stage="Production"
 )
 
 # COMMAND ----------
@@ -179,8 +181,8 @@ client.transition_model_version_stage(
 # COMMAND ----------
 
 model_version_details = client.get_model_version(
-  name=model_details.name,
-  version=model_details.version,
+    name=model_details.name,
+    version=model_details.version
 )
 print(f"The current model stage is: '{model_version_details.current_stage}'")
 
@@ -222,22 +224,22 @@ model_version_1.predict(X_test)
 from sklearn.linear_model import Ridge
 
 with mlflow.start_run(run_name="LR Ridge Model") as run:
-  alpha = .9
-  ridgeRegression = Ridge(alpha=alpha)
-  ridgeRegression.fit(X_train, y_train)
-  
-  # Specify the `registered_model_name` parameter of the `mlflow.sklearn.log_model()`
-  # function to register the model with the MLflow Model Registry. This automatically
-  # creates a new model version
-  
-  mlflow.sklearn.log_model(
-    sk_model=ridgeRegression,
-    artifact_path="sklearn-ridge-model",
-    registered_model_name=model_name,
-  )
+    alpha = .9
+    ridge_regression = Ridge(alpha=alpha)
+    ridge_regression.fit(X_train, y_train)
 
-  mlflow.log_params(ridgeRegression.get_params())
-  mlflow.log_metric("mse", mean_squared_error(y_test, ridgeRegression.predict(X_test)))
+    # Specify the `registered_model_name` parameter of the `mlflow.sklearn.log_model()`
+    # function to register the model with the MLflow Model Registry. This automatically
+    # creates a new model version
+
+    mlflow.sklearn.log_model(
+        sk_model=ridge_regression,
+        artifact_path="sklearn-ridge-model",
+        registered_model_name=model_name,
+    )
+
+    mlflow.log_params(ridge_regression.get_params())
+    mlflow.log_metric("mse", mean_squared_error(y_test, ridge_regression.predict(X_test)))
 
 # COMMAND ----------
 
@@ -250,9 +252,9 @@ import time
 time.sleep(10)
 
 client.transition_model_version_stage(
-  name=model_details.name,
-  version=2,
-  stage="Staging",
+    name=model_details.name,
+    version=2,
+    stage="Staging"
 )
 
 # COMMAND ----------
@@ -277,9 +279,9 @@ new_model_version = max([model_version_info.version for model_version_info in mo
 # COMMAND ----------
 
 client.update_model_version(
-  name=model_name,
-  version=new_model_version,
-  description=f"This model version is a ridge regression model with an alpha value of {alpha} that was trained in scikit-learn."
+    name=model_name,
+    version=new_model_version,
+    description=f"This model version is a ridge regression model with an alpha value of {alpha} that was trained in scikit-learn."
 )
 
 # COMMAND ----------
@@ -289,10 +291,10 @@ client.update_model_version(
 # COMMAND ----------
 
 client.transition_model_version_stage(
-  name=model_name,
-  version=new_model_version,
-  stage="Production", 
-  archive_existing_versions=True ### archieve existing model in production 
+    name=model_name,
+    version=new_model_version,
+    stage="Production", 
+    archive_existing_versions=True ### archieve existing model in production 
 )
 
 # COMMAND ----------
@@ -304,8 +306,8 @@ client.transition_model_version_stage(
 # COMMAND ----------
 
 client.delete_model_version(
-  name=model_name,
-  version=1
+    name=model_name,
+    version=1
 )
 
 # COMMAND ----------
@@ -315,9 +317,9 @@ client.delete_model_version(
 # COMMAND ----------
 
 client.transition_model_version_stage(
-  name=model_name,
-  version=2,
-  stage="Archived",
+    name=model_name,
+    version=2,
+    stage="Archived"
 )
 
 # COMMAND ----------
@@ -348,9 +350,6 @@ client.delete_registered_model(model_name)
 # MAGIC 
 # MAGIC **Q:** Where can I find out more information on MLflow Model Registry?  
 # MAGIC **A:** Check out <a href="https://mlflow.org/docs/latest/registry.html" target="_blank">the MLflow documentation</a>
-# MAGIC 
-# MAGIC **Q:** Does model serving work with SparkML models?<br>
-# MAGIC **A:** Yes! However, models trained on DBR 8.x are [currently not supported](https://docs.databricks.com/applications/mlflow/model-serving.html#known-errors). You will need to specify the pyspark version explicitly when logging the model, using the `conda_env` parameter.
 
 # COMMAND ----------
 

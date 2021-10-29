@@ -29,15 +29,15 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06.csv"
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06.csv"
 
-rawDF = spark.read.csv(filePath, header="true", inferSchema="true", multiLine="true", escape='"')
+raw_df = spark.read.csv(file_path, header="true", inferSchema="true", multiLine="true", escape='"')
 
-display(rawDF)
+display(raw_df)
 
 # COMMAND ----------
 
-rawDF.columns
+raw_df.columns
 
 # COMMAND ----------
 
@@ -46,35 +46,36 @@ rawDF.columns
 
 # COMMAND ----------
 
-columnsToKeep = [
-  "host_is_superhost",
-  "cancellation_policy",
-  "instant_bookable",
-  "host_total_listings_count",
-  "neighbourhood_cleansed",
-  "latitude",
-  "longitude",
-  "property_type",
-  "room_type",
-  "accommodates",
-  "bathrooms",
-  "bedrooms",
-  "beds",
-  "bed_type",
-  "minimum_nights",
-  "number_of_reviews",
-  "review_scores_rating",
-  "review_scores_accuracy",
-  "review_scores_cleanliness",
-  "review_scores_checkin",
-  "review_scores_communication",
-  "review_scores_location",
-  "review_scores_value",
-  "price"]
+columns_to_keep = [
+    "host_is_superhost",
+    "cancellation_policy",
+    "instant_bookable",
+    "host_total_listings_count",
+    "neighbourhood_cleansed",
+    "latitude",
+    "longitude",
+    "property_type",
+    "room_type",
+    "accommodates",
+    "bathrooms",
+    "bedrooms",
+    "beds",
+    "bed_type",
+    "minimum_nights",
+    "number_of_reviews",
+    "review_scores_rating",
+    "review_scores_accuracy",
+    "review_scores_cleanliness",
+    "review_scores_checkin",
+    "review_scores_communication",
+    "review_scores_location",
+    "review_scores_value",
+    "price"
+]
 
-baseDF = rawDF.select(columnsToKeep)
-baseDF.cache().count()
-display(baseDF)
+base_df = raw_df.select(columns_to_keep)
+base_df.cache().count()
+display(base_df)
 
 # COMMAND ----------
 
@@ -89,9 +90,9 @@ display(baseDF)
 
 from pyspark.sql.functions import col, translate
 
-fixedPriceDF = baseDF.withColumn("price", translate(col("price"), "$,", "").cast("double"))
+fixed_price_df = base_df.withColumn("price", translate(col("price"), "$,", "").cast("double"))
 
-display(fixedPriceDF)
+display(fixed_price_df)
 
 # COMMAND ----------
 
@@ -106,11 +107,11 @@ display(fixedPriceDF)
 
 # COMMAND ----------
 
-display(fixedPriceDF.describe())
+display(fixed_price_df.describe())
 
 # COMMAND ----------
 
-display(fixedPriceDF.summary())
+display(fixed_price_df.summary())
 
 # COMMAND ----------
 
@@ -121,7 +122,7 @@ display(fixedPriceDF.summary())
 
 # COMMAND ----------
 
-display(fixedPriceDF.select("price").describe())
+display(fixed_price_df.select("price").describe())
 
 # COMMAND ----------
 
@@ -131,7 +132,7 @@ display(fixedPriceDF.select("price").describe())
 
 # COMMAND ----------
 
-fixedPriceDF.filter(col("price") == 0).count()
+fixed_price_df.filter(col("price") == 0).count()
 
 # COMMAND ----------
 
@@ -140,7 +141,7 @@ fixedPriceDF.filter(col("price") == 0).count()
 
 # COMMAND ----------
 
-posPricesDF = fixedPriceDF.filter(col("price") > 0)
+pos_prices_df = fixed_price_df.filter(col("price") > 0)
 
 # COMMAND ----------
 
@@ -149,14 +150,14 @@ posPricesDF = fixedPriceDF.filter(col("price") > 0)
 
 # COMMAND ----------
 
-display(posPricesDF.select("minimum_nights").describe())
+display(pos_prices_df.select("minimum_nights").describe())
 
 # COMMAND ----------
 
-display(posPricesDF
-  .groupBy("minimum_nights").count()
-  .orderBy(col("count").desc(), col("minimum_nights"))
-)
+display(pos_prices_df
+        .groupBy("minimum_nights").count()
+        .orderBy(col("count").desc(), col("minimum_nights"))
+       )
 
 # COMMAND ----------
 
@@ -165,9 +166,9 @@ display(posPricesDF
 
 # COMMAND ----------
 
-minNightsDF = posPricesDF.filter(col("minimum_nights") <= 365)
+min_nights_df = pos_prices_df.filter(col("minimum_nights") <= 365)
 
-display(minNightsDF)
+display(min_nights_df)
 
 # COMMAND ----------
 
@@ -199,13 +200,13 @@ display(minNightsDF)
 from pyspark.sql.functions import col
 from pyspark.sql.types import IntegerType
 
-integerColumns = [x.name for x in minNightsDF.schema.fields if x.dataType == IntegerType()]
-doublesDF = minNightsDF
+integer_columns = [x.name for x in min_nights_df.schema.fields if x.dataType == IntegerType()]
+doubles_df = min_nights_df
 
-for c in integerColumns:
-  doublesDF = doublesDF.withColumn(c, col(c).cast("double"))
+for c in integer_columns:
+    doubles_df = doubles_df.withColumn(c, col(c).cast("double"))
 
-columns = "\n - ".join(integerColumns)
+columns = "\n - ".join(integer_columns)
 print(f"Columns converted from Integer to Double:\n - {columns}")
 
 # COMMAND ----------
@@ -216,25 +217,25 @@ print(f"Columns converted from Integer to Double:\n - {columns}")
 
 from pyspark.sql.functions import when
 
-imputeCols = [
-  "bedrooms",
-  "bathrooms",
-  "beds", 
-  "review_scores_rating",
-  "review_scores_accuracy",
-  "review_scores_cleanliness",
-  "review_scores_checkin",
-  "review_scores_communication",
-  "review_scores_location",
-  "review_scores_value"
+impute_cols = [
+    "bedrooms",
+    "bathrooms",
+    "beds", 
+    "review_scores_rating",
+    "review_scores_accuracy",
+    "review_scores_cleanliness",
+    "review_scores_checkin",
+    "review_scores_communication",
+    "review_scores_location",
+    "review_scores_value"
 ]
 
-for c in imputeCols:
-  doublesDF = doublesDF.withColumn(c + "_na", when(col(c).isNull(), 1.0).otherwise(0.0))
+for c in impute_cols:
+    doubles_df = doubles_df.withColumn(c + "_na", when(col(c).isNull(), 1.0).otherwise(0.0))
 
 # COMMAND ----------
 
-display(doublesDF.describe())
+display(doubles_df.describe())
 
 # COMMAND ----------
 
@@ -249,10 +250,10 @@ display(doublesDF.describe())
 
 from pyspark.ml.feature import Imputer
 
-imputer = Imputer(strategy="median", inputCols=imputeCols, outputCols=imputeCols)
+imputer = Imputer(strategy="median", inputCols=impute_cols, outputCols=impute_cols)
 
-imputerModel = imputer.fit(doublesDF)
-imputedDF = imputerModel.transform(doublesDF)
+imputer_model = imputer.fit(doubles_df)
+imputed_df = imputer_model.transform(doubles_df)
 
 # COMMAND ----------
 
@@ -261,9 +262,7 @@ imputedDF = imputerModel.transform(doublesDF)
 
 # COMMAND ----------
 
-outputPath = userhome + "/machine-learning/airbnb-cleansed.delta"
-
-imputedDF.write.format("delta").mode("overwrite").save(outputPath)
+imputed_df.write.format("delta").mode("overwrite").save(working_dir)
 
 # COMMAND ----------
 

@@ -26,9 +26,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -37,18 +37,18 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.regression import LinearRegression
 
-vecAssembler = VectorAssembler(inputCols=["bedrooms", "bathrooms", "bathrooms_na", "minimum_nights", "number_of_reviews"], outputCol="features")
+vec_assembler = VectorAssembler(inputCols=["bedrooms", "bathrooms", "bathrooms_na", "minimum_nights", "number_of_reviews"], outputCol="features")
 
-vecTrainDF = vecAssembler.transform(trainDF)
-vecTestDF = vecAssembler.transform(testDF)
+vec_train_df = vec_assembler.transform(train_df)
+vec_test_df = vec_assembler.transform(test_df)
 
-lrModel = LinearRegression(featuresCol="features", labelCol="price").fit(vecTrainDF)
+lr_model = LinearRegression(featuresCol="features", labelCol="price").fit(vec_train_df)
 
-predDF = lrModel.transform(vecTestDF)
+pred_df = lr_model.transform(vec_test_df)
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
-rmse = regressionEvaluator.evaluate(predDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+rmse = regression_evaluator.evaluate(pred_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 
@@ -58,10 +58,10 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-for col, coef in zip(["bedrooms", "bathrooms", "bathrooms_na", "minimum_nights", "number_of_reviews"], lrModel.coefficients):
-  print(col, coef)
+for col, coef in zip(["bedrooms", "bathrooms", "bathrooms_na", "minimum_nights", "number_of_reviews"], lr_model.coefficients):
+    print(col, coef)
   
-print(f"intercept: {lrModel.intercept}")
+print(f"intercept: {lr_model.intercept}")
 
 # COMMAND ----------
 

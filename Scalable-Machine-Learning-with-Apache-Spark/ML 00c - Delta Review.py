@@ -43,10 +43,10 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/"
-airbnbDF = spark.read.parquet(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/"
+airbnb_df = spark.read.parquet(file_path)
 
-display(airbnbDF)
+display(airbnb_df)
 
 # COMMAND ----------
 
@@ -55,9 +55,8 @@ display(airbnbDF)
 # COMMAND ----------
 
 # Converting Spark DataFrame to Delta Table
-deltaPath = userhome + "/delta-p"
-dbutils.fs.rm(deltaPath, True)
-airbnbDF.write.format("delta").mode("overwrite").save(deltaPath)
+dbutils.fs.rm(working_dir, True)
+airbnb_df.write.format("delta").mode("overwrite").save(working_dir)
 
 # COMMAND ----------
 
@@ -68,7 +67,7 @@ airbnbDF.write.format("delta").mode("overwrite").save(deltaPath)
 spark.sql(f"CREATE DATABASE IF NOT EXISTS {cleaned_username}")
 spark.sql(f"USE {cleaned_username}")
 
-airbnbDF.write.format("delta").mode("overwrite").saveAsTable("deltaReview")
+airbnb_df.write.format("delta").mode("overwrite").saveAsTable("delta_review")
 
 # COMMAND ----------
 
@@ -76,7 +75,7 @@ airbnbDF.write.format("delta").mode("overwrite").saveAsTable("deltaReview")
 
 # COMMAND ----------
 
-airbnbDF.write.format("delta").mode("overwrite").partitionBy("neighbourhood_cleansed").option("overwriteSchema", "true").save(deltaPath)
+airbnb_df.write.format("delta").mode("overwrite").partitionBy("neighbourhood_cleansed").option("overwriteSchema", "true").save(working_dir)
 
 # COMMAND ----------
 
@@ -85,7 +84,7 @@ airbnbDF.write.format("delta").mode("overwrite").partitionBy("neighbourhood_clea
 
 # COMMAND ----------
 
-display(dbutils.fs.ls(deltaPath))
+display(dbutils.fs.ls(working_dir))
 
 # COMMAND ----------
 
@@ -97,7 +96,7 @@ display(dbutils.fs.ls(deltaPath))
 
 # COMMAND ----------
 
-display(dbutils.fs.ls(deltaPath + "/_delta_log/"))
+display(dbutils.fs.ls(working_dir + "/_delta_log/"))
 
 # COMMAND ----------
 
@@ -111,7 +110,7 @@ display(dbutils.fs.ls(deltaPath + "/_delta_log/"))
 
 # COMMAND ----------
 
-display(spark.read.json(deltaPath + "/_delta_log/00000000000000000000.json"))
+display(spark.read.json(working_dir + "/_delta_log/00000000000000000000.json"))
 
 # COMMAND ----------
 
@@ -119,7 +118,7 @@ display(spark.read.json(deltaPath + "/_delta_log/00000000000000000000.json"))
 
 # COMMAND ----------
 
-display(spark.read.json(deltaPath + "/_delta_log/00000000000000000001.json"))
+display(spark.read.json(working_dir + "/_delta_log/00000000000000000001.json"))
 
 # COMMAND ----------
 
@@ -127,7 +126,7 @@ display(spark.read.json(deltaPath + "/_delta_log/00000000000000000001.json"))
 
 # COMMAND ----------
 
-display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
+display(dbutils.fs.ls(working_dir + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
@@ -135,7 +134,7 @@ display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-df = spark.read.format("delta").load(deltaPath)
+df = spark.read.format("delta").load(working_dir)
 display(df)
 
 # COMMAND ----------
@@ -146,16 +145,16 @@ display(df)
 
 # COMMAND ----------
 
-df_update = airbnbDF.filter(airbnbDF["host_is_superhost"] == "t")
+df_update = airbnb_df.filter(airbnb_df["host_is_superhost"] == "t")
 display(df_update)
 
 # COMMAND ----------
 
-df_update.write.format("delta").mode("overwrite").save(deltaPath)
+df_update.write.format("delta").mode("overwrite").save(working_dir)
 
 # COMMAND ----------
 
-df = spark.read.format("delta").load(deltaPath)
+df = spark.read.format("delta").load(working_dir)
 display(df)
 
 # COMMAND ----------
@@ -164,7 +163,7 @@ display(df)
 
 # COMMAND ----------
 
-display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
+display(dbutils.fs.ls(working_dir + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
@@ -177,7 +176,7 @@ display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
 # COMMAND ----------
 
 spark.sql("DROP TABLE IF EXISTS train_delta")
-spark.sql(f"CREATE TABLE train_delta USING DELTA LOCATION '{deltaPath}'")
+spark.sql(f"CREATE TABLE train_delta USING DELTA LOCATION '{working_dir}'")
 
 # COMMAND ----------
 
@@ -190,7 +189,7 @@ spark.sql(f"CREATE TABLE train_delta USING DELTA LOCATION '{deltaPath}'")
 
 # COMMAND ----------
 
-df = spark.read.format("delta").option("versionAsOf", 0).load(deltaPath)
+df = spark.read.format("delta").option("versionAsOf", 0).load(working_dir)
 display(df)
 
 # COMMAND ----------
@@ -202,12 +201,12 @@ display(df)
 # COMMAND ----------
 
 # Use your own timestamp 
-# timeStampString = "FILL_IN"
+# time_stamp_string = "FILL_IN"
 
 # OR programatically get the first verion's timestamp value
-timeStampString = str(spark.sql("DESCRIBE HISTORY train_delta").collect()[-1]["timestamp"])
+time_stamp_string = str(spark.sql("DESCRIBE HISTORY train_delta").collect()[-1]["timestamp"])
 
-df = spark.read.format("delta").option("timestampAsOf", timeStampString).load(deltaPath)
+df = spark.read.format("delta").option("timestampAsOf", time_stamp_string).load(working_dir)
 display(df)
 
 # COMMAND ----------
@@ -220,10 +219,10 @@ display(df)
 
 # COMMAND ----------
 
-# from delta.tables import *
+# from delta.tables import DeltaTable
 
-# deltaTable = DeltaTable.forPath(spark, deltaPath)
-# deltaTable.vacuum(0)
+# delta_table = DeltaTable.forPath(spark, working_dir)
+# delta_table.vacuum(0)
 
 # COMMAND ----------
 
@@ -231,11 +230,11 @@ display(df)
 
 # COMMAND ----------
 
-from delta.tables import *
+from delta.tables import DeltaTable
 
 spark.conf.set("spark.databricks.delta.retentionDurationCheck.enabled", "false")
-deltaTable = DeltaTable.forPath(spark, deltaPath)
-deltaTable.vacuum(0)
+delta_table = DeltaTable.forPath(spark, working_dir)
+delta_table.vacuum(0)
 
 # COMMAND ----------
 
@@ -243,7 +242,7 @@ deltaTable.vacuum(0)
 
 # COMMAND ----------
 
-display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
+display(dbutils.fs.ls(working_dir + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
@@ -251,7 +250,7 @@ display(dbutils.fs.ls(deltaPath + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-# df = spark.read.format("delta").option("versionAsOf", 0).load(deltaPath)
+# df = spark.read.format("delta").option("versionAsOf", 0).load(working_dir)
 # display(df)
 
 # COMMAND ----------

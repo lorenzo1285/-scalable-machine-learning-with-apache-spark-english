@@ -54,18 +54,17 @@ from sklearn.metrics import make_scorer, r2_score
 from numpy import mean
   
 def objective_function(params):
+    # set the hyperparameters that we want to tune:
+    max_depth = <FILL_IN>
+    max_features = <FILL_IN>
 
-  # set the hyperparameters that we want to tune:
-  max_depth = <FILL_IN>
-  max_features = <FILL_IN>
+    regressor = RandomForestRegressor(max_depth=max_depth, max_features=max_features, random_state=42)
 
-  regressor = RandomForestRegressor(max_depth=max_depth, max_features=max_features, random_state=42)
+    # Evaluate predictions
+    r2 = mean(cross_val_score(regressor, X_train, y_train, cv=3))
 
-  # Evaluate predictions
-  r2 = mean(cross_val_score(regressor, X_train, y_train, cv=3))
-
-  # Note: since we aim to maximize r2, we need to return it as a negative value ("loss": -metric)
-  return <FILL_IN>
+    # Note: since we aim to maximize r2, we need to return it as a negative value ("loss": -metric)
+    return <FILL_IN>
 
 # COMMAND ----------
 
@@ -80,8 +79,8 @@ from hyperopt import hp
 
 max_features_choices =  ["auto", "sqrt", "log2"]
 search_space = {
-  "max_depth": <FILL_IN>
-  "max_features": <FILL_IN>
+    "max_depth": <FILL_IN>
+    "max_features": <FILL_IN>
 }
 
 # COMMAND ----------
@@ -109,21 +108,21 @@ best_hyperparam = fmin(<FILL_IN>)
 
 # Re-train best model and log metrics on test dataset
 with mlflow.start_run(run_name="best_model"):
-  # get optimal hyperparameter values
-  best_max_depth = <FILL_IN>
-  best_max_features = <FILL_IN>
+    # get optimal hyperparameter values
+    best_max_depth = <FILL_IN>
+    best_max_features = <FILL_IN>
 
-  # train model on entire training data
-  regressor = RandomForestRegressor(max_depth=best_max_depth, max_features=best_max_features, random_state=42)
-  regressor.fit(X_train, y_train)
+    # train model on entire training data
+    regressor = RandomForestRegressor(max_depth=best_max_depth, max_features=best_max_features, random_state=42)
+    regressor.fit(X_train, y_train)
 
-  # evaluate on holdout/test data
-  r2 = regressor.score(X_test, y_test)
-  
-  # Log param and metric for the final model
-  mlflow.log_param("max_depth", best_max_depth)
-  mlflow.log_param("max_features", best_max_features)
-  mlflow.log_metric("loss", r2)
+    # evaluate on holdout/test data
+    r2 = regressor.score(X_test, y_test)
+
+    # Log param and metric for the final model
+    mlflow.log_param("max_depth", best_max_depth)
+    mlflow.log_param("max_features", best_max_features)
+    mlflow.log_metric("loss", r2)
 
 # COMMAND ----------
 

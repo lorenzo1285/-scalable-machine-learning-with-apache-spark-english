@@ -36,13 +36,6 @@ def getDbrMajorAndMinorVersions() -> (int, int):
   dbrVersion = dbrVersion.split(".")
   return (int(dbrVersion[0]), int(dbrVersion[1]))
 
-# Get Python version
-def getPythonVersion() -> str:
-  import sys
-  pythonVersion = sys.version[0:sys.version.index(" ")]
-  spark.conf.set("com.databricks.training.python-version", pythonVersion)
-  return pythonVersion
-
 #############################################
 # USER, USERNAME, AND USERHOME FUNCTIONS
 #############################################
@@ -97,52 +90,42 @@ def getWorkingDir() -> str:
 
 # When migrating DBR versions this should be one
 # of the only two places that needs to be updated
-latestDbrMajor = 7
-latestDbrMinor = 0
+# latestDbrMajor = 9
+# latestDbrMinor = 1
 
-  # Assert an appropriate Databricks Runtime version
-def assertDbrVersion(expected:str, latestMajor:int=latestDbrMajor, latestMinor:int=latestDbrMinor, display:bool = True):
+#  # Assert an appropriate Databricks Runtime version
+# def assertDbrVersion(expected:str, latestMajor:int=latestDbrMajor, latestMinor:int=latestDbrMinor, display:bool = True):
   
-  expMajor = latestMajor
-  expMinor = latestMinor
+#   expMajor = latestMajor
+#   expMinor = latestMinor
   
-  if expected and expected != "DBR 9.1 ML":
-    expMajor = int(expected.split(".")[0])
-    expMinor = int(expected.split(".")[1])
+#   if expected and expected != "{-dbr-}":
+#     expMajor = int(expected.split(".")[0])
+#     expMinor = int(expected.split(".")[1])
 
-  (major, minor) = getDbrMajorAndMinorVersions()
+#   (major, minor) = getDbrMajorAndMinorVersions()
 
-  if (major < expMajor) or (major == expMajor and minor < expMinor):
-    msg = f"This notebook must be run on DBR {expMajor}.{expMinor} or newer. Your cluster is using {major}.{minor}. You must update your cluster configuration before proceeding."
+#   if (major < expMajor) or (major == expMajor and minor < expMinor):
+#     msg = f"This notebook must be run on DBR {expMajor}.{expMinor} or newer. Your cluster is using {major}.{minor}. You must update your cluster configuration before proceeding."
 
-    raise AssertionError(msg)
+#     raise AssertionError(msg)
     
-  if major != expMajor or minor != expMinor:
-    html = f"""
-      <div style="color:red; font-weight:bold">WARNING: This notebook was tested on DBR {expMajor}.{expMinor}, but we found DBR {major}.{minor}.</div>
-      <div style="font-weight:bold">Using an untested DBR may yield unexpected results and/or various errors</div>
-      <div style="font-weight:bold">Please update your cluster configuration and/or <a href="https://academy.databricks.com/" target="_blank">download a newer version of this course</a> before proceeding.</div>
-    """
+#   if major != expMajor or minor != expMinor:
+#     html = f"""
+#       <div style="color:red; font-weight:bold">WARNING: This notebook was tested on DBR {expMajor}.{expMinor}, but we found DBR {major}.{minor}.</div>
+#       <div style="font-weight:bold">Using an untested DBR may yield unexpected results and/or various errors</div>
+#       <div style="font-weight:bold">Please update your cluster configuration and/or <a href="https://academy.databricks.com/" target="_blank">download a newer version of this course</a> before proceeding.</div>
+#     """
 
-  else:
-    html = f"Running on <b>DBR {major}.{minor}</b>"
+#   else:
+#     html = f"Running on <b>DBR {major}.{minor}</b>"
   
-  if display:
-    displayHTML(html)
-  else:
-    print(html)
+#   if display:
+#     displayHTML(html)
+#   else:
+#     print(html)
   
-  return f"{major}.{minor}"
-
-# Assert that the Databricks Runtime is ML version
-# def assertIsMlRuntime(testValue: str = None):
-
-#   if testValue is not None: sourceValue = testValue
-#   else: sourceValue = getRuntimeVersion()
-
-#   if "-ml-" not in sourceValue:
-#     raise AssertionError(f"This notebook must be ran on a Databricks ML Runtime, found {sourceValue}.")
-
+#   return f"{major}.{minor}"
     
 ############################################
 # USER DATABASE FUNCTIONS
@@ -302,283 +285,11 @@ def deletePath(path):
   
   if dbutils.fs.rm(path, True) == False:
     raise IOError("Unable to delete directory: " + path)
-
-# ****************************************************************************
-# Utility method to clean up the workspace at the end of a lesson
-# ****************************************************************************
-
-def classroomCleanup(daLogger:object, courseType:str, username:str, moduleName:str, lessonName:str, dropDatabase:str): 
-  import time
-
-  actions = ""
-  
-  # Stop any active streams
-  for stream in spark.streams.active:
-    stream.stop()
-    
-    # Wait for the stream to stop
-    queries = list(filter(lambda query: query.name == stream.name, spark.streams.active))
-    
-    while (len(queries) > 0):
-      time.sleep(5) # Give it a couple of seconds
-      queries = list(filter(lambda query: query.name == stream.name, spark.streams.active))
-
-    actions += f"""<li>Terminated stream: <b>{stream.name}</b></li>"""
-  
-  # Drop all tables from the specified database
-  database = getDatabaseName(courseType, username, moduleName, lessonName)
-  try:
-    tables = spark.sql("show tables from {}".format(database)).select("tableName").collect()
-    for row in tables:
-      tableName = row["tableName"]
-      spark.sql("drop table if exists {}.{}".format(database, tableName))
-
-      # In some rare cases the files don't actually get removed.
-      time.sleep(1) # Give it just a second...
-      hivePath = "dbfs:/user/hive/warehouse/{}.db/{}".format(database, tableName)
-      dbutils.fs.rm(hivePath, True) # Ignoring the delete's success or failure
-      
-      actions += f"""<li>Dropped table: <b>{tableName}</b></li>"""
-
-  except:
-    pass # ignored
-
-  # The database should only be dropped in a "cleanup" notebook, not "setup"
-  if dropDatabase: 
-    spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(database))
-    
-    # In some rare cases the files don't actually get removed.
-    time.sleep(1) # Give it just a second...
-    hivePath = "dbfs:/user/hive/warehouse/{}.db".format(database)
-    dbutils.fs.rm(hivePath, True) # Ignoring the delete's success or failure
-    
-    actions += f"""<li>Dropped database: <b>{database}</b></li>"""
-
-  # Remove any files that may have been created from previous runs
-  path = getWorkingDir(courseType)
-  if pathExists(path):
-    deletePath(path)
-
-    actions += f"""<li>Removed working directory: <b>{path}</b></li>"""
-    
-  htmlMsg = "Cleaning up the learning environment..."
-  if len(actions) == 0: htmlMsg += "no actions taken."
-  else:  htmlMsg += f"<ul>{actions}</ul>"
-  displayHTML(htmlMsg)
-  
-  if dropDatabase: daLogger.logEvent("Classroom-Cleanup-Final")
-  else: daLogger.logEvent("Classroom-Cleanup-Preliminary")
-
   
 # Utility method to delete a database  
 def deleteTables(database):
   spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(database))
   
-    
-# ****************************************************************************
-# DatabricksAcademyLogger and Student Feedback
-# ****************************************************************************
-
-class DatabricksAcademyLogger:
-  
-  def logEvent(self, eventId: str, message: str = None):
-    import time
-    import json
-    import requests
-
-    hostname = "https://rqbr3jqop0.execute-api.us-west-2.amazonaws.com/prod"
-    
-    try:
-      username = getUsername().encode("utf-8")
-      moduleName = getModuleName().encode("utf-8")
-      lessonName = getLessonName().encode("utf-8")
-      event = eventId.encode("utf-8")
-    
-      content = {
-        "tags":       dict(map(lambda x: (x[0], str(x[1])), getTags().items())),
-        "moduleName": getModuleName(),
-        "lessonName": getLessonName(),
-        "orgId":      getTag("orgId", "unknown"),
-        "username":   getUsername(),
-        "eventId":    eventId,
-        "eventTime":  f"{int(round(time.time() * 1000))}",
-        "language":   getTag("notebookLanguage", "unknown"),
-        "notebookId": getTag("notebookId", "unknown"),
-        "sessionId":  getTag("sessionId", "unknown"),
-        "message":    message
-      }
-      
-      response = requests.post( 
-          url=f"{hostname}/logger", 
-          json=content,
-          headers={
-            "Accept": "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-          })
-      
-    except Exception as e:
-      pass
-
-    
-def showStudentSurvey():
-  html = renderStudentSurvey()
-  displayHTML(html);
-
-def renderStudentSurvey():
-  username = getUsername().encode("utf-8")
-  userhome = getUserhome().encode("utf-8")
-
-  moduleName = getModuleName().encode("utf-8")
-  lessonName = getLessonName().encode("utf-8")
-  lessonNameUnencoded = getLessonName()
-  
-  apiEndpoint = "https://rqbr3jqop0.execute-api.us-west-2.amazonaws.com/prod"
-
-  feedbackUrl = f"{apiEndpoint}/feedback";
-  
-  html = """
-  <html>
-  <head>
-    <script src="https://files.training.databricks.com/static/js/classroom-support.min.js"></script>
-    <script>
-<!--    
-      window.setTimeout( // Defer until bootstrap has enough time to async load
-        () => { 
-          $("#divComment").css("display", "visible");
-
-          // Emulate radio-button like feature for multiple_choice
-          $(".multiple_choicex").on("click", (evt) => {
-                const container = $(evt.target).parent();
-                $(".multiple_choicex").removeClass("checked"); 
-                $(".multiple_choicex").removeClass("checkedRed"); 
-                $(".multiple_choicex").removeClass("checkedGreen"); 
-                container.addClass("checked"); 
-                if (container.hasClass("thumbsDown")) { 
-                    container.addClass("checkedRed"); 
-                } else { 
-                    container.addClass("checkedGreen"); 
-                };
-                
-                // Send the like/dislike before the comment is shown so we at least capture that.
-                // In analysis, always take the latest feedback for a module (if they give a comment, it will resend the like/dislike)
-                var json = {
-                  moduleName: "GET_MODULE_NAME", 
-                  lessonName: "GET_LESSON_NAME", 
-                  orgId:       "GET_ORG_ID",
-                  username:    "GET_USERNAME",
-                  language:    "python",
-                  notebookId:  "GET_NOTEBOOK_ID",
-                  sessionId:   "GET_SESSION_ID",
-                  survey: $(".multiple_choicex.checked").attr("value"), 
-                  comment: $("#taComment").val() 
-                };
-                
-                $("#vote-response").html("Recording your vote...");
-
-                $.ajax({
-                  type: "PUT", 
-                  url: "FEEDBACK_URL", 
-                  data: JSON.stringify(json),
-                  dataType: "json",
-                  processData: false
-                }).done(function() {
-                  $("#vote-response").html("Thank you for your vote!<br/>Please feel free to share more if you would like to...");
-                  $("#divComment").show("fast");
-                }).fail(function() {
-                  $("#vote-response").html("There was an error submitting your vote");
-                }); // End of .ajax chain
-          });
-
-
-           // Set click handler to do a PUT
-          $("#btnSubmit").on("click", (evt) => {
-              // Use .attr("value") instead of .val() - this is not a proper input box
-              var json = {
-                moduleName: "GET_MODULE_NAME", 
-                lessonName: "GET_LESSON_NAME", 
-                orgId:       "GET_ORG_ID",
-                username:    "GET_USERNAME",
-                language:    "python",
-                notebookId:  "GET_NOTEBOOK_ID",
-                sessionId:   "GET_SESSION_ID",
-                survey: $(".multiple_choicex.checked").attr("value"), 
-                comment: $("#taComment").val() 
-              };
-
-              $("#feedback-response").html("Sending feedback...");
-
-              $.ajax({
-                type: "PUT", 
-                url: "FEEDBACK_URL", 
-                data: JSON.stringify(json),
-                dataType: "json",
-                processData: false
-              }).done(function() {
-                  $("#feedback-response").html("Thank you for your feedback!");
-              }).fail(function() {
-                  $("#feedback-response").html("There was an error submitting your feedback");
-              }); // End of .ajax chain
-          });
-        }, 2000
-      );
--->
-    </script>    
-    <style>
-.multiple_choicex > img {    
-    border: 5px solid white;
-    border-radius: 5px;
-}
-.multiple_choicex.choice1 > img:hover {    
-    border-color: green;
-    background-color: green;
-}
-.multiple_choicex.choice2 > img:hover {    
-    border-color: red;
-    background-color: red;
-}
-.multiple_choicex {
-    border: 0.5em solid white;
-    background-color: white;
-    border-radius: 5px;
-}
-.multiple_choicex.checkedGreen {
-    border-color: green;
-    background-color: green;
-}
-.multiple_choicex.checkedRed {
-    border-color: red;
-    background-color: red;
-}
-    </style>
-  </head>
-  <body>
-    <h2 style="font-size:28px; line-height:34.3px"><img style="vertical-align:middle" src="https://files.training.databricks.com/images/105/logo_spark_tiny.png"/>What did you think?</h2>
-    <p>Please let us know if you liked this notebook, <b>LESSON_NAME_UNENCODED</b></p>
-    <div id="feedback" style="clear:both;display:table;">
-      <span class="multiple_choicex choice1 thumbsUp" value="positive"><img style="width:100px" src="https://files.training.databricks.com/images/feedback/thumbs-up.png"/></span>
-      <span class="multiple_choicex choice2 thumbsDown" value="negative"><img style="width:100px" src="https://files.training.databricks.com/images/feedback/thumbs-down.png"/></span>
-      <div id="vote-response" style="color:green; margin:1em 0; font-weight:bold">&nbsp;</div>
-      <table id="divComment" style="display:none; border-collapse:collapse;">
-        <tr>
-          <td style="padding:0"><textarea id="taComment" placeholder="How can we make this lesson better? (optional)" style="height:4em;width:30em;display:block"></textarea></td>
-          <td style="padding:0"><button id="btnSubmit" style="margin-left:1em">Send</button></td>
-        </tr>
-      </table>
-    </div>
-    <div id="feedback-response" style="color:green; margin-top:1em; font-weight:bold">&nbsp;</div>
-  </body>
-  </html>
-  """
-
-  return (html.replace("GET_MODULE_NAME", getModuleName())
-              .replace("GET_LESSON_NAME", getLessonName())
-              .replace("GET_ORG_ID", getTag("orgId", "unknown"))
-              .replace("GET_USERNAME", getUsername())
-              .replace("GET_NOTEBOOK_ID", getTag("notebookId", "unknown"))
-              .replace("GET_SESSION_ID", getTag("sessionId", "unknown"))
-              .replace("LESSON_NAME_UNENCODED", lessonNameUnencoded)
-              .replace("FEEDBACK_URL", feedbackUrl)
-         )
 
 # ****************************************************************************
 # Facility for advertising functions, variables and databases to the student
@@ -650,13 +361,6 @@ class FILL_IN:
   ROW = Row()
   INT = 0
   DATAFRAME = sqlContext.createDataFrame(sc.emptyRDD(), StructType([]))
-
-# ****************************************************************************
-# Initialize the logger so that it can be used down-stream
-# ****************************************************************************
-
-daLogger = DatabricksAcademyLogger()
-daLogger.logEvent("Initialized", "Initialized the Python DatabricksAcademyLogger")
 
 displayHTML("Defining courseware-specific utility methods...")
 

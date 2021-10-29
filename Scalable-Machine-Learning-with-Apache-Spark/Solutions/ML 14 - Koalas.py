@@ -93,8 +93,8 @@ display(df)
 
 import pandas as pd
 
-pdDF = pd.read_parquet(f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/".replace("dbfs:/", "/dbfs/"))
-pdDF.head()
+pdf = pd.read_parquet(f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/".replace("dbfs:/", "/dbfs/"))
+pdf.head()
 
 # COMMAND ----------
 

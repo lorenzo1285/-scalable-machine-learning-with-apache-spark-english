@@ -54,18 +54,17 @@ from sklearn.metrics import make_scorer, r2_score
 from numpy import mean
   
 def objective_function(params):
+    # set the hyperparameters that we want to tune:
+    max_depth = params["max_depth"]
+    max_features = params["max_features"]
 
-  # set the hyperparameters that we want to tune:
-  max_depth = params["max_depth"]
-  max_features = params["max_features"]
+    regressor = RandomForestRegressor(max_depth=max_depth, max_features=max_features, random_state=42)
 
-  regressor = RandomForestRegressor(max_depth=max_depth, max_features=max_features, random_state=42)
+    # Evaluate predictions
+    r2 = mean(cross_val_score(regressor, X_train, y_train, cv=3))
 
-  # Evaluate predictions
-  r2 = mean(cross_val_score(regressor, X_train, y_train, cv=3))
-
-  # Note: since we aim to maximize r2, we need to return it as a negative value ("loss": -metric)
-  return -r2
+    # Note: since we aim to maximize r2, we need to return it as a negative value ("loss": -metric)
+    return -r2
 
 # COMMAND ----------
 
@@ -80,8 +79,8 @@ from hyperopt import hp
 
 max_features_choices =  ["auto", "sqrt", "log2"]
 search_space = {
-  "max_depth": hp.quniform("max_depth", 2, 10, 1),
-  "max_features": hp.choice("max_features", max_features_choices)
+    "max_depth": hp.quniform("max_depth", 2, 10, 1),
+    "max_features": hp.choice("max_features", max_features_choices)
 }
 
 # COMMAND ----------
@@ -105,30 +104,30 @@ num_evals = 8
 # Number of models to train concurrently
 spark_trials = SparkTrials(parallelism=2)
 # Automatically logs to MLflow
-best_hyperparam = fmin(fn = objective_function, 
-                       space = search_space,
-                       algo = tpe.suggest, 
-                       trials = spark_trials,
-                       max_evals = num_evals,
-                       rstate = np.random.RandomState(42))
+best_hyperparam = fmin(fn=objective_function, 
+                       space=search_space,
+                       algo=tpe.suggest, 
+                       trials=spark_trials,
+                       max_evals=num_evals,
+                       rstate=np.random.RandomState(42))
 
 # Re-train best model and log metrics on test dataset
 with mlflow.start_run(run_name="best_model"):
-  # get optimal hyperparameter values
-  best_max_depth = best_hyperparam["max_depth"]
-  best_max_features = max_features_choices[best_hyperparam["max_features"]]
+    # get optimal hyperparameter values
+    best_max_depth = best_hyperparam["max_depth"]
+    best_max_features = max_features_choices[best_hyperparam["max_features"]]
 
-  # train model on entire training data
-  regressor = RandomForestRegressor(max_depth=best_max_depth, max_features=best_max_features, random_state=42)
-  regressor.fit(X_train, y_train)
+    # train model on entire training data
+    regressor = RandomForestRegressor(max_depth=best_max_depth, max_features=best_max_features, random_state=42)
+    regressor.fit(X_train, y_train)
 
-  # evaluate on holdout/test data
-  r2 = regressor.score(X_test, y_test)
-  
-  # Log param and metric for the final model
-  mlflow.log_param("max_depth", best_max_depth)
-  mlflow.log_param("max_features", best_max_features)
-  mlflow.log_metric("loss", r2)
+    # evaluate on holdout/test data
+    r2 = regressor.score(X_test, y_test)
+
+    # Log param and metric for the final model
+    mlflow.log_param("max_depth", best_max_depth)
+    mlflow.log_param("max_features", best_max_features)
+    mlflow.log_metric("loss", r2)
 
 # COMMAND ----------
 

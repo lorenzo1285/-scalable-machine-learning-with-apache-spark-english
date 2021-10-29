@@ -26,9 +26,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -47,7 +47,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 
 from databricks import automl
 
-summary = automl.regress(trainDF, target_col="price", primary_metric="rmse", timeout_minutes=5, max_trials=10)
+summary = automl.regress(train_df, target_col="price", primary_metric="rmse", timeout_minutes=5, max_trials=10)
 
 # COMMAND ----------
 
@@ -78,15 +78,15 @@ import mlflow
 model_uri = f"runs:/{summary.best_trial.mlflow_run_id}/model"
 
 predict = mlflow.pyfunc.spark_udf(spark, model_uri)
-predDF = testDF.withColumn("prediction", predict(*testDF.drop("price").columns))
-display(predDF)
+pred_df = test_df.withColumn("prediction", predict(*test_df.drop("price").columns))
+display(pred_df)
 
 # COMMAND ----------
 
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
-rmse = regressionEvaluator.evaluate(predDF)
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+rmse = regression_evaluator.evaluate(pred_df)
 print(f"RMSE on test dataset: {rmse:.3f}")
 
 # COMMAND ----------

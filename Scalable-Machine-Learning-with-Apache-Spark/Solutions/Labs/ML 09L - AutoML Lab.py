@@ -26,9 +26,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -39,7 +39,7 @@ trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
 # COMMAND ----------
 
 spark.sql(f"CREATE DATABASE IF NOT EXISTS {cleaned_username}")
-trainDF.write.mode("overwrite").saveAsTable(f"{cleaned_username}.autoMLTable")
+train_df.write.mode("overwrite").saveAsTable(f"{cleaned_username}.autoMLTable")
 
 # COMMAND ----------
 

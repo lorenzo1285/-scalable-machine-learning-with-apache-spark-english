@@ -30,16 +30,16 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
 with mlflow.start_run(run_name="sklearn-random-forest") as run:
-  # Import the data
-  df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/")).drop(["zipcode"], axis=1)
-  X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
+    # Import the data
+    df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/")).drop(["zipcode"], axis=1)
+    X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
 
-  # Create model
-  rf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
-  rf.fit(X_train, y_train)
+    # Create model
+    rf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
+    rf.fit(X_train, y_train)
 
-  # Log model
-  mlflow.sklearn.log_model(rf, "random-forest-model")
+    # Log model
+    mlflow.sklearn.log_model(rf, "random-forest-model")
 
 # COMMAND ----------
 
@@ -47,7 +47,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-sparkDF = spark.createDataFrame(X_test)
+spark_df = spark.createDataFrame(X_test)
 
 # COMMAND ----------
 
@@ -72,12 +72,12 @@ from pyspark.sql.functions import pandas_udf
 
 @pandas_udf("double")
 def predict(*args: pd.DataFrame) -> pd.Series:
-  model_path = f"runs:/{run.info.run_id}/random-forest-model" 
-  model = mlflow.sklearn.load_model(model_path) # Load model
-  pdf = pd.concat(args, axis=1)
-  return pd.Series(model.predict(pdf))
+    model_path = f"runs:/{run.info.run_id}/random-forest-model" 
+    model = mlflow.sklearn.load_model(model_path) # Load model
+    pdf = pd.concat(args, axis=1)
+    return pd.Series(model.predict(pdf))
 
-prediction_df = sparkDF.withColumn("prediction", predict(*sparkDF.columns))
+prediction_df = spark_df.withColumn("prediction", predict(*spark_df.columns))
 display(prediction_df)
 
 # COMMAND ----------
@@ -92,9 +92,9 @@ display(prediction_df)
 # MAGIC It has the general syntax of: 
 # MAGIC ```@pandas_udf(...)
 # MAGIC def predict(iterator):
-# MAGIC   model = ... # load model
-# MAGIC   for features in iterator:
-# MAGIC     yield model.predict(features)```
+# MAGIC     model = ... # load model
+# MAGIC     for features in iterator:
+# MAGIC         yield model.predict(features)```
 
 # COMMAND ----------
 
@@ -102,13 +102,13 @@ from typing import Iterator, Tuple
 
 @pandas_udf("double")
 def predict(iterator: Iterator[pd.DataFrame]) -> Iterator[pd.Series]:
-  model_path = f"runs:/{run.info.run_id}/random-forest-model" 
-  model = mlflow.sklearn.load_model(model_path) # Load model
-  for features in iterator:
-    pdf = pd.concat(features, axis=1)
-    yield pd.Series(model.predict(pdf))
+    model_path = f"runs:/{run.info.run_id}/random-forest-model" 
+    model = mlflow.sklearn.load_model(model_path) # Load model
+    for features in iterator:
+        pdf = pd.concat(features, axis=1)
+        yield pd.Series(model.predict(pdf))
 
-prediction_df = sparkDF.withColumn("prediction", predict(*sparkDF.columns))
+prediction_df = spark_df.withColumn("prediction", predict(*spark_df.columns))
 display(prediction_df)
 
 # COMMAND ----------
@@ -123,12 +123,12 @@ display(prediction_df)
 # COMMAND ----------
 
 def predict(iterator: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
-  model_path = f"runs:/{run.info.run_id}/random-forest-model" 
-  model = mlflow.sklearn.load_model(model_path) # Load model
-  for features in iterator:
-    yield pd.concat([features, pd.Series(model.predict(features), name="prediction")], axis=1)
+    model_path = f"runs:/{run.info.run_id}/random-forest-model" 
+    model = mlflow.sklearn.load_model(model_path) # Load model
+    for features in iterator:
+        yield pd.concat([features, pd.Series(model.predict(features), name="prediction")], axis=1)
     
-display(sparkDF.mapInPandas(predict, """`host_total_listings_count` DOUBLE,`neighbourhood_cleansed` BIGINT,`latitude` DOUBLE,`longitude` DOUBLE,`property_type` BIGINT,`room_type` BIGINT,`accommodates` DOUBLE,`bathrooms` DOUBLE,`bedrooms` DOUBLE,`beds` DOUBLE,`bed_type` BIGINT,`minimum_nights` DOUBLE,`number_of_reviews` DOUBLE,`review_scores_rating` DOUBLE,`review_scores_accuracy` DOUBLE,`review_scores_cleanliness` DOUBLE,`review_scores_checkin` DOUBLE,`review_scores_communication` DOUBLE,`review_scores_location` DOUBLE,`review_scores_value` DOUBLE, `prediction` DOUBLE""")) 
+display(spark_df.mapInPandas(predict, """`host_total_listings_count` DOUBLE,`neighbourhood_cleansed` BIGINT,`latitude` DOUBLE,`longitude` DOUBLE,`property_type` BIGINT,`room_type` BIGINT,`accommodates` DOUBLE,`bathrooms` DOUBLE,`bedrooms` DOUBLE,`beds` DOUBLE,`bed_type` BIGINT,`minimum_nights` DOUBLE,`number_of_reviews` DOUBLE,`review_scores_rating` DOUBLE,`review_scores_accuracy` DOUBLE,`review_scores_cleanliness` DOUBLE,`review_scores_checkin` DOUBLE,`review_scores_communication` DOUBLE,`review_scores_location` DOUBLE,`review_scores_value` DOUBLE, `prediction` DOUBLE""")) 
 
 # COMMAND ----------
 
@@ -139,8 +139,8 @@ display(sparkDF.mapInPandas(predict, """`host_total_listings_count` DOUBLE,`neig
 from pyspark.sql.functions import lit
 from pyspark.sql.types import DoubleType
 
-schema = sparkDF.withColumn("prediction", lit(None).cast(DoubleType())).schema
-display(sparkDF.mapInPandas(predict, schema)) 
+schema = spark_df.withColumn("prediction", lit(None).cast(DoubleType())).schema
+display(spark_df.mapInPandas(predict, schema)) 
 
 # COMMAND ----------
 

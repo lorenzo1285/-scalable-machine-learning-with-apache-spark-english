@@ -23,8 +23,8 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
@@ -50,9 +50,9 @@ airbnbDF = spark.read.format("delta").load(filePath)
 
 from pyspark.sql.functions import when, col, lit
 
-labelDF = airbnbDF.select(when(col("host_is_superhost") == "t", 1.0).otherwise(0.0).alias("label"), "*").drop("host_is_superhost")
+label_df = airbnb_df.select(when(col("host_is_superhost") == "t", 1.0).otherwise(0.0).alias("label"), "*").drop("host_is_superhost")
 
-predDF = labelDF.withColumn("prediction", lit(0.0))
+pred_df = label_df.withColumn("prediction", lit(0.0))
 
 # COMMAND ----------
 
@@ -64,8 +64,8 @@ predDF = labelDF.withColumn("prediction", lit(0.0))
 
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 
-mcEvaluator = MulticlassClassificationEvaluator(metricName="accuracy")
-print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
+mc_evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
 # COMMAND ----------
 
@@ -75,8 +75,8 @@ print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
 
 # COMMAND ----------
 
-trainDF, testDF = labelDF.randomSplit([.8, .2], seed=42)
-print(trainDF.cache().count())
+train_df, test_df = label_df.randomSplit([.8, .2], seed=42)
+print(train_df.cache().count())
 
 # COMMAND ----------
 
@@ -86,7 +86,7 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-display(trainDF.select("review_scores_rating", "label"))
+display(train_df.select("review_scores_rating", "label"))
 
 # COMMAND ----------
 
@@ -101,15 +101,15 @@ from pyspark.ml import Pipeline
 from pyspark.ml.feature import RFormula
 from pyspark.ml.classification import LogisticRegression
 
-rFormula = RFormula(formula="label ~ .", 
+r_formula = RFormula(formula="label ~ .", 
                     featuresCol="features", 
                     labelCol="label", 
                     handleInvalid="skip") # Look at handleInvalid
 
 lr = LogisticRegression(labelCol="label", featuresCol="features")
-pipeline = Pipeline(stages=[rFormula, lr])
-pipelineModel = pipeline.fit(trainDF)
-predDF = pipelineModel.transform(testDF)
+pipeline = Pipeline(stages=[r_formula, lr])
+pipeline_model = pipeline.fit(train_df)
+pred_df = pipeline_model.transform(test_df)
 
 # COMMAND ----------
 
@@ -122,14 +122,14 @@ predDF = pipelineModel.transform(testDF)
 # ANSWER
 from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 
-mcEvaluator = MulticlassClassificationEvaluator(metricName="accuracy")
-print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
+mc_evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
-bcEvaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
-print(f"The area under the ROC curve: {bcEvaluator.evaluate(predDF):.2f}")
+bc_evaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
+print(f"The area under the ROC curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
-bcEvaluator.setMetricName("areaUnderPR")
-print(f"The area under the PR curve: {bcEvaluator.evaluate(predDF):.2f}")
+bc_evaluator.setMetricName("areaUnderPR")
+print(f"The area under the PR curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
 # COMMAND ----------
 
@@ -143,19 +143,19 @@ print(f"The area under the PR curve: {bcEvaluator.evaluate(predDF):.2f}")
 from pyspark.ml.tuning import ParamGridBuilder
 from pyspark.ml.tuning import CrossValidator
 
-paramGrid = (ParamGridBuilder()
+param_grid = (ParamGridBuilder()
             .addGrid(lr.regParam, [0.1, 0.2])
             .addGrid(lr.elasticNetParam, [0.0, 0.5, 1.0])
             .build())
 
-cv = CrossValidator(estimator=lr, evaluator=mcEvaluator, estimatorParamMaps=paramGrid,
+cv = CrossValidator(estimator=lr, evaluator=mc_evaluator, estimatorParamMaps=param_grid,
                     numFolds=3, parallelism=4, seed=42)
 
-pipeline = Pipeline(stages=[rFormula, cv])
+pipeline = Pipeline(stages=[r_formula, cv])
 
-pipelineModel = pipeline.fit(trainDF)
+pipeline_model = pipeline.fit(train_df)
 
-predDF = pipelineModel.transform(testDF)
+pred_df = pipeline_model.transform(test_df)
 
 # COMMAND ----------
 
@@ -163,11 +163,11 @@ predDF = pipelineModel.transform(testDF)
 
 # COMMAND ----------
 
-mcEvaluator = MulticlassClassificationEvaluator(metricName="accuracy")
-print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
+mc_evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
-bcEvaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
-print(f"The area under the ROC curve: {bcEvaluator.evaluate(predDF):.2f}")
+bc_evaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
+print(f"The area under the ROC curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
 # COMMAND ----------
 

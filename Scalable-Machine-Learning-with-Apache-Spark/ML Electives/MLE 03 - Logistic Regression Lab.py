@@ -23,8 +23,8 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
@@ -49,9 +49,9 @@ airbnbDF = spark.read.format("delta").load(filePath)
 # TODO
 from <FILL_IN>
 
-labelDF = airbnbDF.<FILL_IN>
+label_df = airbnb_df.<FILL_IN>
 
-predDF = labelDF.<FILL_IN> # Add a prediction column
+pred_df = label_df.<FILL_IN> # Add a prediction column
 
 # COMMAND ----------
 
@@ -63,8 +63,8 @@ predDF = labelDF.<FILL_IN> # Add a prediction column
 
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 
-mcEvaluator = MulticlassClassificationEvaluator(metricName="accuracy")
-print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
+mc_evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
 # COMMAND ----------
 
@@ -74,8 +74,8 @@ print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
 
 # COMMAND ----------
 
-trainDF, testDF = labelDF.randomSplit([.8, .2], seed=42)
-print(trainDF.cache().count())
+train_df, test_df = label_df.randomSplit([.8, .2], seed=42)
+print(train_df.cache().count())
 
 # COMMAND ----------
 
@@ -85,7 +85,7 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-display(trainDF.select("review_scores_rating", "label"))
+display(train_df.select("review_scores_rating", "label"))
 
 # COMMAND ----------
 
@@ -100,11 +100,11 @@ from pyspark.ml import Pipeline
 from pyspark.ml.feature import RFormula
 from pyspark.ml.classification import LogisticRegression
 
-rFormula = RFormula(<FILL_IN>)
+r_formula = RFormula(<FILL_IN>)
 lr = <FILL_IN>
 pipeline = Pipeline(<FILL_IN>)
-pipelineModel = pipeline.fit(<FILL_IN>)
-predDF = pipelineModel.transform(<FILL_IN>)
+pipeline_model = pipeline.fit(<FILL_IN>)
+pred_df = pipeline_model.transform(<FILL_IN>)
 
 # COMMAND ----------
 
@@ -117,11 +117,11 @@ predDF = pipelineModel.transform(<FILL_IN>)
 # TODO
 from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 
-mcEvaluator = MulticlassClassificationEvaluator(metricName="accuracy")
-print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
+mc_evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
-bcEvaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
-print(f"The area under the ROC curve: {bcEvaluator.evaluate(predDF):.2f}")
+bc_evaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
+print(f"The area under the ROC curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
 # COMMAND ----------
 
@@ -135,7 +135,7 @@ print(f"The area under the ROC curve: {bcEvaluator.evaluate(predDF):.2f}")
 from pyspark.ml.tuning import ParamGridBuilder
 from pyspark.ml.tuning import CrossValidator
 
-paramGrid = <FILL_IN>
+param_grid = <FILL_IN>
 
 evaluator = <FILL_IN>
 
@@ -143,9 +143,9 @@ cv = <FILL_IN>
 
 pipeline = <FILL_IN>
 
-pipelineModel = <FILL_IN>
+pipeline_model = <FILL_IN>
 
-predDF = <FILL_IN>
+pred_df = <FILL_IN>
 
 # COMMAND ----------
 
@@ -153,11 +153,11 @@ predDF = <FILL_IN>
 
 # COMMAND ----------
 
-mcEvaluator = MulticlassClassificationEvaluator(metricName="accuracy")
-print(f"The accuracy is {100*mcEvaluator.evaluate(predDF):.2f}%")
+mc_evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
-bcEvaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
-print(f"The area under the ROC curve: {bcEvaluator.evaluate(predDF):.2f}")
+bc_evaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
+print(f"The area under the ROC curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
 # COMMAND ----------
 

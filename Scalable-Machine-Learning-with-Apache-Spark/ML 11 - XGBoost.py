@@ -32,21 +32,19 @@
 
 from pyspark.sql.functions import log, col
 from pyspark.ml.feature import StringIndexer, VectorAssembler
-from pyspark.ml import Pipeline
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.withColumn("label", log(col("price"))).randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.withColumn("label", log(col("price"))).randomSplit([.8, .2], seed=42)
 
-categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
-indexOutputCols = [x + "Index" for x in categoricalCols]
+categorical_cols = [field for (field, dataType) in train_df.dtypes if dataType == "string"]
+index_output_cols = [x + "Index" for x in categorical_cols]
 
-stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputCols, handleInvalid="skip")
+string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_output_cols, handleInvalid="skip")
 
-numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "price") & (field != "label"))]
-assemblerInputs = indexOutputCols + numericCols
-vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
-pipeline = Pipeline(stages=[stringIndexer, vecAssembler])
+numeric_cols = [field for (field, dataType) in train_df.dtypes if ((dataType == "double") & (field != "price") & (field != "label"))]
+assembler_inputs = index_output_cols + numeric_cols
+vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features")
 
 # COMMAND ----------
 
@@ -64,13 +62,14 @@ pipeline = Pipeline(stages=[stringIndexer, vecAssembler])
 # COMMAND ----------
 
 from sparkdl.xgboost import XgboostRegressor
+from pyspark.ml import Pipeline
 
 params = {"n_estimators": 100, "learning_rate": 0.1, "max_depth": 4, "random_state": 42, "missing": 0}
 
 xgboost = XgboostRegressor(**params)
 
-pipeline = Pipeline(stages=[stringIndexer, vecAssembler, xgboost])
-pipelineModel = pipeline.fit(trainDF)
+pipeline = Pipeline(stages=[string_indexer, vec_assembler, xgboost])
+pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
@@ -82,11 +81,11 @@ pipelineModel = pipeline.fit(trainDF)
 
 from pyspark.sql.functions import exp, col
 
-logPredDF = pipelineModel.transform(testDF)
+log_pred_df = pipeline_model.transform(test_df)
 
-expXgboostDF = logPredDF.withColumn("prediction", exp(col("prediction")))
+exp_xgboost_df = log_pred_df.withColumn("prediction", exp(col("prediction")))
 
-display(expXgboostDF.select("price", "prediction"))
+display(exp_xgboost_df.select("price", "prediction"))
 
 # COMMAND ----------
 
@@ -96,10 +95,10 @@ display(expXgboostDF.select("price", "prediction"))
 
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
 
-rmse = regressionEvaluator.evaluate(expXgboostDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(expXgboostDF)
+rmse = regression_evaluator.evaluate(exp_xgboost_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(exp_xgboost_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 

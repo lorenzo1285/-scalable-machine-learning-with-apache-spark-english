@@ -21,8 +21,8 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
@@ -35,8 +35,8 @@ airbnbDF = spark.read.format("delta").load(filePath)
 
 # COMMAND ----------
 
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
-print(trainDF.cache().count())
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
+print(train_df.cache().count())
 
 # COMMAND ----------
 
@@ -45,11 +45,11 @@ print(trainDF.cache().count())
 
 # COMMAND ----------
 
-trainRepartitionDF, testRepartitionDF = (airbnbDF
-                                         .repartition(24)
-                                         .randomSplit([.8, .2], seed=42))
+train_repartition_df, test_repartition_df = (airbnb_df
+                                             .repartition(24)
+                                             .randomSplit([.8, .2], seed=42))
 
-print(trainRepartitionDF.count())
+print(train_repartition_df.count())
 
 # COMMAND ----------
 
@@ -61,15 +61,15 @@ print(trainRepartitionDF.count())
 
 # COMMAND ----------
 
-display(trainDF.select("price", "bedrooms"))
+display(train_df.select("price", "bedrooms"))
 
 # COMMAND ----------
 
-display(trainDF.select("price", "bedrooms").summary())
+display(train_df.select("price", "bedrooms").summary())
 
 # COMMAND ----------
 
-display(trainDF)
+display(train_df)
 
 # COMMAND ----------
 
@@ -86,7 +86,7 @@ from pyspark.ml.regression import LinearRegression
 lr = LinearRegression(featuresCol="bedrooms", labelCol="price")
 
 # Uncomment when running
-# lrModel = lr.fit(trainDF)
+# lr_model = lr.fit(train_df)
 
 # COMMAND ----------
 
@@ -102,14 +102,14 @@ lr = LinearRegression(featuresCol="bedrooms", labelCol="price")
 
 from pyspark.ml.feature import VectorAssembler
 
-vecAssembler = VectorAssembler(inputCols=["bedrooms"], outputCol="features")
+vec_assembler = VectorAssembler(inputCols=["bedrooms"], outputCol="features")
 
-vecTrainDF = vecAssembler.transform(trainDF)
+vec_train_df = vec_assembler.transform(train_df)
 
 # COMMAND ----------
 
 lr = LinearRegression(featuresCol="features", labelCol="price")
-lrModel = lr.fit(vecTrainDF)
+lr_model = lr.fit(vec_train_df)
 
 # COMMAND ----------
 
@@ -117,8 +117,8 @@ lrModel = lr.fit(vecTrainDF)
 
 # COMMAND ----------
 
-m = lrModel.coefficients[0]
-b = lrModel.intercept
+m = lr_model.coefficients[0]
+b = lr_model.intercept
 
 print(f"The formula for the linear regression line is y = {m:.2f}x + {b:.2f}")
 
@@ -129,11 +129,11 @@ print(f"The formula for the linear regression line is y = {m:.2f}x + {b:.2f}")
 
 # COMMAND ----------
 
-vecTestDF = vecAssembler.transform(testDF)
+vec_test_df = vec_assembler.transform(test_df)
 
-predDF = lrModel.transform(vecTestDF)
+pred_df = lr_model.transform(vec_test_df)
 
-predDF.select("bedrooms", "features", "price", "prediction").show()
+pred_df.select("bedrooms", "features", "price", "prediction").show()
 
 # COMMAND ----------
 
@@ -145,9 +145,9 @@ predDF.select("bedrooms", "features", "price", "prediction").show()
 
 from pyspark.ml.evaluation import RegressionEvaluator
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
 
-rmse = regressionEvaluator.evaluate(predDF)
+rmse = regression_evaluator.evaluate(pred_df)
 print(f"RMSE is {rmse}")
 
 # COMMAND ----------

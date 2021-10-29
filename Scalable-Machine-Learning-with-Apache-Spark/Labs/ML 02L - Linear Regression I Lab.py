@@ -26,9 +26,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -38,13 +38,13 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.regression import LinearRegression
 
-vecAssembler = # FILL_IN
+vec_assembler = # FILL_IN
 
-lrModel = # FILL_IN
+lr_model = # FILL_IN
 
-predDF = # FILL_IN
+pred_df = # FILL_IN
 
-regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
 rmse = # FILL_IN
 r2 = # FILL_IN
 print(f"RMSE is {rmse}")
@@ -56,10 +56,10 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-for col, coef in zip(["bedrooms", "bathrooms", "bathrooms_na", "minimum_nights", "number_of_reviews"], lrModel.coefficients):
-  print(col, coef)
+for col, coef in zip(["bedrooms", "bathrooms", "bathrooms_na", "minimum_nights", "number_of_reviews"], lr_model.coefficients):
+    print(col, coef)
   
-print(f"intercept: {lrModel.intercept}")
+print(f"intercept: {lr_model.intercept}")
 
 # COMMAND ----------
 

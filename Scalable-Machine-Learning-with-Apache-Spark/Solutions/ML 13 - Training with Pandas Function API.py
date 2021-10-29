@@ -32,13 +32,14 @@
 
 import pyspark.sql.functions as f
 
-df = (spark.range(1000*100)
-  .select(f.col("id").alias("record_id"), (f.col("id")%10).alias("device_id"))
-  .withColumn("feature_1", f.rand() * 1)
-  .withColumn("feature_2", f.rand() * 2)
-  .withColumn("feature_3", f.rand() * 3)
-  .withColumn("label", (f.col("feature_1") + f.col("feature_2") + f.col("feature_3")) + f.rand())
-)
+df = (spark
+      .range(1000*100)
+      .select(f.col("id").alias("record_id"), (f.col("id")%10).alias("device_id"))
+      .withColumn("feature_1", f.rand() * 1)
+      .withColumn("feature_2", f.rand() * 2)
+      .withColumn("feature_3", f.rand() * 3)
+      .withColumn("label", (f.col("feature_1") + f.col("feature_2") + f.col("feature_3")) + f.rand())
+     )
 
 display(df)
 
@@ -50,11 +51,11 @@ display(df)
 
 import pyspark.sql.types as t
 
-trainReturnSchema = t.StructType([
-  t.StructField("device_id", t.IntegerType()), # unique device ID
-  t.StructField("n_used", t.IntegerType()),    # number of records used in training
-  t.StructField("model_path", t.StringType()), # path to the model for a given device
-  t.StructField("mse", t.FloatType())          # metric for model performance
+train_return_schema = t.StructType([
+    t.StructField("device_id", t.IntegerType()), # unique device ID
+    t.StructField("n_used", t.IntegerType()),    # number of records used in training
+    t.StructField("model_path", t.StringType()), # path to the model for a given device
+    t.StructField("mse", t.FloatType())          # metric for model performance
 ])
 
 # COMMAND ----------
@@ -70,41 +71,41 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 
 def train_model(df_pandas: pd.DataFrame) -> pd.DataFrame:
-  """
-  Trains an sklearn model on grouped instances
-  """
-  # Pull metadata
-  device_id = df_pandas["device_id"].iloc[0]
-  n_used = df_pandas.shape[0]
-  run_id = df_pandas["run_id"].iloc[0] # Pulls run ID to do a nested run
-  
-  # Train the model
-  X = df_pandas[["feature_1", "feature_2", "feature_3"]]
-  y = df_pandas["label"]
-  rf = RandomForestRegressor()
-  rf.fit(X, y)
+    """
+    Trains an sklearn model on grouped instances
+    """
+    # Pull metadata
+    device_id = df_pandas["device_id"].iloc[0]
+    n_used = df_pandas.shape[0]
+    run_id = df_pandas["run_id"].iloc[0] # Pulls run ID to do a nested run
 
-  # Evaluate the model
-  predictions = rf.predict(X)
-  mse = mean_squared_error(y, predictions) # Note we could add a train/test split
- 
-  # Resume the top-level training
-  with mlflow.start_run(run_id=run_id) as outer_run:
-    # Small hack for for running as a job
-    experiment_id = outer_run.info.experiment_id
-    print(f"Current experiment_id = {experiment_id}")
-    
-    # Create a nested run for the specific device
-    with mlflow.start_run(run_name=str(device_id), nested=True, experiment_id=experiment_id) as run:
-      mlflow.sklearn.log_model(rf, str(device_id))
-      mlflow.log_metric("mse", mse)
-      
-      artifact_uri = f"runs:/{run.info.run_id}/{device_id}"
-      # Create a return pandas DataFrame that matches the schema above
-      returnDF = pd.DataFrame([[device_id, n_used, artifact_uri, mse]], 
-        columns=["device_id", "n_used", "model_path", "mse"])
+    # Train the model
+    X = df_pandas[["feature_1", "feature_2", "feature_3"]]
+    y = df_pandas["label"]
+    rf = RandomForestRegressor()
+    rf.fit(X, y)
 
-  return returnDF 
+    # Evaluate the model
+    predictions = rf.predict(X)
+    mse = mean_squared_error(y, predictions) # Note we could add a train/test split
+
+    # Resume the top-level training
+    with mlflow.start_run(run_id=run_id) as outer_run:
+        # Small hack for for running as a job
+        experiment_id = outer_run.info.experiment_id
+        print(f"Current experiment_id = {experiment_id}")
+
+        # Create a nested run for the specific device
+        with mlflow.start_run(run_name=str(device_id), nested=True, experiment_id=experiment_id) as run:
+            mlflow.sklearn.log_model(rf, str(device_id))
+            mlflow.log_metric("mse", mse)
+
+            artifact_uri = f"runs:/{run.info.run_id}/{device_id}"
+            # Create a return pandas DataFrame that matches the schema above
+            return_df = pd.DataFrame([[device_id, n_used, artifact_uri, mse]], 
+                                    columns=["device_id", "n_used", "model_path", "mse"])
+
+    return return_df 
 
 
 # COMMAND ----------
@@ -116,20 +117,17 @@ def train_model(df_pandas: pd.DataFrame) -> pd.DataFrame:
 # COMMAND ----------
 
 with mlflow.start_run(run_name="Training session for all devices") as run:
-  run_id = run.info.run_id
-  
-  modelDirectoriesDF = (df
-    .withColumn("run_id", f.lit(run_id)) # Add run_id
-    .groupby("device_id")
-    .applyInPandas(train_model, schema=trainReturnSchema)
-    .cache()
-  )
-  
-combinedDF = (df
-  .join(modelDirectoriesDF, on="device_id", how="left")
-)
+    run_id = run.info.run_id
 
-display(combinedDF)
+    model_directories_df = (df
+        .withColumn("run_id", f.lit(run_id)) # Add run_id
+        .groupby("device_id")
+        .applyInPandas(train_model, schema=train_return_schema)
+        .cache()
+    )
+
+combined_df = df.join(model_directories_df, on="device_id", how="left")
+display(combined_df)
 
 # COMMAND ----------
 
@@ -137,31 +135,31 @@ display(combinedDF)
 
 # COMMAND ----------
 
-applyReturnSchema = t.StructType([
-  t.StructField("record_id", t.IntegerType()),
-  t.StructField("prediction", t.FloatType())
+apply_return_schema = t.StructType([
+    t.StructField("record_id", t.IntegerType()),
+    t.StructField("prediction", t.FloatType())
 ])
 
 def apply_model(df_pandas: pd.DataFrame) -> pd.DataFrame:
-  """
-  Applies model to data for a particular device, represented as a pandas DataFrame
-  """
-  model_path = df_pandas["model_path"].iloc[0]
-  
-  input_columns = ["feature_1", "feature_2", "feature_3"]
-  X = df_pandas[input_columns]
-  
-  model = mlflow.sklearn.load_model(model_path)
-  prediction = model.predict(X)
-  
-  returnDF = pd.DataFrame({
-    "record_id": df_pandas["record_id"],
-    "prediction": prediction
-  })
-  return returnDF
+    """
+    Applies model to data for a particular device, represented as a pandas DataFrame
+    """
+    model_path = df_pandas["model_path"].iloc[0]
 
-predictionDF = combinedDF.groupby("device_id").applyInPandas(apply_model, schema=applyReturnSchema)
-display(predictionDF)
+    input_columns = ["feature_1", "feature_2", "feature_3"]
+    X = df_pandas[input_columns]
+
+    model = mlflow.sklearn.load_model(model_path)
+    prediction = model.predict(X)
+
+    return_df = pd.DataFrame({
+        "record_id": df_pandas["record_id"],
+        "prediction": prediction
+    })
+    return return_df
+
+prediction_df = combined_df.groupby("device_id").applyInPandas(apply_model, schema=apply_return_schema)
+display(prediction_df)
 
 # COMMAND ----------
 

@@ -23,9 +23,9 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
@@ -46,16 +46,16 @@ from pyspark.ml.feature import RFormula
 from pyspark.ml.regression import LinearRegression
 from pyspark.ml.evaluation import RegressionEvaluator
 
-rFormula = RFormula(<FILL_IN>)
+r_formula = RFormula(<FILL_IN>)
 lr = <FILL_IN>
 pipeline = Pipeline(<FILL_IN>)
-pipelineModel = pipeline.fit(<FILL_IN>)
-predDF = pipelineModel.transform(<FILL_IN>)
+pipeline_model = pipeline.fit(<FILL_IN>)
+pred_df = pipeline_model.transform(<FILL_IN>)
 
-regressionEvaluator = RegressionEvaluator(<FILL_IN>)
+regression_evaluator = RegressionEvaluator(<FILL_IN>)
 
-rmse = regressionEvaluator.setMetricName("rmse").evaluate(predDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
+rmse = regression_evaluator.setMetricName("rmse").evaluate(pred_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 
@@ -71,21 +71,21 @@ print(f"R2 is {r2}")
 
 from pyspark.sql.functions import log
 
-display(trainDF.select(log("price")))
+display(train_df.select(log("price")))
 
 # COMMAND ----------
 
 # TODO
 from pyspark.sql.functions import col, log
 
-logTrainDF = <FILL_IN>
-logTestDF = <FILL_IN>
+log_train_df = <FILL_IN>
+log_test_df = <FILL_IN>
 
-rFormula = RFormula(<FILL_IN>) # Look at handleInvalid
+r_formula = RFormula(<FILL_IN>) # Look at handleInvalid
 lr.setLabelCol(<FILL_IN>)
-pipeline = Pipeline(stages = [rFormula, lr])
-pipelineModel = pipeline.fit(logTrainDF)
-predDF = pipelineModel.transform(logTestDF)
+pipeline = Pipeline(stages=[r_formula, lr])
+pipeline_model = pipeline.fit(log_train_df)
+pred_df = pipeline_model.transform(log_test_df)
 
 # COMMAND ----------
 
@@ -96,10 +96,10 @@ predDF = pipelineModel.transform(logTestDF)
 # COMMAND ----------
 
 # TODO
-expDF = <FILL_IN>
+exp_df = <FILL_IN>
 
-rmse = regressionEvaluator.setMetricName("rmse").evaluate(expDF)
-r2 = regressionEvaluator.setMetricName("r2").evaluate(expDF)
+rmse = regression_evaluator.setMetricName("rmse").evaluate(exp_df)
+r2 = regression_evaluator.setMetricName("r2").evaluate(exp_df)
 print(f"RMSE is {rmse}")
 print(f"R2 is {r2}")
 

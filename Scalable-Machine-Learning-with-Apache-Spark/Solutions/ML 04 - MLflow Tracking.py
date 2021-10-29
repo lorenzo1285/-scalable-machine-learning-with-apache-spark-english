@@ -38,11 +38,11 @@
 
 # COMMAND ----------
 
-filePath = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
-airbnbDF = spark.read.format("delta").load(filePath)
+file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.delta/"
+airbnb_df = spark.read.format("delta").load(file_path)
 
-trainDF, testDF = airbnbDF.randomSplit([.8, .2], seed=42)
-print(trainDF.cache().count())
+train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
+print(train_df.cache().count())
 
 # COMMAND ----------
 
@@ -75,25 +75,25 @@ from pyspark.ml import Pipeline
 from pyspark.ml.evaluation import RegressionEvaluator
 
 with mlflow.start_run(run_name="LR-Single-Feature") as run:
-  # Define pipeline
-  vecAssembler = VectorAssembler(inputCols=["bedrooms"], outputCol="features")
-  lr = LinearRegression(featuresCol="features", labelCol="price")
-  pipeline = Pipeline(stages=[vecAssembler, lr])
-  pipelineModel = pipeline.fit(trainDF)
-  
-  # Log parameters
-  mlflow.log_param("label", "price-bedrooms")
-  
-  # Log model
-  mlflow.spark.log_model(pipelineModel, "model", input_example=trainDF.limit(5).toPandas()) 
-  
-  # Evaluate predictions
-  predDF = pipelineModel.transform(testDF)
-  regressionEvaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
-  rmse = regressionEvaluator.evaluate(predDF)
-  
-  # Log metrics
-  mlflow.log_metric("rmse", rmse)
+    # Define pipeline
+    vec_assembler = VectorAssembler(inputCols=["bedrooms"], outputCol="features")
+    lr = LinearRegression(featuresCol="features", labelCol="price")
+    pipeline = Pipeline(stages=[vec_assembler, lr])
+    pipeline_model = pipeline.fit(train_df)
+
+    # Log parameters
+    mlflow.log_param("label", "price-bedrooms")
+
+    # Log model
+    mlflow.spark.log_model(pipeline_model, "model", input_example=train_df.limit(5).toPandas()) 
+
+    # Evaluate predictions
+    pred_df = pipeline_model.transform(test_df)
+    regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="price", metricName="rmse")
+    rmse = regression_evaluator.evaluate(pred_df)
+
+    # Log metrics
+    mlflow.log_metric("rmse", rmse)
 
 # COMMAND ----------
 
@@ -107,28 +107,29 @@ with mlflow.start_run(run_name="LR-Single-Feature") as run:
 # COMMAND ----------
 
 from pyspark.ml.feature import RFormula
-with mlflow.start_run(run_name="LR-All-Features") as run:
-  # Create pipeline
-  rFormula = RFormula(formula="price ~ .", featuresCol="features", labelCol="price", handleInvalid="skip")
-  lr = LinearRegression(labelCol="price", featuresCol="features")
-  pipeline = Pipeline(stages = [rFormula, lr])
-  pipelineModel = pipeline.fit(trainDF)
-  
-  # Log pipeline
-  mlflow.spark.log_model(pipelineModel, "model", input_example=trainDF.limit(5).toPandas())
 
-  # Log parameter
-  mlflow.log_param("label", "price-all-features")
-  
-  # Create predictions and metrics
-  predDF = pipelineModel.transform(testDF)
-  regressionEvaluator = RegressionEvaluator(labelCol="price", predictionCol="prediction")
-  rmse = regressionEvaluator.setMetricName("rmse").evaluate(predDF)
-  r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
-  
-  # Log both metrics
-  mlflow.log_metric("rmse", rmse)
-  mlflow.log_metric("r2", r2)
+with mlflow.start_run(run_name="LR-All-Features") as run:
+    # Create pipeline
+    r_formula = RFormula(formula="price ~ .", featuresCol="features", labelCol="price", handleInvalid="skip")
+    lr = LinearRegression(labelCol="price", featuresCol="features")
+    pipeline = Pipeline(stages=[r_formula, lr])
+    pipeline_model = pipeline.fit(train_df)
+
+    # Log pipeline
+    mlflow.spark.log_model(pipeline_model, "model", input_example=train_df.limit(5).toPandas())
+
+    # Log parameter
+    mlflow.log_param("label", "price-all-features")
+
+    # Create predictions and metrics
+    pred_df = pipeline_model.transform(test_df)
+    regression_evaluator = RegressionEvaluator(labelCol="price", predictionCol="prediction")
+    rmse = regression_evaluator.setMetricName("rmse").evaluate(pred_df)
+    r2 = regression_evaluator.setMetricName("r2").evaluate(pred_df)
+
+    # Log both metrics
+    mlflow.log_metric("rmse", rmse)
+    mlflow.log_metric("r2", r2)
 
 # COMMAND ----------
 
@@ -138,46 +139,45 @@ with mlflow.start_run(run_name="LR-All-Features") as run:
 
 # COMMAND ----------
 
-from pyspark.ml.feature import RFormula
 from pyspark.sql.functions import col, log, exp
 import matplotlib.pyplot as plt
 
 with mlflow.start_run(run_name="LR-Log-Price") as run:
-  # Take log of price
-  logTrainDF = trainDF.withColumn("log_price", log(col("price")))
-  logTestDF = testDF.withColumn("log_price", log(col("price")))
-  
-  # Log parameter
-  mlflow.log_param("label", "log-price")
-  
-  # Create pipeline
-  rFormula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip")  
-  lr = LinearRegression(labelCol="log_price", predictionCol="log_prediction")
-  pipeline = Pipeline(stages = [rFormula, lr])
-  pipelineModel = pipeline.fit(logTrainDF)
-  
-  # Log model
-  mlflow.spark.log_model(pipelineModel, "log-model", input_example=logTrainDF.limit(5).toPandas())
-    
-  # Make predictions
-  predDF = pipelineModel.transform(logTestDF)
-  expDF = predDF.withColumn("prediction", exp(col("log_prediction")))
-  
-  # Evaluate predictions
-  rmse = regressionEvaluator.setMetricName("rmse").evaluate(expDF)
-  r2 = regressionEvaluator.setMetricName("r2").evaluate(expDF)
-  
-  # Log metrics
-  mlflow.log_metric("rmse", rmse)
-  mlflow.log_metric("r2", r2)
-  
-  # Log artifact
-  plt.clf()
-  
-  logTrainDF.toPandas().hist(column="log_price", bins=100)
-  fig = plt.gcf()
-  mlflow.log_figure(fig, username + "_logNormal.png")
-  plt.show()
+    # Take log of price
+    log_train_df = train_df.withColumn("log_price", log(col("price")))
+    log_test_df = test_df.withColumn("log_price", log(col("price")))
+
+    # Log parameter
+    mlflow.log_param("label", "log-price")
+
+    # Create pipeline
+    r_formula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip")  
+    lr = LinearRegression(labelCol="log_price", predictionCol="log_prediction")
+    pipeline = Pipeline(stages=[r_formula, lr])
+    pipeline_model = pipeline.fit(log_train_df)
+
+    # Log model
+    mlflow.spark.log_model(pipeline_model, "log-model", input_example=log_train_df.limit(5).toPandas())
+
+    # Make predictions
+    pred_df = pipeline_model.transform(log_test_df)
+    exp_df = pred_df.withColumn("prediction", exp(col("log_prediction")))
+
+    # Evaluate predictions
+    rmse = regression_evaluator.setMetricName("rmse").evaluate(exp_df)
+    r2 = regression_evaluator.setMetricName("r2").evaluate(exp_df)
+
+    # Log metrics
+    mlflow.log_metric("rmse", rmse)
+    mlflow.log_metric("r2", r2)
+
+    # Log artifact
+    plt.clf()
+
+    log_train_df.toPandas().hist(column="log_price", bins=100)
+    fig = plt.gcf()
+    mlflow.log_figure(fig, username + "_log_normal.png")
+    plt.show()
 
 # COMMAND ----------
 
@@ -254,7 +254,7 @@ runs[0].info.run_id
 model_path = f"runs:/{run.info.run_id}/log-model"
 loaded_model = mlflow.spark.load_model(model_path)
 
-display(loaded_model.transform(testDF))
+display(loaded_model.transform(test_df))
 
 # COMMAND ----------
 

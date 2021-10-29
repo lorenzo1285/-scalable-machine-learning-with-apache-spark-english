@@ -35,11 +35,11 @@
 
 from pyspark.ml.pipeline import PipelineModel
 
-pipelinePath = f"{datasets_dir}/airbnb/sf-listings/models/sf-listings-2019-03-06/pipeline_model"
-pipelineModel = PipelineModel.load(pipelinePath)
+pipeline_path = f"{datasets_dir}/airbnb/sf-listings/models/sf-listings-2019-03-06/pipeline_model"
+pipeline_model = PipelineModel.load(pipeline_path)
 
-repartitionedPath =  f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean-100p.parquet/"
-schema = spark.read.parquet(repartitionedPath).schema
+repartitioned_path =  f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean-100p.parquet/"
+schema = spark.read.parquet(repartitioned_path).schema
 
 # COMMAND ----------
 
@@ -49,11 +49,11 @@ schema = spark.read.parquet(repartitionedPath).schema
 
 # COMMAND ----------
 
-streamingData = (spark
+streaming_data = (spark
                  .readStream
                  .schema(schema) # Can set the schema this way
                  .option("maxFilesPerTrigger", 1)
-                 .parquet(repartitionedPath))
+                 .parquet(repartitioned_path))
 
 # COMMAND ----------
 
@@ -61,7 +61,7 @@ streamingData = (spark
 
 # COMMAND ----------
 
-streamPred = pipelineModel.transform(streamingData)
+stream_pred = pipeline_model.transform(streaming_data)
 
 # COMMAND ----------
 
@@ -72,21 +72,21 @@ streamPred = pipelineModel.transform(streamingData)
 
 import re
 
-checkpointDir = userhome + "/machine-learning/stream_1p_checkpoint"
+checkpoint_dir = working_dir + "/stream_checkpoint"
 # Clear out the checkpointing directory
-dbutils.fs.rm(checkpointDir, True) 
+dbutils.fs.rm(checkpoint_dir, True) 
 
-(streamPred
+(stream_pred
  .writeStream
  .format("memory")
- .option("checkpointLocation", checkpointDir)
+ .option("checkpointLocation", checkpoint_dir)
  .outputMode("append")
- .queryName("pred_stream_1p")
+ .queryName("pred_stream")
  .start())
 
 # COMMAND ----------
 
-untilStreamIsReady("pred_stream_1p")
+untilStreamIsReady("pred_stream")
 
 # COMMAND ----------
 
@@ -95,13 +95,13 @@ untilStreamIsReady("pred_stream_1p")
 # COMMAND ----------
 
 display(
-  sql("select * from pred_stream_1p")
+  sql("select * from pred_stream")
 )
 
 # COMMAND ----------
 
 display(
-  sql("select count(*) from pred_stream_1p")
+  sql("select count(*) from pred_stream")
 )
 
 # COMMAND ----------
@@ -111,9 +111,10 @@ display(
 # COMMAND ----------
 
 for stream in spark.streams.active:
-  print(f"Stopping {stream.name}")
-  stream.stop()             # Stop the active stream
-  stream.awaitTermination() # Wait for it to actually stop
+    print(f"Stopping {stream.name}")
+    stream.stop()                  # Stop the active stream
+    try: stream.awaitTermination() # Wait for it to actually stop
+    except: pass                   # Don't care if stopping fails
 
 # COMMAND ----------
 
