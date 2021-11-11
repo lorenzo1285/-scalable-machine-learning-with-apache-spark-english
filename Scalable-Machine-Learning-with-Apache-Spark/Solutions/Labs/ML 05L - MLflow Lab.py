@@ -236,7 +236,9 @@ test_new = test_delta.withColumn("log_price", log(col("price")))
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC Save the updated DataFrames to `train_delta_path` and `test_delta_path`, respectively, passing the `mergeSchema` option to safely evolve its schema.
+# MAGIC Save the updated DataFrames to `train_delta_path` and `test_delta_path`, respectively, passing the `mergeSchema` option to safely evolve its schema. 
+# MAGIC 
+# MAGIC Take a look at this [blog](https://databricks.com/blog/2019/09/24/diving-into-delta-lake-schema-enforcement-evolution.html) on Delta Lake for more information about `mergeSchema`.
 
 # COMMAND ----------
 

@@ -82,7 +82,8 @@ with mlflow.start_run(run_name="LR-Single-Feature") as run:
     pipeline_model = pipeline.fit(train_df)
 
     # Log parameters
-    mlflow.log_param("label", "price-bedrooms")
+    mlflow.log_param("label", "price")
+    mlflow.log_param("features", "bedrooms")
 
     # Log model
     mlflow.spark.log_model(pipeline_model, "model", input_example=train_df.limit(5).toPandas()) 
@@ -119,7 +120,8 @@ with mlflow.start_run(run_name="LR-All-Features") as run:
     mlflow.spark.log_model(pipeline_model, "model", input_example=train_df.limit(5).toPandas())
 
     # Log parameter
-    mlflow.log_param("label", "price-all-features")
+    mlflow.log_param("label", "price")
+    mlflow.log_param("features", "all_features")
 
     # Create predictions and metrics
     pred_df = pipeline_model.transform(test_df)
@@ -148,7 +150,8 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
     log_test_df = test_df.withColumn("log_price", log(col("price")))
 
     # Log parameter
-    mlflow.log_param("label", "log-price")
+    mlflow.log_param("label", "log_price")
+    mlflow.log_param("features", "all_features")
 
     # Create pipeline
     r_formula = RFormula(formula="log_price ~ . - price", featuresCol="features", labelCol="log_price", handleInvalid="skip")  

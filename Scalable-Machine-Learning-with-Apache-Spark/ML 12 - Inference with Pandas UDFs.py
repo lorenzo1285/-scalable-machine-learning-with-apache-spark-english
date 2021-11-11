@@ -71,7 +71,7 @@ spark_df = spark.createDataFrame(X_test)
 from pyspark.sql.functions import pandas_udf
 
 @pandas_udf("double")
-def predict(*args: pd.DataFrame) -> pd.Series:
+def predict(*args: pd.Series) -> pd.Series:
     model_path = f"runs:/{run.info.run_id}/random-forest-model" 
     model = mlflow.sklearn.load_model(model_path) # Load model
     pdf = pd.concat(args, axis=1)

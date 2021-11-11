@@ -262,7 +262,8 @@ train_model(table_name)
 # MAGIC  - **feature_store_model** : packaged feature store model that can be used directly for batch scoring - logged from `fs.log_model`
 # MAGIC <br>
 # MAGIC <br>
-# MAGIC <img src="https://files.training.databricks.com/images/mlflow/fs_log_model_mlflow_artifacts.png" alt="step12" width="1000"/>
+# MAGIC 
+# MAGIC <img src="https://files.training.databricks.com/images/301/updated_feature_store_9_1.png" alt="step12" width="1000"/>
 
 # COMMAND ----------
 
