@@ -64,18 +64,18 @@ print(table_name)
 
 fs = feature_store.FeatureStoreClient()
 
-# help(fs.create_feature_table)
+# help(fs.create_table)
 
 # COMMAND ----------
 
 # MAGIC %md #### Create Feature Table
 # MAGIC 
-# MAGIC Next, we can create the Feature Table using the `create_feature_table` method.
+# MAGIC Next, we can create the Feature Table using the `create_table` method.
 # MAGIC 
 # MAGIC This method takes a few parameters as inputs:
 # MAGIC * `name`- A feature table name of the form ``<database_name>.<table_name>``
-# MAGIC * `keys`- The primary key(s). If multiple columns are required, specify a list of column names.
-# MAGIC * `features_df`- Data to insert into this feature table.  The schema of `features_df` will be used as the feature table schema.
+# MAGIC * `primary_keys`- The primary key(s). If multiple columns are required, specify a list of column names.
+# MAGIC * `df`- Data to insert into this feature table.  The schema of `features_df` will be used as the feature table schema.
 # MAGIC * `schema`- Feature table schema. Note that either `schema` or `features_df` must be provided.
 # MAGIC * `description`- Description of the feature table
 # MAGIC * `partition_columns`- Column(s) used to partition the feature table.
@@ -99,10 +99,10 @@ display(numeric_features_df)
 
 # COMMAND ----------
 
-fs.create_feature_table(
+fs.create_table(
     name=table_name,
-    keys=["index"],
-    features_df=numeric_features_df,
+    primary_keys=["index"],
+    df=numeric_features_df,
     schema=numeric_features_df.schema,
     description="Numeric features of airbnb data"
 )
@@ -110,14 +110,14 @@ fs.create_feature_table(
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Alternatively, you can `create_feature_table` with schema only (without `features_df`), and populate data to the feature table with `fs.write_table`. `fs.write_table` supports both `overwrite` and `merge` modes.
+# MAGIC Alternatively, you can `create_table` with schema only (without `df`), and populate data to the feature table with `fs.write_table`. `fs.write_table` supports both `overwrite` and `merge` modes.
 # MAGIC 
 # MAGIC Example:
 # MAGIC 
 # MAGIC ```
-# MAGIC fs.create_feature_table(
+# MAGIC fs.create_table(
 # MAGIC     name=table_name,
-# MAGIC     keys=["index"],
+# MAGIC     primary_keys=["index"],
 # MAGIC     schema=numeric_features_df.schema,
 # MAGIC     description="Original Airbnb data"
 # MAGIC )
@@ -149,15 +149,15 @@ fs.create_feature_table(
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC We can also look at the metadata of the feature store via the FeatureStore client by using `get_feature_table()`.
+# MAGIC We can also look at the metadata of the feature store via the FeatureStore client by using `get_table()`.
 
 # COMMAND ----------
 
-fs.get_feature_table(table_name).path_data_sources
+fs.get_table(table_name).path_data_sources
 
 # COMMAND ----------
 
-fs.get_feature_table(table_name).description
+fs.get_table(table_name).description
 
 # COMMAND ----------
 
@@ -359,7 +359,7 @@ display(fs.read_table(name=table_name))
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

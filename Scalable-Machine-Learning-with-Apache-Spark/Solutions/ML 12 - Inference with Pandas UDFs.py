@@ -30,6 +30,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
 with mlflow.start_run(run_name="sklearn-random-forest") as run:
+    # Enable autologging 
+    mlflow.sklearn.autolog(log_input_examples=True, log_model_signatures=True, log_models=True)
     # Import the data
     df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/")).drop(["zipcode"], axis=1)
     X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
@@ -37,9 +39,6 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
     # Create model
     rf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
     rf.fit(X_train, y_train)
-
-    # Log model
-    mlflow.sklearn.log_model(rf, "random-forest-model")
 
 # COMMAND ----------
 
@@ -72,7 +71,7 @@ from pyspark.sql.functions import pandas_udf
 
 @pandas_udf("double")
 def predict(*args: pd.Series) -> pd.Series:
-    model_path = f"runs:/{run.info.run_id}/random-forest-model" 
+    model_path = f"runs:/{run.info.run_id}/model" 
     model = mlflow.sklearn.load_model(model_path) # Load model
     pdf = pd.concat(args, axis=1)
     return pd.Series(model.predict(pdf))
@@ -102,7 +101,7 @@ from typing import Iterator, Tuple
 
 @pandas_udf("double")
 def predict(iterator: Iterator[pd.DataFrame]) -> Iterator[pd.Series]:
-    model_path = f"runs:/{run.info.run_id}/random-forest-model" 
+    model_path = f"runs:/{run.info.run_id}/model" 
     model = mlflow.sklearn.load_model(model_path) # Load model
     for features in iterator:
         pdf = pd.concat(features, axis=1)
@@ -123,7 +122,7 @@ display(prediction_df)
 # COMMAND ----------
 
 def predict(iterator: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
-    model_path = f"runs:/{run.info.run_id}/random-forest-model" 
+    model_path = f"runs:/{run.info.run_id}/model" 
     model = mlflow.sklearn.load_model(model_path) # Load model
     for features in iterator:
         yield pd.concat([features, pd.Series(model.predict(features), name="prediction")], axis=1)
@@ -145,7 +144,7 @@ display(spark_df.mapInPandas(predict, schema))
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

@@ -20,7 +20,7 @@
 
 # MAGIC %md
 # MAGIC 
-# MAGIC In the cell below, we train the same model on the same data set as in the lesson. 
+# MAGIC In the cell below, we train the same model on the same data set as in the lesson and [autolog](https://www.mlflow.org/docs/latest/python_api/mlflow.sklearn.html) metrics, parameters, and models to MLflow. 
 
 # COMMAND ----------
 
@@ -31,6 +31,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 
 with mlflow.start_run(run_name="sklearn-random-forest") as run:
+    # Enable autologging 
+    mlflow.sklearn.autolog(log_input_examples=True, log_model_signatures=True, log_models=True)
+    
     # Import the data
     df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/"))
     X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
@@ -39,18 +42,6 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
     rf = RandomForestRegressor(n_estimators=100, max_depth=10)
     rf.fit(X_train, y_train)
     predictions = rf.predict(X_test)
-
-    # Log model
-    mlflow.sklearn.log_model(rf, "random-forest-model")
-
-    # Log params
-    mlflow.log_param("n_estimators", 100)
-    mlflow.log_param("max_depth", 10)
-
-    # Log metrics
-    mlflow.log_metric("mse", mean_squared_error(y_test, predictions))
-    mlflow.log_metric("mae", mean_absolute_error(y_test, predictions))  
-    mlflow.log_metric("r2", r2_score(y_test, predictions))  
 
 # COMMAND ----------
 
@@ -98,7 +89,7 @@ display(spark_df.withColumn("prediction", <FILL_IN>))
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

@@ -8,9 +8,9 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC # Data Cleansing with Airbnb
+# MAGIC # Data Cleansing
 # MAGIC 
-# MAGIC We're going to start by doing some exploratory data analysis & cleansing. We will be using the SF Airbnb rental dataset from [Inside Airbnb](http://insideairbnb.com/get-the-data.html).
+# MAGIC We will be using Spark to do some exploratory data analysis & cleansing of the SF Airbnb rental dataset from [Inside Airbnb](http://insideairbnb.com/get-the-data.html).
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/301/sf.jpg" style="height: 200px; margin: 10px; border: 1px solid #ddd; padding: 10px"/>
 # MAGIC 
@@ -100,8 +100,8 @@ display(fixed_price_df)
 # MAGIC ### Summary statistics
 # MAGIC 
 # MAGIC Two options:
-# MAGIC * describe
-# MAGIC * summary (describe + IQR)
+# MAGIC * `describe`: count, mean, stddev, min, max
+# MAGIC * `summary`: describe + interquartile range (IQR)
 # MAGIC 
 # MAGIC **Question:** When to use IQR/median over mean? Vice versa?
 
@@ -115,10 +115,20 @@ display(fixed_price_df.summary())
 
 # COMMAND ----------
 
+# MAGIC %md ### Dbutils Data Summary
+# MAGIC 
+# MAGIC We can also use `dbutils.data.summarize` to see more detailed summary statistics and data plots.
+
+# COMMAND ----------
+
+dbutils.data.summarize(fixed_price_df)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ### Getting rid of extreme values
 # MAGIC 
-# MAGIC Let's take a look at the *min* and *max* values of the `price` column:
+# MAGIC Let's take a look at the *min* and *max* values of the `price` column.
 
 # COMMAND ----------
 
@@ -126,7 +136,7 @@ display(fixed_price_df.select("price").describe())
 
 # COMMAND ----------
 
-# MAGIC %md There are some super-expensive listings. But it's the data scientist's job to decide what to do with them. We can certainly filter the "free" Airbnbs though.
+# MAGIC %md There are some super-expensive listings, but it's up to the SME (Subject Matter Experts) to decide what to do with them. We can certainly filter the "free" Airbnbs though.
 # MAGIC 
 # MAGIC Let's see first how many listings we can find where the *price* is zero.
 
@@ -162,7 +172,7 @@ display(pos_prices_df
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC A minimum stay of one year seems to be a reasonable limit here. Let's filter out those records where the *minimum_nights* is greater then 365:
+# MAGIC A minimum stay of one year seems to be a reasonable limit here. Let's filter out those records where the *minimum_nights* is greater then 365.
 
 # COMMAND ----------
 
@@ -172,7 +182,7 @@ display(min_nights_df)
 
 # COMMAND ----------
 
-# MAGIC %md ### Nulls
+# MAGIC %md ### Handling Null Values
 # MAGIC 
 # MAGIC There are a lot of different ways to handle null values. Sometimes, null can actually be a key indicator of the thing you are trying to predict (e.g. if you don't fill in certain portions of a form, probability of it getting approved decreases).
 # MAGIC 
@@ -183,7 +193,7 @@ display(min_nights_df)
 # MAGIC * Categorical:
 # MAGIC   * Replace them with the mode
 # MAGIC   * Create a special category for null
-# MAGIC * Use techniques like ALS which are designed to impute missing values
+# MAGIC * Use techniques like ALS (Alternating Least Squares) which are designed to impute missing values
 # MAGIC   
 # MAGIC **If you do ANY imputation techniques for categorical/numerical features, you MUST include an additional field specifying that field was imputed.**
 # MAGIC 
@@ -211,7 +221,7 @@ print(f"Columns converted from Integer to Double:\n - {columns}")
 
 # COMMAND ----------
 
-# MAGIC %md Add in dummy variable if we will impute any value.
+# MAGIC %md Add a dummy column to denote presence of null values before imputing.
 
 # COMMAND ----------
 
@@ -241,10 +251,11 @@ display(doubles_df.describe())
 
 # MAGIC %md ### Transformers and Estimators
 # MAGIC 
-# MAGIC **Transformer**: Accepts a DataFrame as input, and returns a new DataFrame with one or more columns appended to it. Transformers do not learn any parameters from your
-# MAGIC data and simply apply rule-based transformations to either prepare data for model training or generate predictions using a trained MLlib model. They have a `.transform()` method.
+# MAGIC Spark ML standardizes APIs for machine learning algorithms to make it easier to combine multiple algorithms into a single pipeline, or workflow. Let's cover two key concepts introduced by the Spark ML API: `transformers` and `estimators`.
 # MAGIC 
-# MAGIC **Estimator**: Learns (or "fits") parameters from your DataFrame via a `.fit()` method and returns a Model, which is a transformer.
+# MAGIC **Transformer**: Transforms one DataFrame into another DataFrame. It accepts a DataFrame as input, and returns a new DataFrame with one or more columns appended to it. Transformers do not learn any parameters from your data and simply apply rule-based transformations. It has a `.transform()` method.
+# MAGIC 
+# MAGIC **Estimator**: An algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model. It has a `.fit()` method because it learns (or "fits") parameters from your DataFrame.
 
 # COMMAND ----------
 
@@ -267,23 +278,27 @@ imputed_df.write.format("delta").mode("overwrite").save(working_dir)
 # COMMAND ----------
 
 # MAGIC %md ## What's needed for the lab
-# MAGIC * [Train-test split](https://en.wikipedia.org/wiki/Training,_validation,_and_test_sets)
-# MAGIC * [RMSE](https://en.wikipedia.org/wiki/Root-mean-square_deviation)
+# MAGIC * Train-test split
+# MAGIC * RMSE
 
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ### [Train-test split](https://en.wikipedia.org/wiki/Training,_validation,_and_test_sets)
 # MAGIC ![](https://files.training.databricks.com/images/301/TrainTestSplit.png)
 
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC 
+# MAGIC ### [Root-Mean-Square Error (RMSE)](https://en.wikipedia.org/wiki/Root-mean-square_deviation)
+# MAGIC 
 # MAGIC ![](https://files.training.databricks.com/images/301/rmse.png)
 
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

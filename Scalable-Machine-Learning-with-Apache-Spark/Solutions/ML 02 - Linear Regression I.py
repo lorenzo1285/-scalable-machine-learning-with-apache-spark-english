@@ -73,7 +73,7 @@ display(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md There do appear some outliers in our dataset for the price ($10,000 a night??). Just keep this in mind when we are building our models :).
+# MAGIC %md There does appear to be some outliers in our dataset for the price ($10,000 a night??). Just keep this in mind when we are building our models.
 # MAGIC 
 # MAGIC We will use [LinearRegression](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html?highlight=linearregression#pyspark.ml.regression.LinearRegression) to build our first model.
 # MAGIC 
@@ -157,7 +157,7 @@ print(f"RMSE is {rmse}")
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

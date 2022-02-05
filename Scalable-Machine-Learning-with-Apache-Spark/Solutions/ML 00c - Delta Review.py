@@ -44,7 +44,7 @@
 # COMMAND ----------
 
 file_path = f"{datasets_dir}/airbnb/sf-listings/sf-listings-2019-03-06-clean.parquet/"
-airbnb_df = spark.read.parquet(file_path)
+airbnb_df = spark.read.format("parquet").load(file_path)
 
 display(airbnb_df)
 
@@ -60,7 +60,7 @@ airbnb_df.write.format("delta").mode("overwrite").save(working_dir)
 
 # COMMAND ----------
 
-# MAGIC %md You can also create a Delta table in the metastore.
+# MAGIC %md A Delta directory can also be registered as a table in the metastore.
 
 # COMMAND ----------
 
@@ -71,7 +71,7 @@ airbnb_df.write.format("delta").mode("overwrite").saveAsTable("delta_review")
 
 # COMMAND ----------
 
-# MAGIC %md Delta supports partitioning your data using unique values in a specified column. Let's partition by the neighborhood column. Partitioning by neighborhood gives us a point of quick comparison between different parts of San Francisco.
+# MAGIC %md Delta supports partitioning. Partitioning puts data with the same value for the partitioned column into its own directory. Operations with a filter on the partitioned column will only read directories that match the filter. This optimization is called partition pruning. Choose partition columns based in the patterns in your data, this dataset for example might benefit if partitioned by neighborhood.
 
 # COMMAND ----------
 
@@ -92,7 +92,7 @@ display(dbutils.fs.ls(working_dir))
 # MAGIC   <img src="https://user-images.githubusercontent.com/20408077/87174138-609fe600-c29c-11ea-90cc-84df0c1357f1.png" width="500"/>
 # MAGIC </div>
 # MAGIC 
-# MAGIC When a user creates a Delta Lake table, that table’s transaction log is automatically created in the _delta_log subdirectory. As he or she makes changes to that table, those changes are recorded as ordered, atomic commits in the transaction log. Each commit is written out as a JSON file, starting with 000000.json. Additional changes to the table generate subsequent JSON files in ascending numerical order so that the next commit is written out as 000001.json, the following as 000002.json, and so on.
+# MAGIC When a user creates a Delta Lake table, that table’s transaction log is automatically created in the _delta_log subdirectory. As he or she makes changes to that table, those changes are recorded as ordered, atomic commits in the transaction log. Each commit is written out as a JSON file, starting with 000000.json. Additional changes to the table generate more JSON files.
 
 # COMMAND ----------
 
@@ -102,7 +102,8 @@ display(dbutils.fs.ls(working_dir + "/_delta_log/"))
 
 # MAGIC %md Next, let's take a look at a Transaction Log File.
 # MAGIC 
-# MAGIC The [four columns](https://docs.databricks.com/delta/delta-utility.html) each represent a different part of the very first commit to the Delta Table, creating the table.
+# MAGIC The [four columns](https://docs.databricks.com/delta/delta-utility.html) each represent a different part of the very first commit to the Delta Table where the table was created.<br><br>
+# MAGIC 
 # MAGIC - The add column has statistics about the DataFrame as a whole and individual columns.
 # MAGIC - The commitInfo column has useful information about what the operation was (WRITE or READ) and who executed the operation.
 # MAGIC - The metaData column contains information about the column schema.
@@ -114,7 +115,7 @@ display(spark.read.json(working_dir + "/_delta_log/00000000000000000000.json"))
 
 # COMMAND ----------
 
-# MAGIC %md One key difference between these two transaction logs is the size of the JSON file, this file has 39 rows compared to the previous 4. To understand why, let's take a look at the commitInfo column. We can see that in the operationParameters section, partitionBy has been filled in by the "neighbourhood_cleansed" column. Furthermore, if we look at the add section on row 3, we can see that a new section called partitionValues has appeared. As we saw above, Delta stores partitions separately in memory, however, it stores information about these partitions in the same transaction log file.
+# MAGIC %md The second transaction log has 39 rows. This includes metadata for each partition. 
 
 # COMMAND ----------
 
@@ -171,7 +172,7 @@ display(dbutils.fs.ls(working_dir + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-# MAGIC %md Oops, actually we need the entire dataset! You can access a previous version of your Delta Table using [Delta Time Travel](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html). Use the following two cells to access your version history. Delta Lake will keep a 30 day version history by default, but if necessary, Delta can store a version history for longer.
+# MAGIC %md Oops, actually we need the entire dataset! You can access a previous version of your Delta Table using [Delta Time Travel](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html). Use the following two cells to access your version history. Delta Lake will keep a 30 day version history by default, though it can maintain that history for longer if needed.
 
 # COMMAND ----------
 
@@ -216,6 +217,8 @@ display(df)
 # COMMAND ----------
 
 # MAGIC %md Uh-oh, our code doesn't run! By default, to prevent accidentally vacuuming recent commits, Delta Lake will not let users vacuum a period under 7 days or 168 hours. Once vacuumed, you cannot return to a prior commit through time travel, only your most recent Delta Table will be saved.
+# MAGIC 
+# MAGIC Try changing the vacuum parameter to different values.
 
 # COMMAND ----------
 
@@ -256,7 +259,7 @@ display(dbutils.fs.ls(working_dir + "/neighbourhood_cleansed=Bayview/"))
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

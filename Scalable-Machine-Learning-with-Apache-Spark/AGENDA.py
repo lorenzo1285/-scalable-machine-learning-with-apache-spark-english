@@ -70,14 +70,14 @@
 # MAGIC | 20m    | **[Pandas UDFs Lab]($./Labs/ML 12L - Pandas UDF Lab)**    | Distributed inference lab |
 # MAGIC | 10m  | **Break** ||
 # MAGIC | 15m    | **[Training with Pandas Function API]($./ML 13 - Training with Pandas Function API)**    | Build groups of model in parallel using applyInPandas </br>Track models with MLflow |
-# MAGIC | 20m  | **[Koalas]($./ML 14 - Koalas)** | Use the new open-source library to write Pandas code that distributes using Spark under the hood|  
+# MAGIC | 20m  | **[Pandas API on Spark]($./ML 14 - Pandas API on Spark)** | Write Pandas code that leverages Spark under the hood|  
 # MAGIC 
 # MAGIC **Additional reference notebooks in the electives folder**
 
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>

@@ -53,7 +53,17 @@
 
 # COMMAND ----------
 
-# MAGIC %md Train a model and log it to MLflow. Here we are only using numeric features for simplicity of building the random forest.
+# MAGIC %md Train a model and log it to MLflow using [autologging](https://docs.databricks.com/applications/mlflow/databricks-autologging.html). Autologging allows you to log metrics, parameters, and models without the need for explicit log statements.
+# MAGIC 
+# MAGIC There are a few ways to use autologging:
+# MAGIC 
+# MAGIC   1. Call `mlflow.autolog()` before your training code. This will enable autologging for each supported library you have installed as soon as you import it.
+# MAGIC 
+# MAGIC   2. Enable autologging at the workspace level from the admin console
+# MAGIC 
+# MAGIC   3. Use library-specific autolog calls for each library you use in your code. (e.g. `mlflow.spark.autolog()`)
+# MAGIC 
+# MAGIC Here we are only using numeric features for simplicity of building the random forest.
 
 # COMMAND ----------
 
@@ -69,15 +79,11 @@ from sklearn.model_selection import train_test_split
 df = pd.read_csv(f"{datasets_dir}/airbnb/sf-listings/airbnb-cleaned-mlflow.csv".replace("dbfs:/", "/dbfs/"))
 X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1), df[["price"]].values.ravel(), random_state=42)
 
-lr = LinearRegression()
-lr.fit(X_train, y_train)
-
 with mlflow.start_run(run_name="LR Model") as run:
+    mlflow.sklearn.autolog(log_input_examples=True, log_model_signatures=True, log_models=True)
+    lr = LinearRegression()
+    lr.fit(X_train, y_train)
     signature = infer_signature(X_train, lr.predict(X_train))
-    mlflow.sklearn.log_model(lr, "model", input_example=X_train[:5], signature=signature) # Add input_example for easier serving
-
-    mlflow.log_params(lr.get_params())
-    mlflow.log_metric("mse", mean_squared_error(y_test, lr.predict(X_test)))
 
 # COMMAND ----------
 
@@ -354,7 +360,7 @@ client.delete_registered_model(model_name)
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2021 Databricks, Inc. All rights reserved.<br/>
-# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
+# MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
+# MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
-# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
+# MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="https://help.databricks.com/">Support</a>
