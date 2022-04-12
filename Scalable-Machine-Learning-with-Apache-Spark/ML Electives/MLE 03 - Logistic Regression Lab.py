@@ -11,7 +11,7 @@
 # MAGIC 
 # MAGIC Up until this point, we have only examined regression use cases. Now let's take a look at how to handle classification.
 # MAGIC 
-# MAGIC For this lab, we will use the same Airbnb dataset, but instead of predicting price, we will predict if host is a [superhost](https://www.airbnb.com/superhost) or not in San Francisco.
+# MAGIC For this lab, we will use the same Airbnb dataset, but instead of predicting price, we will predict if host is a <a href="https://www.airbnb.com/superhost" target="_blank">superhost</a> or not in San Francisco.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC  - Build a Logistic Regression model
@@ -30,19 +30,19 @@ airbnb_df = spark.read.format("delta").load(file_path)
 
 # MAGIC %md ## Baseline Model
 # MAGIC 
-# MAGIC Before we build any Machine Learning models, we want to build a baseline model to compare to. We are going to start by predicting if a host is a [superhost](https://www.airbnb.com/superhost). 
+# MAGIC Before we build any Machine Learning models, we want to build a baseline model to compare to. We are going to start by predicting if a host is a <a href="https://www.airbnb.com/superhost" target="_blank">superhost</a>. 
 # MAGIC 
 # MAGIC For our baseline model, we are going to predict no on is a superhost and evaluate our accuracy. We will examine other metrics later as we build more complex models.
 # MAGIC 
-# MAGIC 0. Convert our `host_is_superhost` column (t/f) into 1/0 and call the resulting column `label`. DROP the `host_is_superhost` afterwards.
-# MAGIC 0. Add a column to the resulting DataFrame called `prediction` which contains the literal value `0.0`. We will make a constant prediction that no one is a superhost.
+# MAGIC 0. Convert our **`host_is_superhost`** column (t/f) into 1/0 and call the resulting column **`label`**. DROP the **`host_is_superhost`** afterwards.
+# MAGIC 0. Add a column to the resulting DataFrame called **`prediction`** which contains the literal value **`0.0`**. We will make a constant prediction that no one is a superhost.
 # MAGIC 
 # MAGIC After we finish these two steps, then we can evaluate the "model" accuracy. 
 # MAGIC 
 # MAGIC Some helpful functions:
-# MAGIC * [when()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.when.html#pyspark.sql.functions.when)
-# MAGIC * [withColumn()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.withColumn.html?highlight=withcolumn#pyspark.sql.DataFrame.withColumn)
-# MAGIC * [lit()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.lit.html?highlight=lit#pyspark.sql.functions.lit)
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.when.html#pyspark.sql.functions.when" target="_blank">when()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.withColumn.html?highlight=withcolumn#pyspark.sql.DataFrame.withColumn" target="_blank">withColumn()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.lit.html?highlight=lit#pyspark.sql.functions.lit" target="_blank">lit()</a>
 
 # COMMAND ----------
 
@@ -57,7 +57,7 @@ pred_df = label_df.<FILL_IN> # Add a prediction column
 
 # MAGIC %md ## Evaluate model
 # MAGIC 
-# MAGIC For right now, let's use accuracy as our metric. This is available from [MulticlassClassificationEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.MulticlassClassificationEvaluator.html?highlight=multiclassclassificationevaluator#pyspark.ml.evaluation.MulticlassClassificationEvaluator).
+# MAGIC For right now, let's use accuracy as our metric. This is available from <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.MulticlassClassificationEvaluator.html?highlight=multiclassclassificationevaluator#pyspark.ml.evaluation.MulticlassClassificationEvaluator" target="_blank">MulticlassClassificationEvaluator</a>.
 
 # COMMAND ----------
 
@@ -81,7 +81,7 @@ print(train_df.cache().count())
 
 # MAGIC %md ## Visualize
 # MAGIC 
-# MAGIC Let's look at the relationship between `review_scores_rating` and `label` in our training dataset.
+# MAGIC Let's look at the relationship between **`review_scores_rating`** and **`label`** in our training dataset.
 
 # COMMAND ----------
 
@@ -91,7 +91,7 @@ display(train_df.select("review_scores_rating", "label"))
 
 # MAGIC %md ## Logistic Regression
 # MAGIC 
-# MAGIC Now build a [logistic regression model](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.LogisticRegression.html?highlight=logisticregression#pyspark.ml.classification.LogisticRegression) using all of the features (HINT: use RFormula). Put the pre-processing step and the Logistic Regression Model into a Pipeline.
+# MAGIC Now build a <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.LogisticRegression.html?highlight=logisticregression#pyspark.ml.classification.LogisticRegression" target="_blank">logistic regression model</a> using all of the features (HINT: use RFormula). Put the pre-processing step and the Logistic Regression Model into a Pipeline.
 
 # COMMAND ----------
 

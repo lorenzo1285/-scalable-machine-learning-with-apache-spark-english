@@ -23,10 +23,10 @@
 # MAGIC 
 # MAGIC The most common issues with slow running jobs are:<br><br>
 # MAGIC 
-# MAGIC - `Spill`: Data is exhausting the cluster's memory and is spilling onto disk. Resolution: a cluster with more memory resources
-# MAGIC - `Shuffle`: Large amounts of data are being transferred across the cluster.  Resolution: optimize joins or refactor code to avoid shuffles
-# MAGIC - `Skew/Stragglers`: Partitioned data (in files or in memory) is skewed causing the "curse of the last reducer" where some partitions take longer to run.  Resolution: repartition to a multiple of the available cores or use skew hints
-# MAGIC - `Small/Large Files`: Too many small files are exhausting cluster resources since each file read needs its own thread or few large files are causing unused threads.  Resolution: rewrite data in a more optimized way or perform Delta file compaction
+# MAGIC - **`Spill`**: Data is exhausting the cluster's memory and is spilling onto disk. Resolution: a cluster with more memory resources
+# MAGIC - **`Shuffle`**: Large amounts of data are being transferred across the cluster.  Resolution: optimize joins or refactor code to avoid shuffles
+# MAGIC - **`Skew/Stragglers`**: Partitioned data (in files or in memory) is skewed causing the "curse of the last reducer" where some partitions take longer to run.  Resolution: repartition to a multiple of the available cores or use skew hints
+# MAGIC - **`Small/Large Files`**: Too many small files are exhausting cluster resources since each file read needs its own thread or few large files are causing unused threads.  Resolution: rewrite data in a more optimized way or perform Delta file compaction
 # MAGIC 
 # MAGIC Your debugging toolkit:<br><br>
 # MAGIC 
@@ -41,9 +41,9 @@
 # MAGIC 
 # MAGIC A few notes on data access:<br><br>
 # MAGIC 
-# MAGIC * [Mount data for easy access](https://docs.databricks.com/data/databricks-file-system.html#mount-storage)
-# MAGIC * [Use secrets to secure credentials](https://docs.databricks.com/dev-tools/cli/secrets-cli.html#secrets-cli) (this keeps credentials out of the code)
-# MAGIC * Credential passthrough works in [AWS](https://docs.databricks.com/dev-tools/cli/secrets-cli.html#secrets-cli) and [Azure](https://docs.microsoft.com/en-us/azure/databricks/security/credential-passthrough/adls-passthrough)
+# MAGIC * <a href="https://docs.databricks.com/data/databricks-file-system.html#mount-storage" target="_blank">Mount data for easy access</a>
+# MAGIC * <a href="https://docs.databricks.com/dev-tools/cli/secrets-cli.html#secrets-cli" target="_blank">Use secrets to secure credentials</a> (this keeps credentials out of the code)
+# MAGIC * Credential passthrough works in <a href="https://docs.databricks.com/dev-tools/cli/secrets-cli.html#secrets-cli" target="_blank">AWS</a> and <a href="https://docs.microsoft.com/en-us/azure/databricks/security/credential-passthrough/adls-passthrough" target="_blank">Azure</a>
 
 # COMMAND ----------
 
@@ -51,7 +51,7 @@
 # MAGIC 
 # MAGIC Cluster types are:<br><br>
 # MAGIC 
-# MAGIC - Memory optimized (with or without [Delta Cache Acceleration](https://docs.databricks.com/delta/optimizations/delta-cache.html))
+# MAGIC - Memory optimized (with or without <a href="https://docs.databricks.com/delta/optimizations/delta-cache.html" target="_blank">Delta Cache Acceleration</a>
 # MAGIC - Compute optimized
 # MAGIC - Storage optimized
 # MAGIC - GPU accelerated
@@ -62,32 +62,32 @@
 # MAGIC - Smaller clusters of larger machine types for machine learning
 # MAGIC - One cluster per production workload
 # MAGIC - Don't share clusters for ML training (even in development)
-# MAGIC - [See the docs for more specifics](https://docs.databricks.com/clusters/configure.html)
+# MAGIC - <a href="https://docs.databricks.com/clusters/configure.html" target="_blank">See the docs for more specifics</a>
 
 # COMMAND ----------
 
 # MAGIC %md Library installation best practices:<br><br>
 # MAGIC   
-# MAGIC - [Notebook-scoped Python libraries](https://docs.databricks.com/libraries/notebooks-python-libraries.html) ensure users on same cluster can have different libraries.  Also good for saving notebooks with their library dependencies
-# MAGIC - [Init scripts](https://docs.databricks.com/clusters/init-scripts.html) ensure that code is ran before the JVM starts (good for certain libraries or environment configuration)
+# MAGIC - <a href="https://docs.databricks.com/libraries/notebooks-python-libraries.html" target="_blank">Notebook-scoped Python libraries</a> ensure users on same cluster can have different libraries.  Also good for saving notebooks with their library dependencies
+# MAGIC - <a href="https://docs.databricks.com/clusters/init-scripts.html" target="_blank">Init scripts</a> ensure that code is ran before the JVM starts (good for certain libraries or environment configuration)
 # MAGIC - Some configuration variables need to be set on cluster start
 
 # COMMAND ----------
 
 # MAGIC %md Jobs best practices:<br><br>
 # MAGIC 
-# MAGIC - Use [notebook workflows](https://docs.databricks.com/notebooks/notebook-workflows.html)
-# MAGIC - [Widgets](https://docs.databricks.com/notebooks/widgets.html) work for parameter passing
+# MAGIC - Use <a href="https://docs.databricks.com/notebooks/notebook-workflows.html" target="_blank">notebook workflows</a>
+# MAGIC - <a href="https://docs.databricks.com/notebooks/widgets.html" target="_blank">Widgets</a> work for parameter passing
 # MAGIC - You can also run jars and wheels
 # MAGIC - Use the CLI for orchestration tools (e.g. Airflow)
-# MAGIC - [See the docs for more specifics](https://docs.databricks.com/jobs.html)
+# MAGIC - <a href="https://docs.databricks.com/jobs.html" target="_blank">See the docs for more specifics</a>
 # MAGIC - Always specify a timeout interval to prevent infinitely running jobs
 
 # COMMAND ----------
 
 # MAGIC %md ## CLI and Version Control
 # MAGIC 
-# MAGIC The [Databricks CLI](https://github.com/databricks/databricks-cli):<br><br>
+# MAGIC The <a href="https://github.com/databricks/databricks-cli" target="_blank">Databricks CLI</a>:<br><br>
 # MAGIC 
 # MAGIC  * Programmatically export out all your notebooks to check into github
 # MAGIC  * Can also import/export data, execute jobs, create clusters, and perform most other Workspace tasks
@@ -95,12 +95,12 @@
 # MAGIC Git integration can be accomplished in a few ways:<br><br>
 # MAGIC 
 # MAGIC  * Use the CLI to import/export notebooks and check into git manually
-# MAGIC  * [Use the built-in git integration](https://docs.databricks.com/notebooks/github-version-control.html)
-# MAGIC  * [Use the next generation workspace for alternative project integration](https://www.youtube.com/watch?v=HsfMmBfQtvI)
+# MAGIC  * <a href="https://docs.databricks.com/notebooks/github-version-control.html" target="_blank">Use the built-in git integration</a>
+# MAGIC  * <a href="https://www.youtube.com/watch?v=HsfMmBfQtvI" target="_blank">Use the next generation workspace for alternative project integration</a>
 
 # COMMAND ----------
 
-# MAGIC %md Time permitting: exploring the [admin console!](https://docs.databricks.com/administration-guide/index.html)
+# MAGIC %md Time permitting: exploring the <a href="https://docs.databricks.com/administration-guide/index.html" target="_blank">admin console!</a>
 
 # COMMAND ----------
 

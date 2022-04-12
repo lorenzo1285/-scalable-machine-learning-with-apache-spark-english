@@ -14,8 +14,8 @@
 # MAGIC 1. Load in Airbnb dataset, and save both training dataset and test dataset as Delta tables
 # MAGIC 2. Train an MLlib linear regression model using all the listing features and tracking parameters, metrics artifacts and Delta table version to MLflow
 # MAGIC 3. Register this initial model and move it to staging using MLflow Model Registry
-# MAGIC 4. Add a new column, `log_price` to both our train and test table and update the corresponding Delta tables
-# MAGIC 5. Train a second MLlib linear regression model, this time using `log_price` as our target and training on all features, tracking to MLflow 
+# MAGIC 4. Add a new column, **`log_price`** to both our train and test table and update the corresponding Delta tables
+# MAGIC 5. Train a second MLlib linear regression model, this time using **`log_price`** as our target and training on all features, tracking to MLflow 
 # MAGIC 6. Compare the performance of the different runs by looking at the underlying data versions for both models
 # MAGIC 7. Move the better performing model to production in MLflow model registry
 # MAGIC 
@@ -40,7 +40,7 @@
 # MAGIC 
 # MAGIC Data versioning is an advantage of using Delta Lake, which preserves previous versions of datasets so that you can restore later.
 # MAGIC 
-# MAGIC Let's split our dataset into train and test datasets, and writing them out in Delta format. You can read more at the Delta Lake [documentation](https://docs.delta.io/latest/index.html).
+# MAGIC Let's split our dataset into train and test datasets, and writing them out in Delta format. You can read more at the Delta Lake <a href="https://docs.delta.io/latest/index.html" target="_blank">documentation</a>.
 
 # COMMAND ----------
 
@@ -65,7 +65,7 @@ test_df.write.mode("overwrite").format("delta").save(test_delta_path)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC Let's now read in our train and test Delta tables, specifying that we want the first version of these tables. This [blog post](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html) has a great example of how to read in a Delta table at a given version.
+# MAGIC Let's now read in our train and test Delta tables, specifying that we want the first version of these tables. This <a href="https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html" target="_blank">blog post</a> has a great example of how to read in a Delta table at a given version.
 
 # COMMAND ----------
 
@@ -88,7 +88,7 @@ display(spark.sql(f"DESCRIBE HISTORY delta.`{train_delta_path}`"))
 
 # MAGIC %md
 # MAGIC 
-# MAGIC By default Delta tables [keep a commit history of 30 days](https://docs.databricks.com/delta/delta-batch.html#data-retention). This retention period can be adjusted by setting `delta.logRetentionDuration`, which will determine how far back in time you can go. Note that setting this can result in storage costs to go up. 
+# MAGIC By default Delta tables <a href="https://docs.databricks.com/delta/delta-batch.html#data-retention" target="_blank">keep a commit history of 30 days</a>. This retention period can be adjusted by setting **`delta.logRetentionDuration`**, which will determine how far back in time you can go. Note that setting this can result in storage costs to go up. 
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> Be aware that versioning with Delta in this manner may not be feasible as a long term solution. The retention period of Delta tables can be increased, but with that comes additional costs to storage. Alternative methods of data versioning when training models and tracking to MLflow is to save copies of the datasets, either as an MLflow artifact (for a small dataset), or save to a separate distributed location and record the location of the underlying dataset as a tag in MLflow
 
@@ -145,7 +145,7 @@ with mlflow.start_run(run_name="lr_model") as run:
 # MAGIC 
 # MAGIC We are happy with the performance of the above model and want to move it to staging. Let's create the model and register it to the MLflow model registry.
 # MAGIC 
-# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> Make sure the path to `model_uri` matches the subdirectory (the second argument to `mlflow.log_model()`) included above.
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> Make sure the path to **`model_uri`** matches the subdirectory (the second argument to **`mlflow.log_model()`**) included above.
 
 # COMMAND ----------
 
@@ -201,7 +201,7 @@ wait_for_model(model_name, 1, stage="Staging")
 
 # MAGIC %md
 # MAGIC 
-# MAGIC Add a model description using [update_registered_model](https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#mlflow.tracking.MlflowClient.update_registered_model).
+# MAGIC Add a model description using <a href="https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#mlflow.tracking.MlflowClient.update_registered_model" target="_blank">update_registered_model</a>.
 
 # COMMAND ----------
 
@@ -223,7 +223,7 @@ wait_for_model(model_details.name, 1, stage="Staging")
 # MAGIC 
 # MAGIC We now want to do some feature engineering with the aim of improving model performance; we can use Delta Lake to track older versions of the dataset. 
 # MAGIC 
-# MAGIC We will add `log_price` as a new column and update our Delta table with it.
+# MAGIC We will add **`log_price`** as a new column and update our Delta table with it.
 
 # COMMAND ----------
 
@@ -236,9 +236,9 @@ test_new = test_delta.withColumn("log_price", log(col("price")))
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC Save the updated DataFrames to `train_delta_path` and `test_delta_path`, respectively, passing the `mergeSchema` option to safely evolve its schema. 
+# MAGIC Save the updated DataFrames to **`train_delta_path`** and **`test_delta_path`**, respectively, passing the **`mergeSchema`** option to safely evolve its schema. 
 # MAGIC 
-# MAGIC Take a look at this [blog](https://databricks.com/blog/2019/09/24/diving-into-delta-lake-schema-enforcement-evolution.html) on Delta Lake for more information about `mergeSchema`.
+# MAGIC Take a look at this <a href="https://databricks.com/blog/2019/09/24/diving-into-delta-lake-schema-enforcement-evolution.html" target="_blank">blog</a> on Delta Lake for more information about **`mergeSchema`**.
 
 # COMMAND ----------
 
@@ -260,7 +260,7 @@ set(train_new.schema.fields) ^ set(train_delta.schema.fields)
 
 # MAGIC %md 
 # MAGIC 
-# MAGIC Let's review the Delta history of our `train_delta` table and load in the most recent versions of our train and test Delta tables.
+# MAGIC Let's review the Delta history of our **`train_delta`** table and load in the most recent versions of our train and test Delta tables.
 
 # COMMAND ----------
 
@@ -276,7 +276,7 @@ test_delta_new = spark.read.format("delta").option("versionAsOf", data_version).
 
 # MAGIC %md
 # MAGIC 
-# MAGIC ### Step 5. Use `log_price` as target and track run with MLflow
+# MAGIC ### Step 5. Use **`log_price`** as target and track run with MLflow
 # MAGIC 
 # MAGIC Retrain the model on the updated data and compare its performance to the original, logging results to MLflow.
 
@@ -319,9 +319,9 @@ with mlflow.start_run(run_name="lr_log_model") as run:
 # MAGIC 
 # MAGIC ### Step 6. Compare performance across runs by looking at Delta table versions 
 # MAGIC 
-# MAGIC Use MLflow's [`mlflow.search_runs`](https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.search_runs) API to identify runs according to the version of data the run was trained on. Let's compare our runs according to our data versions.
+# MAGIC Use MLflow's <a href="https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.search_runs" target="_blank">**`mlflow.search_runs`**</a> API to identify runs according to the version of data the run was trained on. Let's compare our runs according to our data versions.
 # MAGIC 
-# MAGIC Filter based on `params.data_path` and `params.data_version`.
+# MAGIC Filter based on **`params.data_path`** and **`params.data_version`**.
 
 # COMMAND ----------
 

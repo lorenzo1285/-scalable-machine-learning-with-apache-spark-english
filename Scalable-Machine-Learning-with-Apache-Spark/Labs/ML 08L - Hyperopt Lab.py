@@ -10,10 +10,10 @@
 # MAGIC %md 
 # MAGIC # Hyperopt Lab
 # MAGIC 
-# MAGIC The [Hyperopt library](https://github.com/hyperopt/hyperopt) allows for parallel hyperparameter tuning using either random search or Tree of Parzen Estimators (TPE). With MLflow, we can record the hyperparameters and corresponding metrics for each hyperparameter combination. You can read more on [SparkTrials w/ Hyperopt](https://github.com/hyperopt/hyperopt/blob/master/docs/templates/scaleout/spark.md).
+# MAGIC The <a href="https://github.com/hyperopt/hyperopt" target="_blank">Hyperopt library</a> allows for parallel hyperparameter tuning using either random search or Tree of Parzen Estimators (TPE). With MLflow, we can record the hyperparameters and corresponding metrics for each hyperparameter combination. You can read more on <a href="https://github.com/hyperopt/hyperopt/blob/master/docs/templates/scaleout/spark.md" target="_blank">SparkTrials w/ Hyperopt</a>.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
-# MAGIC - Learn how to distribute tuning tasks when training a single-node machine learning model by using `SparkTrials` class, rather than the default `Trials` class. 
+# MAGIC - Learn how to distribute tuning tasks when training a single-node machine learning model by using **`SparkTrials`** class, rather than the default **`Trials`** class. 
 # MAGIC 
 # MAGIC > SparkTrials fits and evaluates each model on one Spark executor, allowing massive scale-out for tuning. To use SparkTrials with Hyperopt, simply pass the SparkTrials object to Hyperopt's fmin() function.
 
@@ -41,9 +41,9 @@ X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1),
 
 # COMMAND ----------
 
-# MAGIC %md Now we need to define an `objective_function` where you evaluate the [random forest's](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) predictions using R2.
+# MAGIC %md Now we need to define an **`objective_function`** where you evaluate the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html" target="_blank">random forest's</a> predictions using R2.
 # MAGIC 
-# MAGIC In the code below, compute the `r2` and return it (remember we are trying to maximize R2, so we need to return it as a negative value).
+# MAGIC In the code below, compute the **`r2`** and return it (remember we are trying to maximize R2, so we need to return it as a negative value).
 
 # COMMAND ----------
 
@@ -70,7 +70,7 @@ def objective_function(params):
 
 # MAGIC %md
 # MAGIC 
-# MAGIC We need to define a search space for HyperOpt. Let the `max_depth` vary between 2-10, and `max_features` be one of: "auto", "sqrt", or "log2".
+# MAGIC We need to define a search space for HyperOpt. Let the **`max_depth`** vary between 2-10, and **`max_features`** be one of: "auto", "sqrt", or "log2".
 
 # COMMAND ----------
 
@@ -86,11 +86,11 @@ search_space = {
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Instead of using the default `Trials` class, you can leverage the `SparkTrials` class to trigger the distribution of tuning tasks across Spark executors. On Databricks, SparkTrials are automatically logged with MLflow.
+# MAGIC Instead of using the default **`Trials`** class, you can leverage the **`SparkTrials`** class to trigger the distribution of tuning tasks across Spark executors. On Databricks, SparkTrials are automatically logged with MLflow.
 # MAGIC 
-# MAGIC `SparkTrials` takes 3 optional arguments, namely `parallelism`, `timeout`, and `spark_session`. You can refer to this [page](http://hyperopt.github.io/hyperopt/scaleout/spark/) to read more.
+# MAGIC **`SparkTrials`** takes 3 optional arguments, namely **`parallelism`**, **`timeout`**, and **`spark_session`**. You can refer to this <a href="http://hyperopt.github.io/hyperopt/scaleout/spark/" target="_blank">page</a> to read more.
 # MAGIC 
-# MAGIC In the code below, fill in the `fmin` function. 
+# MAGIC In the code below, fill in the **`fmin`** function. 
 
 # COMMAND ----------
 

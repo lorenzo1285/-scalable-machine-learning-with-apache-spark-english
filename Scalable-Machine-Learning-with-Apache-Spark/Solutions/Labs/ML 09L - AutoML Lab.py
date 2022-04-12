@@ -9,7 +9,7 @@
 
 # MAGIC %md # AutoML Lab
 # MAGIC 
-# MAGIC [Databricks AutoML](https://docs.databricks.com/applications/machine-learning/automl.html) helps you automatically build machine learning models both through a UI and programmatically. It prepares the dataset for model training and then performs and records a set of trials (using HyperOpt), creating, tuning, and evaluating multiple models. 
+# MAGIC <a href="https://docs.databricks.com/applications/machine-learning/automl.html" target="_blank">Databricks AutoML</a> helps you automatically build machine learning models both through a UI and programmatically. It prepares the dataset for model training and then performs and records a set of trials (using HyperOpt), creating, tuning, and evaluating multiple models. 
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you will:<br>
 # MAGIC  - Use AutoML to automatically train and tune your models
@@ -49,7 +49,7 @@ train_df.write.mode("overwrite").saveAsTable(f"{cleaned_username}.autoMLTable")
 
 # COMMAND ----------
 
-# MAGIC %md Select `regression` as the problem type, as well as the table we created in the previous cell. Then, select `price` as the column to predict.
+# MAGIC %md Select **`regression`** as the problem type, as well as the table we created in the previous cell. Then, select **`price`** as the column to predict.
 # MAGIC 
 # MAGIC <img src="http://files.training.databricks.com/images/301/AutoML_UI.png" alt="ui" width="750"/>
 

@@ -24,10 +24,11 @@
 # MAGIC 
 # MAGIC 
 # MAGIC Resources:
-# MAGIC 0. [Documentation](http://hyperopt.github.io/hyperopt/scaleout/spark/)
-# MAGIC 0. [Hyperopt on Databricks](https://docs.databricks.com/applications/machine-learning/automl/hyperopt/index.html)
-# MAGIC 0. [Hyperparameter Tuning with MLflow, Apache Spark MLlib and Hyperopt](https://databricks.com/blog/2019/06/07/hyperparameter-tuning-with-mlflow-apache-spark-mllib-and-hyperopt.html)
-# MAGIC 0. [How (Not) to Tune Your Model With Hyperopt](https://databricks.com/blog/2021/04/15/how-not-to-tune-your-model-with-hyperopt.html)
+# MAGIC 
+# MAGIC 0. <a href="http://hyperopt.github.io/hyperopt/scaleout/spark/" target="_blank">Documentation</a>
+# MAGIC 0. <a href="https://docs.databricks.com/applications/machine-learning/automl/hyperopt/index.html" target="_blank">Hyperopt on Databricks</a>
+# MAGIC 0. <a href="https://databricks.com/blog/2019/06/07/hyperparameter-tuning-with-mlflow-apache-spark-mllib-and-hyperopt.html" target="_blank">Hyperparameter Tuning with MLflow, Apache Spark MLlib and Hyperopt</a>
+# MAGIC 0. <a href="https://databricks.com/blog/2021/04/15/how-not-to-tune-your-model-with-hyperopt.html" target="_blank">How (Not) to Tune Your Model With Hyperopt</a>
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC  - Use hyperopt to find the optimal parameters for an MLlib model using TPE
@@ -79,12 +80,12 @@ regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol=
 # MAGIC 
 # MAGIC First, we define our **objective function**. The objective function has two primary requirements:
 # MAGIC 
-# MAGIC 1. An **input** `params` including hyperparameter values to use when training the model
+# MAGIC 1. An **input** **`params`** including hyperparameter values to use when training the model
 # MAGIC 2. An **output** containing a loss metric on which to optimize
 # MAGIC 
-# MAGIC In this case, we are specifying values of `max_depth` and `num_trees` and returning the RMSE as our loss metric.
+# MAGIC In this case, we are specifying values of **`max_depth`** and **`num_trees`** and returning the RMSE as our loss metric.
 # MAGIC 
-# MAGIC We are reconstructing our pipeline for the `RandomForestRegressor` to use the specified hyperparameter values.
+# MAGIC We are reconstructing our pipeline for the **`RandomForestRegressor`** to use the specified hyperparameter values.
 
 # COMMAND ----------
 
@@ -110,7 +111,7 @@ def objective_function(params):
 # MAGIC 
 # MAGIC This is similar to the parameter grid in a grid search process. However, we are only specifying the range of values rather than the individual, specific values to be tested. It's up to hyperopt's optimization algorithm to choose the actual values.
 # MAGIC 
-# MAGIC See the [documentation](https://github.com/hyperopt/hyperopt/wiki/FMin) for helpful tips on defining your search space.
+# MAGIC See the <a href="https://github.com/hyperopt/hyperopt/wiki/FMin" target="_blank">documentation</a> for helpful tips on defining your search space.
 
 # COMMAND ----------
 
@@ -125,13 +126,13 @@ search_space = {
 
 # MAGIC %md 
 # MAGIC 
-# MAGIC `fmin()` generates new hyperparameter configurations to use for your `objective_function`. It will evaluate 4 models in total, using the information from the previous models to make a more informative decision for the the next hyperparameter to try. 
+# MAGIC **`fmin()`** generates new hyperparameter configurations to use for your **`objective_function`**. It will evaluate 4 models in total, using the information from the previous models to make a more informative decision for the the next hyperparameter to try. 
 # MAGIC 
-# MAGIC Hyperopt allows for parallel hyperparameter tuning using either random search or Tree of Parzen Estimators (TPE). Note that in the cell below, we are importing `tpe`. According to the [documentation](http://hyperopt.github.io/hyperopt/scaleout/spark/), TPE is an adaptive algorithm that 
+# MAGIC Hyperopt allows for parallel hyperparameter tuning using either random search or Tree of Parzen Estimators (TPE). Note that in the cell below, we are importing **`tpe`**. According to the <a href="http://hyperopt.github.io/hyperopt/scaleout/spark/" target="_blank">documentation</a>, TPE is an adaptive algorithm that 
 # MAGIC 
 # MAGIC > iteratively explores the hyperparameter space. Each new hyperparameter setting tested will be chosen based on previous results. 
 # MAGIC 
-# MAGIC Hence, `tpe.suggest` is a Bayesian method.
+# MAGIC Hence, **`tpe.suggest`** is a Bayesian method.
 # MAGIC 
 # MAGIC MLflow also integrates with Hyperopt, so you can track the results of all the models you’ve trained and their results as part of your hyperparameter tuning. Notice you can track the MLflow experiment in this notebook, but you can also specify an external experiment. 
 

@@ -34,7 +34,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 # MAGIC 
 # MAGIC **However, for decision trees, and in particular, random forests, we should not OHE our variables.**
 # MAGIC 
-# MAGIC There is an excellent [blog](https://towardsdatascience.com/one-hot-encoding-is-making-your-tree-based-ensembles-worse-heres-why-d64b282b5769#:~:text=One%2Dhot%20encoding%20categorical%20variables,importance%20resulting%20in%20poorer%20performance) on this, and the essence is:
+# MAGIC There is an excellent <a href="https://towardsdatascience.com/one-hot-encoding-is-making-your-tree-based-ensembles-worse-heres-why-d64b282b5769#:~:text=One%2Dhot%20encoding%20categorical%20variables,importance%20resulting%20in%20poorer%20performance" target="_blank">blog</a> on this, and the essence is:
 # MAGIC >>> "One-hot encoding categorical variables with high cardinality can cause inefficiency in tree-based methods. Continuous variables will be given more importance than the dummy variables by the algorithm, which will obscure the order of feature importance and can result in poorer performance."
 
 # COMMAND ----------
@@ -50,7 +50,7 @@ string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_outp
 
 # MAGIC %md ## VectorAssembler
 # MAGIC 
-# MAGIC Let's use the [VectorAssembler](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.VectorAssembler.html?highlight=vectorassembler#pyspark.ml.feature.VectorAssembler) to combine all of our categorical and numeric inputs.
+# MAGIC Let's use the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.VectorAssembler.html?highlight=vectorassembler#pyspark.ml.feature.VectorAssembler" target="_blank">VectorAssembler</a> to combine all of our categorical and numeric inputs.
 
 # COMMAND ----------
 
@@ -66,7 +66,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # MAGIC %md ## Decision Tree
 # MAGIC 
-# MAGIC Now let's build a [DecisionTreeRegressor](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html?highlight=decisiontreeregressor#pyspark.ml.regression.DecisionTreeRegressor) with the default hyperparameters.
+# MAGIC Now let's build a <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html?highlight=decisiontreeregressor#pyspark.ml.regression.DecisionTreeRegressor" target="_blank">DecisionTreeRegressor</a> with the default hyperparameters.
 
 # COMMAND ----------
 
@@ -95,7 +95,7 @@ pipeline = Pipeline(stages=stages)
 
 # MAGIC %md ## maxBins
 # MAGIC 
-# MAGIC What is this parameter [maxBins](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html?highlight=decisiontreeregressor#pyspark.ml.regression.DecisionTreeRegressor.maxBins)? Let's take a look at the PLANET implementation of distributed decision trees to help explain the `maxBins` parameter.
+# MAGIC What is this parameter <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html?highlight=decisiontreeregressor#pyspark.ml.regression.DecisionTreeRegressor.maxBins" target="_blank">maxBins</a>? Let's take a look at the PLANET implementation of distributed decision trees to help explain the **`maxBins`** parameter.
 
 # COMMAND ----------
 
@@ -107,11 +107,11 @@ pipeline = Pipeline(stages=stages)
 
 # MAGIC %md In Spark, data is partitioned by row. So when it needs to make a split, each worker has to compute summary statistics for every feature for  each split point. Then these summary statistics have to be aggregated (via tree reduce) for a split to be made. 
 # MAGIC 
-# MAGIC Think about it: What if worker 1 had the value `32` but none of the others had it. How could you communicate how good of a split that would be? So, Spark has a maxBins parameter for discretizing continuous variables into buckets, but the number of buckets has to be as large as the categorical variable with the highest cardinality.
+# MAGIC Think about it: What if worker 1 had the value **`32`** but none of the others had it. How could you communicate how good of a split that would be? So, Spark has a maxBins parameter for discretizing continuous variables into buckets, but the number of buckets has to be as large as the categorical variable with the highest cardinality.
 
 # COMMAND ----------
 
-# MAGIC %md Let's go ahead and increase maxBins to `40`.
+# MAGIC %md Let's go ahead and increase maxBins to **`40`**.
 
 # COMMAND ----------
 
@@ -157,7 +157,7 @@ features_df
 
 # MAGIC %md ## Why so few features are non-zero?
 # MAGIC 
-# MAGIC With SparkML, the default `maxDepth` is 5, so there are only a few features we could consider (we can also split on the same feature many times at different split points).
+# MAGIC With SparkML, the default **`maxDepth`** is 5, so there are only a few features we could consider (we can also split on the same feature many times at different split points).
 # MAGIC 
 # MAGIC Let's use a Databricks widget to get the top-K features.
 

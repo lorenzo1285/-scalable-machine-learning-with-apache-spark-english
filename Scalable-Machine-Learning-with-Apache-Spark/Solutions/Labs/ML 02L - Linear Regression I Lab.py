@@ -12,9 +12,9 @@
 # MAGIC In the previous lesson, we predicted price using just one variable: bedrooms. Now, we want to predict price given a few other features.
 # MAGIC 
 # MAGIC Steps:
-# MAGIC 0. Use the features: `bedrooms`, `bathrooms`, `bathrooms_na`, `minimum_nights`, and `number_of_reviews` as input to your VectorAssembler.
+# MAGIC 0. Use the features: **`bedrooms`**, **`bathrooms`**, **`bathrooms_na`**, **`minimum_nights`**, and **`number_of_reviews`** as input to your VectorAssembler.
 # MAGIC 0. Build a Linear Regression Model
-# MAGIC 0. Evaluate the `RMSE` and the `R2`.
+# MAGIC 0. Evaluate the **`RMSE`** and the **`R2`**.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC  - Build a linear regression model with multiple features
@@ -72,11 +72,11 @@ print(f"intercept: {lr_model.intercept}")
 # MAGIC Spark uses the following approach to solve a linear regression problem:
 # MAGIC 
 # MAGIC * First, Spark tries to use matrix decomposition to solve the linear regression problem. 
-# MAGIC * If it fails, Spark then uses [L-BFGS](https://spark.apache.org/docs/latest/ml-advanced.html#limited-memory-bfgs-l-bfgs) to solve for the parameters. L-BFGS is a limited-memory version of BFGS that is particularly suited to problems with very large numbers of variables. The [BFGS](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm) method belongs to [quasi-Newton methods](https://en.wikipedia.org/wiki/Quasi-Newton_method), which are used to either find zeroes or local maxima and minima of functions iteratively. 
+# MAGIC * If it fails, Spark then uses <a href="https://spark.apache.org/docs/latest/ml-advanced.html#limited-memory-bfgs-l-bfgs" target="_blank">L-BFGS</a> to solve for the parameters. L-BFGS is a limited-memory version of BFGS that is particularly suited to problems with very large numbers of variables. The <a href="https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm" target="_blank">BFGS</a> method belongs to <a href="https://en.wikipedia.org/wiki/Quasi-Newton_method" target="_blank">quasi-Newton methods</a>, which are used to either find zeroes or local maxima and minima of functions iteratively. 
 # MAGIC 
 # MAGIC If you are interested in how linear regression is implemented in the distributed setting and bottlenecks, check out these lecture slides:
-# MAGIC * [distributed-linear-regression-1](https://files.training.databricks.com/static/docs/distributed-linear-regression-1.pdf)
-# MAGIC * [distributed-linear-regression-2](https://files.training.databricks.com/static/docs/distributed-linear-regression-2.pdf)
+# MAGIC * <a href="https://files.training.databricks.com/static/docs/distributed-linear-regression-1.pdf" target="_blank">distributed-linear-regression-1</a>
+# MAGIC * <a href="https://files.training.databricks.com/static/docs/distributed-linear-regression-2.pdf" target="_blank">distributed-linear-regression-2</a>
 
 # COMMAND ----------
 

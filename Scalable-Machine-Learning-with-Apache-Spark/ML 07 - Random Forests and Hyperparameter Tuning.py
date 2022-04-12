@@ -59,13 +59,13 @@ print(rf.explainParams())
 
 # MAGIC %md There are a lot of hyperparameters we could tune, and it would take a long time to manually configure.
 # MAGIC 
-# MAGIC Instead of a manual (ad-hoc) approach, let's use Spark's [ParamGridBuilder](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgridbuilder#pyspark.ml.tuning.ParamGridBuilder) to find the optimal hyperparameters in a more systematic approach.
+# MAGIC Instead of a manual (ad-hoc) approach, let's use Spark's <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgridbuilder#pyspark.ml.tuning.ParamGridBuilder" target="_blank">ParamGridBuilder</a> to find the optimal hyperparameters in a more systematic approach.
 # MAGIC 
 # MAGIC Let's define a grid of hyperparameters to test:
-# MAGIC   - `maxDepth`: max depth of each decision tree (Use the values `2, 5`)
-# MAGIC   - `numTrees`: number of decision trees to train (Use the values `5, 10`)
+# MAGIC   - **`maxDepth`**: max depth of each decision tree (Use the values **`2, 5`**)
+# MAGIC   - **`numTrees`**: number of decision trees to train (Use the values **`5, 10`**)
 # MAGIC 
-# MAGIC `addGrid()` accepts the name of the parameter (e.g. `rf.maxDepth`), and a list of the possible values (e.g. `[2, 5]`).
+# MAGIC **`addGrid()`** accepts the name of the parameter (e.g. **`rf.maxDepth`**), and a list of the possible values (e.g. **`[2, 5]`**).
 
 # COMMAND ----------
 
@@ -90,7 +90,7 @@ param_grid = (ParamGridBuilder()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC We pass in the `estimator` (pipeline), `evaluator`, and `estimatorParamMaps` to [CrossValidator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator) so that it knows:
+# MAGIC We pass in the **`estimator`** (pipeline), **`evaluator`**, and **`estimatorParamMaps`** to <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator" target="_blank">CrossValidator</a> so that it knows:
 # MAGIC - Which model to use
 # MAGIC - How to evaluate the model
 # MAGIC - What hyperparameters to set for the model
@@ -121,9 +121,9 @@ cv_model = cv.fit(train_df)
 # MAGIC 
 # MAGIC Hmmm... that took a long time to run. That's because the models were being trained sequentially rather than in parallel!
 # MAGIC 
-# MAGIC In Spark 2.3, a [parallelism](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator.parallelism) parameter was introduced. From the docs: `the number of threads to use when running parallel algorithms (>= 1)`.
+# MAGIC In Spark 2.3, a <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator.parallelism" target="_blank">parallelism</a> parameter was introduced. From the docs: **`the number of threads to use when running parallel algorithms (>= 1)`**.
 # MAGIC 
-# MAGIC Let's set this value to 4 and see if we can train any faster. The Spark [docs](https://spark.apache.org/docs/latest/ml-tuning.html) recommend a value between 2-10.
+# MAGIC Let's set this value to 4 and see if we can train any faster. The Spark <a href="https://spark.apache.org/docs/latest/ml-tuning.html" target="_blank">docs</a> recommend a value between 2-10.
 
 # COMMAND ----------
 

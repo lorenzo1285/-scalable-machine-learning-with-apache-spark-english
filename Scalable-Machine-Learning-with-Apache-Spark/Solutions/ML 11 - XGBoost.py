@@ -11,7 +11,7 @@
 # MAGIC 
 # MAGIC Up until this point, we have only used SparkML. Let's look a third party library for Gradient Boosted Trees. 
 # MAGIC  
-# MAGIC Ensure that you are using the [Databricks Runtime for ML](https://docs.microsoft.com/en-us/azure/databricks/runtime/mlruntime) because that has Distributed XGBoost already installed. 
+# MAGIC Ensure that you are using the <a href="https://docs.microsoft.com/en-us/azure/databricks/runtime/mlruntime" target="_blank">Databricks Runtime for ML</a> because that has Distributed XGBoost already installed. 
 # MAGIC 
 # MAGIC **Question**: How do gradient boosted trees differ from random forests? Which parts can be parallelized?
 # MAGIC 
@@ -26,7 +26,7 @@
 
 # MAGIC %md ## Data Preparation
 # MAGIC 
-# MAGIC Let's go ahead and index all of our categorical features, and set our label to be `log(price)`.
+# MAGIC Let's go ahead and index all of our categorical features, and set our label to be **`log(price)`**.
 
 # COMMAND ----------
 
@@ -50,14 +50,14 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # MAGIC %md ### Pyspark Distributed XGBoost
 # MAGIC 
-# MAGIC Let's create our distributed XGBoost model. While technically not part of MLlib, you can integrate [XGBoost](https://databricks.github.io/spark-deep-learning/_modules/sparkdl/xgboost/xgboost.html) into your ML Pipelines. 
+# MAGIC Let's create our distributed XGBoost model. While technically not part of MLlib, you can integrate <a href="https://databricks.github.io/spark-deep-learning/_modules/sparkdl/xgboost/xgboost.html" target="_blank">XGBoost</a> into your ML Pipelines. 
 # MAGIC 
 # MAGIC To use the distributed version of Pyspark XGBoost you can specify two additional parameters:
 # MAGIC 
-# MAGIC * `num_workers`: The number of workers to distribute over. Requires MLR 9.0+.
-# MAGIC * `use_gpu`: Enable to utilize GPU based training for faster performance (optional).
+# MAGIC * **`num_workers`**: The number of workers to distribute over. Requires MLR 9.0+.
+# MAGIC * **`use_gpu`**: Enable to utilize GPU based training for faster performance (optional).
 # MAGIC 
-# MAGIC **NOTE:** `use_gpu` requires an ML GPU runtime. Currently, at most one GPU per worker will be used when doing distributed training. 
+# MAGIC **NOTE:** **`use_gpu`** requires an ML GPU runtime. Currently, at most one GPU per worker will be used when doing distributed training. 
 
 # COMMAND ----------
 
@@ -106,7 +106,7 @@ print(f"R2 is {r2}")
 
 # MAGIC %md ## Alternative Gradient Boosted Approaches
 # MAGIC 
-# MAGIC There are lots of other gradient boosted approaches, such as [CatBoost](https://catboost.ai/), [LightGBM](https://github.com/microsoft/LightGBM), vanilla gradient boosted trees in [SparkML](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.GBTClassifier.html?highlight=gbt#pyspark.ml.classification.GBTClassifier)/[scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html), etc. Each of these has their respective [pros and cons](https://towardsdatascience.com/catboost-vs-light-gbm-vs-xgboost-5f93620723db) that you can read more about. 
+# MAGIC There are lots of other gradient boosted approaches, such as <a href="https://catboost.ai/" target="_blank">CatBoost</a>, <a href="https://github.com/microsoft/LightGBM" target="_blank">LightGBM</a>, vanilla gradient boosted trees in <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.GBTClassifier.html?highlight=gbt#pyspark.ml.classification.GBTClassifier" target="_blank">SparkML</a>/<a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html" target="_blank">scikit-learn</a>, etc. Each of these has their respective <a href="https://towardsdatascience.com/catboost-vs-light-gbm-vs-xgboost-5f93620723db" target="_blank">pros and cons</a> that you can read more about. 
 
 # COMMAND ----------
 

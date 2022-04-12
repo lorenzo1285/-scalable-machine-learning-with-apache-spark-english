@@ -9,16 +9,16 @@
 
 # MAGIC %md # Delta Review
 # MAGIC 
-# MAGIC There are a few key operations necessary to understand and make use of [Delta Lake](https://docs.delta.io/latest/quick-start.html#create-a-table).
+# MAGIC There are a few key operations necessary to understand and make use of <a href="https://docs.delta.io/latest/quick-start.html#create-a-table" target="_blank">Delta Lake</a>.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you will:<br>
 # MAGIC - Create a Delta Table
 # MAGIC - Read data from your Delta Table
 # MAGIC - Update data in your Delta Table
-# MAGIC - Access previous versions of your Delta Table using [time travel](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html) 
-# MAGIC - [Understand the Transaction Log](https://databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html)
+# MAGIC - Access previous versions of your Delta Table using <a href="https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html" target="_blank">time travel</a>
+# MAGIC - <a href="https://databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html" target="_blank">Understand the Transaction Log</a>
 # MAGIC 
-# MAGIC In this notebook we will be using the SF Airbnb rental dataset from [Inside Airbnb](http://insideairbnb.com/get-the-data.html).
+# MAGIC In this notebook we will be using the SF Airbnb rental dataset from <a href="http://insideairbnb.com/get-the-data.html" target="_blank">Inside Airbnb</a>.
 
 # COMMAND ----------
 
@@ -30,7 +30,7 @@
 # MAGIC 
 # MAGIC At a glance, Delta Lake is an open source storage layer that brings both **reliability and performance** to data lakes. Delta Lake provides ACID transactions, scalable metadata handling, and unifies streaming and batch data processing. 
 # MAGIC 
-# MAGIC Delta Lake runs on top of your existing data lake and is fully compatible with Apache Spark APIs. [For more information](https://docs.databricks.com/delta/delta-intro.html)
+# MAGIC Delta Lake runs on top of your existing data lake and is fully compatible with Apache Spark APIs. <a href="https://docs.databricks.com/delta/delta-intro.html" target="_blank">For more information </a>
 
 # COMMAND ----------
 
@@ -79,7 +79,7 @@ airbnb_df.write.format("delta").mode("overwrite").partitionBy("neighbourhood_cle
 
 # COMMAND ----------
 
-# MAGIC %md ###Understanding the [Transaction Log](https://databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html)
+# MAGIC %md ###Understanding the <a href="https://databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html" target="_blank">Transaction Log </a>
 # MAGIC Let's take a look at the Delta Transaction Log. We can see how Delta stores the different neighborhood partitions in separate files. Additionally, we can also see a directory called _delta_log.
 
 # COMMAND ----------
@@ -102,7 +102,7 @@ display(dbutils.fs.ls(working_dir + "/_delta_log/"))
 
 # MAGIC %md Next, let's take a look at a Transaction Log File.
 # MAGIC 
-# MAGIC The [four columns](https://docs.databricks.com/delta/delta-utility.html) each represent a different part of the very first commit to the Delta Table where the table was created.<br><br>
+# MAGIC The <a href="https://docs.databricks.com/delta/delta-utility.html" target="_blank">four columns</a> each represent a different part of the very first commit to the Delta Table where the table was created.<br><br>
 # MAGIC 
 # MAGIC - The add column has statistics about the DataFrame as a whole and individual columns.
 # MAGIC - The commitInfo column has useful information about what the operation was (WRITE or READ) and who executed the operation.
@@ -172,7 +172,7 @@ display(dbutils.fs.ls(working_dir + "/neighbourhood_cleansed=Bayview/"))
 
 # COMMAND ----------
 
-# MAGIC %md Oops, actually we need the entire dataset! You can access a previous version of your Delta Table using [Delta Time Travel](https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html). Use the following two cells to access your version history. Delta Lake will keep a 30 day version history by default, though it can maintain that history for longer if needed.
+# MAGIC %md Oops, actually we need the entire dataset! You can access a previous version of your Delta Table using <a href="https://databricks.com/blog/2019/02/04/introducing-delta-time-travel-for-large-scale-data-lakes.html" target="_blank">Delta Time Travel</a>. Use the following two cells to access your version history. Delta Lake will keep a 30 day version history by default, though it can maintain that history for longer if needed.
 
 # COMMAND ----------
 
@@ -186,7 +186,7 @@ spark.sql(f"CREATE TABLE train_delta USING DELTA LOCATION '{working_dir}'")
 
 # COMMAND ----------
 
-# MAGIC %md Using the `versionAsOf` option allows you to easily access previous versions of our Delta Table.
+# MAGIC %md Using the **`versionAsOf`** option allows you to easily access previous versions of our Delta Table.
 
 # COMMAND ----------
 
@@ -212,7 +212,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md Now that we're happy with our Delta Table, we can clean up our directory using `VACUUM`. Vacuum accepts a retention period in hours as an input.
+# MAGIC %md Now that we're happy with our Delta Table, we can clean up our directory using **`VACUUM`**. Vacuum accepts a retention period in hours as an input.
 
 # COMMAND ----------
 

@@ -32,11 +32,11 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 # MAGIC %md
 # MAGIC ## RFormula
 # MAGIC 
-# MAGIC Instead of manually specifying which columns are categorical to the StringIndexer and OneHotEncoder, [RFormula](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.RFormula.html?highlight=rformula#pyspark.ml.feature.RFormula) can do that automatically for you.
+# MAGIC Instead of manually specifying which columns are categorical to the StringIndexer and OneHotEncoder, <a href="(https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.RFormula.html?highlight=rformula#pyspark.ml.feature.RFormula" target="_blank">RFormula</a> can do that automatically for you.
 # MAGIC 
-# MAGIC With RFormula, if you have any columns of type String, it treats it as a categorical feature and string indexes & one hot encodes it for us. Otherwise, it leaves as it is. Then it combines all of one-hot encoded features and numeric features into a single vector, called `features`.
+# MAGIC With RFormula, if you have any columns of type String, it treats it as a categorical feature and string indexes & one hot encodes it for us. Otherwise, it leaves as it is. Then it combines all of one-hot encoded features and numeric features into a single vector, called **`features`**.
 # MAGIC 
-# MAGIC You can see a detailed example of how to use RFormula [here](https://spark.apache.org/docs/latest/ml-features.html#rformula).
+# MAGIC You can see a detailed example of how to use RFormula <a href="https://spark.apache.org/docs/latest/ml-features.html#rformula" target="_blank">here</a>.
 
 # COMMAND ----------
 

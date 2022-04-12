@@ -10,9 +10,9 @@
 # MAGIC %md # Inference with Pandas UDFs
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
-# MAGIC - Build a scikit-learn model, track it with MLflow, and apply it at scale using the Pandas Scalar Iterator UDFs and `mapInPandas()`
+# MAGIC - Build a scikit-learn model, track it with MLflow, and apply it at scale using the Pandas Scalar Iterator UDFs and **`mapInPandas()`**
 # MAGIC 
-# MAGIC To learn more about Pandas UDFs, you can refer to this [blog post](https://databricks.com/blog/2020/05/20/new-pandas-udfs-and-python-type-hints-in-the-upcoming-release-of-apache-spark-3-0.html) to see what's new in Spark 3.0.
+# MAGIC To learn more about Pandas UDFs, you can refer to this <a href="https://databricks.com/blog/2020/05/20/new-pandas-udfs-and-python-type-hints-in-the-upcoming-release-of-apache-spark-3-0.html" target="_blank">blog post</a> to see what's new in Spark 3.0.
 
 # COMMAND ----------
 
@@ -54,13 +54,13 @@ spark_df = spark.createDataFrame(X_test)
 # MAGIC 
 # MAGIC As of Spark 2.3, there are Pandas UDFs available in Python to improve the efficiency of UDFs. Pandas UDFs utilize Apache Arrow to speed up computation. Let's see how that helps improve our processing time.
 # MAGIC 
-# MAGIC * [Blog post](https://databricks.com/blog/2017/10/30/introducing-vectorized-udfs-for-pyspark.html)
-# MAGIC * [Documentation](https://spark.apache.org/docs/latest/sql-programming-guide.html#pyspark-usage-guide-for-pandas-with-apache-arrow)
+# MAGIC * <a href="https://databricks.com/blog/2017/10/30/introducing-vectorized-udfs-for-pyspark.html" target="_blank">Blog post</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#pyspark-usage-guide-for-pandas-with-apache-arrow" target="_blank">Documentation</a>
 # MAGIC 
 # MAGIC <img src="https://databricks.com/wp-content/uploads/2017/10/image1-4.png" alt="Benchmark" width ="500" height="1500">
 # MAGIC 
 # MAGIC The user-defined functions are executed by: 
-# MAGIC * [Apache Arrow](https://arrow.apache.org/), is an in-memory columnar data format that is used in Spark to efficiently transfer data between JVM and Python processes with near-zero (de)serialization cost. See more [here](https://spark.apache.org/docs/latest/sql-pyspark-pandas-with-arrow.html).
+# MAGIC * <a href="https://arrow.apache.org/" target="_blank">Apache Arrow</a>, is an in-memory columnar data format that is used in Spark to efficiently transfer data between JVM and Python processes with near-zero (de)serialization cost. See more <a href="https://spark.apache.org/docs/latest/sql-pyspark-pandas-with-arrow.html" target="_blank">here</a>.
 # MAGIC * pandas inside the function, to work with pandas instances and APIs.
 # MAGIC 
 # MAGIC **NOTE**: In Spark 3.0, you should define your Pandas UDF using Python type hints.
@@ -86,14 +86,15 @@ display(prediction_df)
 # MAGIC 
 # MAGIC If your model is very large, then there is high overhead for the Pandas UDF to repeatedly load the same model for every batch in the same Python worker process. In Spark 3.0, Pandas UDFs can accept an iterator of pandas.Series or pandas.DataFrame so that you can load the model only once instead of loading it for every series in the iterator.
 # MAGIC 
-# MAGIC This way the cost of any set-up needed will be incurred fewer times. When the number of records you’re working with is greater than `spark.conf.get('spark.sql.execution.arrow.maxRecordsPerBatch')`, which is 10,000 by default, you should see speed ups over a pandas scalar UDF because it iterates through batches of pd.Series.
+# MAGIC This way the cost of any set-up needed will be incurred fewer times. When the number of records you’re working with is greater than **`spark.conf.get('spark.sql.execution.arrow.maxRecordsPerBatch')`**, which is 10,000 by default, you should see speed ups over a pandas scalar UDF because it iterates through batches of pd.Series.
 # MAGIC 
 # MAGIC It has the general syntax of: 
-# MAGIC ```@pandas_udf(...)
+# MAGIC 
+# MAGIC **`@pandas_udf(...)
 # MAGIC def predict(iterator):
 # MAGIC     model = ... # load model
 # MAGIC     for features in iterator:
-# MAGIC         yield model.predict(features)```
+# MAGIC         yield model.predict(features)`**
 
 # COMMAND ----------
 
@@ -117,7 +118,7 @@ display(prediction_df)
 # MAGIC 
 # MAGIC Instead of using a Pandas UDF, we can use a Pandas Function API. This new category in Apache Spark 3.0 enables you to directly apply a Python native function, which takes and outputs Pandas instances against a PySpark DataFrame. Pandas Functions APIs supported in Apache Spark 3.0 are: grouped map, map, and co-grouped map.
 # MAGIC 
-# MAGIC `mapInPandas()` takes an iterator of pandas.DataFrame as input, and outputs another iterator of pandas.DataFrame. It's flexible and easy to use if your model requires all of your columns as input, but it requires serialization/deserialization of the whole DataFrame (as it is passed to its input). You can control the size of each pandas.DataFrame with the `spark.sql.execution.arrow.maxRecordsPerBatch` config.
+# MAGIC **`mapInPandas()`** takes an iterator of pandas.DataFrame as input, and outputs another iterator of pandas.DataFrame. It's flexible and easy to use if your model requires all of your columns as input, but it requires serialization/deserialization of the whole DataFrame (as it is passed to its input). You can control the size of each pandas.DataFrame with the **`spark.sql.execution.arrow.maxRecordsPerBatch`** config.
 
 # COMMAND ----------
 

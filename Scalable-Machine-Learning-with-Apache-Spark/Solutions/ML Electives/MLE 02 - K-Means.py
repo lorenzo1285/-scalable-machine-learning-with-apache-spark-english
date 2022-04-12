@@ -31,7 +31,7 @@ display(iris_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Notice that we have four values as "features".  We'll reduce those down to two values (for visualization purposes) and convert them to a `DenseVector`.  To do that we'll use the `VectorAssembler`. 
+# MAGIC Notice that we have four values as "features".  We'll reduce those down to two values (for visualization purposes) and convert them to a **`DenseVector`**.  To do that we'll use the **`VectorAssembler`**. 
 
 # COMMAND ----------
 

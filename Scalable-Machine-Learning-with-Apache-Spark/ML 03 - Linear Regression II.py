@@ -45,9 +45,9 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 # MAGIC * Generate embeddings (mainly used for textual data)
 # MAGIC 
 # MAGIC ### One Hot Encoder
-# MAGIC Here, we are going to One Hot Encode (OHE) our categorical variables. Spark doesn't have a `dummies` function, and OHE is a two step process. First, we need to use [StringIndexer](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.StringIndexer.html?highlight=stringindexer#pyspark.ml.feature.StringIndexer) to map a string column of labels to an ML column of label indices.
+# MAGIC Here, we are going to One Hot Encode (OHE) our categorical variables. Spark doesn't have a **`dummies`** function, and OHE is a two step process. First, we need to use <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.StringIndexer.html?highlight=stringindexer#pyspark.ml.feature.StringIndexer" target="_blank">StringIndexer</a> to map a string column of labels to an ML column of label indices.
 # MAGIC 
-# MAGIC Then, we can apply the [OneHotEncoder](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.OneHotEncoder.html?highlight=onehotencoder#pyspark.ml.feature.OneHotEncoder) to the output of the StringIndexer.
+# MAGIC Then, we can apply the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.OneHotEncoder.html?highlight=onehotencoder#pyspark.ml.feature.OneHotEncoder" target="_blank">OneHotEncoder</a> to the output of the StringIndexer.
 
 # COMMAND ----------
 
@@ -91,7 +91,7 @@ lr = LinearRegression(labelCol="price", featuresCol="features")
 
 # MAGIC %md ## Pipeline
 # MAGIC 
-# MAGIC Let's put all these stages in a Pipeline. A [Pipeline](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.Pipeline.html?highlight=pipeline#pyspark.ml.Pipeline) is a way of organizing all of our transformers and estimators.
+# MAGIC Let's put all these stages in a Pipeline. A <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.Pipeline.html?highlight=pipeline#pyspark.ml.Pipeline" target="_blank">Pipeline</a> is a way of organizing all of our transformers and estimators.
 # MAGIC 
 # MAGIC This way, we don't have to worry about remembering the same ordering of transformations to apply to our test dataset.
 

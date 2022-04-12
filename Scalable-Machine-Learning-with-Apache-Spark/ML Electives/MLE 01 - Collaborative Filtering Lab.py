@@ -13,9 +13,9 @@
 # MAGIC 
 # MAGIC # Predicting Movie Ratings
 # MAGIC 
-# MAGIC One of the most common uses of big data is to predict what users want.  This allows Google to show you relevant ads, Amazon to recommend relevant products, and Netflix to recommend movies that you might like.  This lab will demonstrate how we can use Apache Spark to recommend movies to a user.  We will start with some basic techniques, and then use the SparkML library's Alternating Least Squares method to make more sophisticated predictions. Here are the SparkML [Python docs](https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html).
+# MAGIC One of the most common uses of big data is to predict what users want.  This allows Google to show you relevant ads, Amazon to recommend relevant products, and Netflix to recommend movies that you might like.  This lab will demonstrate how we can use Apache Spark to recommend movies to a user.  We will start with some basic techniques, and then use the SparkML library's Alternating Least Squares method to make more sophisticated predictions. Here are the SparkML <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html" target="_blank">Python docs</a>.
 # MAGIC 
-# MAGIC For this lab, we will use 1 million movie ratings from the [MovieLens stable benchmark rating dataset](http://grouplens.org/datasets/movielens/). 
+# MAGIC For this lab, we will use 1 million movie ratings from the <a href="http://grouplens.org/datasets/movielens/" target="_blank">MovieLens stable benchmark rating dataset</a>. 
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC  - Exploring the dataset and build a baseline model
@@ -27,7 +27,7 @@
 # MAGIC %md
 # MAGIC ##### Motivation: Want to win $1,000,000?
 # MAGIC 
-# MAGIC All you needed to do was improve Netflix’s movie recommendation system by 10% in 2008. This competition is known as the [Netflix Prize](https://en.wikipedia.org/wiki/Netflix_Prize). 
+# MAGIC All you needed to do was improve Netflix’s movie recommendation system by 10% in 2008. This competition is known as the <a href="https://en.wikipedia.org/wiki/Netflix_Prize" target="_blank">Netflix Prize</a>. 
 # MAGIC 
 # MAGIC Good recommendations are vital to sites such as Netflix, where 75 percent of what consumers watch come from movie recommendations.
 # MAGIC 
@@ -91,11 +91,11 @@ display(ratings_df)
 # MAGIC %md
 # MAGIC ### (2a) Creating a Training Set
 # MAGIC 
-# MAGIC Before we jump into using machine learning, we need to break up the `ratings_df` dataset into two DataFrames:
+# MAGIC Before we jump into using machine learning, we need to break up the **`ratings_df`** dataset into two DataFrames:
 # MAGIC * A training set, which we will use to train models
 # MAGIC * A test set, which we will use for our experiments
 # MAGIC 
-# MAGIC To randomly split the dataset into the multiple groups, we can use the [randomSplit()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit) transformation. `randomSplit()` takes a set of splits and a seed and returns multiple DataFrames. Use the seed given below.
+# MAGIC To randomly split the dataset into the multiple groups, we can use the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit" target="_blank">randomSplit()</a> transformation. **`randomSplit()`** takes a set of splits and a seed and returns multiple DataFrames. Use the seed given below.
 
 # COMMAND ----------
 
@@ -135,21 +135,21 @@ print(f"Baseline RMSE: {baseline_rmse:.3}")
 # MAGIC %md
 # MAGIC ### (2c) Alternating Least Squares
 # MAGIC 
-# MAGIC In this part, we will use the Apache Spark ML Pipeline implementation of Alternating Least Squares, [ALS](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.recommendation.ALS.html?highlight=als#pyspark.ml.recommendation.ALS). To determine the best values for the hyperparameters, we will use ALS to train several models, and then we will select the best model and use the parameters from that model in the rest of this lab exercise.
+# MAGIC In this part, we will use the Apache Spark ML Pipeline implementation of Alternating Least Squares, <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.recommendation.ALS.html?highlight=als#pyspark.ml.recommendation.ALS" target="_blank">ALS</a>. To determine the best values for the hyperparameters, we will use ALS to train several models, and then we will select the best model and use the parameters from that model in the rest of this lab exercise.
 # MAGIC 
 # MAGIC The process we will use for determining the best model is as follows:
-# MAGIC 1. Pick a set of model hyperparameters. The most important hyperparameter to model is the *rank*, which is the number of columns in the Users matrix or the number of rows in the Movies matrix. In general, a lower rank will mean higher error on the training dataset, but a high rank may lead to [overfitting](https://en.wikipedia.org/wiki/Overfitting).  We will train models with ranks of 4 and 12 using the `train_df` dataset.
+# MAGIC 1. Pick a set of model hyperparameters. The most important hyperparameter to model is the *rank*, which is the number of columns in the Users matrix or the number of rows in the Movies matrix. In general, a lower rank will mean higher error on the training dataset, but a high rank may lead to <a href="https://en.wikipedia.org/wiki/Overfitting" target="_blank">overfitting</a>.  We will train models with ranks of 4 and 12 using the **`train_df`** dataset.
 # MAGIC 
 # MAGIC 2. Set the appropriate values:
-# MAGIC     * The "User" column will be set to the values in our `userId` DataFrame column.
-# MAGIC     * The "Item" column will be set to the values in our `movieId` DataFrame column.
-# MAGIC     * The "Rating" column will be set to the values in our `rating` DataFrame column.
-# MAGIC     * `nonnegative` = True (whether to use nonnegative constraint for least squares)
-# MAGIC     * `regParam` = 0.1.
+# MAGIC     * The "User" column will be set to the values in our **`userId`** DataFrame column.
+# MAGIC     * The "Item" column will be set to the values in our **`movieId`** DataFrame column.
+# MAGIC     * The "Rating" column will be set to the values in our **`rating`** DataFrame column.
+# MAGIC     * **`nonnegative`** = True (whether to use nonnegative constraint for least squares)
+# MAGIC     * **`regParam`** = 0.1.
 # MAGIC     
 # MAGIC    **Note**: Read the documentation for the ALS class **carefully**. It will help you accomplish this step.
 # MAGIC 
-# MAGIC 4. Create multiple models using the `ParamGridBuilder` and the `CrossValidator`, one for each of our rank values.
+# MAGIC 4. Create multiple models using the **`ParamGridBuilder`** and the **`CrossValidator`**, one for each of our rank values.
 # MAGIC 
 # MAGIC 6. We'll keep the model with the lowest error rate. Such a model will be selected automatically by the CrossValidator.
 
@@ -170,7 +170,7 @@ assert als.getRatingCol() == "rating", f"Incorrect choice of {als.getRatingCol()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Now that we have initialized a model, we need to fit it to our training data, and evaluate how well it does on the validation dataset. Create a `CrossValidator` and `ParamGridBuilder` that will decide whether *rank* value *4* or *12* gives a lower *RMSE*.  
+# MAGIC Now that we have initialized a model, we need to fit it to our training data, and evaluate how well it does on the validation dataset. Create a **`CrossValidator`** and **`ParamGridBuilder`** that will decide whether *rank* value *4* or *12* gives a lower *RMSE*.  
 # MAGIC 
 # MAGIC NOTE: This cell may take a few minutes to run.
 
@@ -205,11 +205,11 @@ assert my_model.rank == 12, f"Unexpected value for best rank. Expected 12, got {
 # MAGIC %md
 # MAGIC ### (2d) Testing Your Model
 # MAGIC 
-# MAGIC So far, we used the `train_df` dataset to select the best model. Since we used this dataset to determine what model is best, we cannot use it to test how good the model is; otherwise, we would be very vulnerable to [overfitting](https://en.wikipedia.org/wiki/Overfitting).  To decide how good our model is, we need to use the `test_df` dataset.  We will use the best model you created in part (2b) for predicting the ratings for the test dataset and then we will compute the RMSE.
+# MAGIC So far, we used the **`train_df`** dataset to select the best model. Since we used this dataset to determine what model is best, we cannot use it to test how good the model is; otherwise, we would be very vulnerable to <a href="https://en.wikipedia.org/wiki/Overfitting" target="_blank">overfitting</a>.  To decide how good our model is, we need to use the **`test_df`** dataset.  We will use the best model you created in part (2b) for predicting the ratings for the test dataset and then we will compute the RMSE.
 # MAGIC 
 # MAGIC The steps you should perform are:
-# MAGIC * Run a prediction, using `my_model` as created above, on the test dataset (`test_df`), producing a new `predicted_test_df` DataFrame.
-# MAGIC * Use the previously created RMSE evaluator, `reg_eval` to evaluate the filtered DataFrame.
+# MAGIC * Run a prediction, using **`my_model`** as created above, on the test dataset (**`test_df`**), producing a new **`predicted_test_df`** DataFrame.
+# MAGIC * Use the previously created RMSE evaluator, **`reg_eval`** to evaluate the filtered DataFrame.
 
 # COMMAND ----------
 
@@ -226,7 +226,7 @@ print(f"The model had a RMSE on the test set of {test_rmse}")
 
 # MAGIC %md
 # MAGIC ## Part 3: Predictions for Yourself
-# MAGIC The ultimate goal of this lab exercise is to predict what movies to recommend to yourself.  In order to do that, you will first need to add ratings for yourself to the `ratings_df` dataset.
+# MAGIC The ultimate goal of this lab exercise is to predict what movies to recommend to yourself.  In order to do that, you will first need to add ratings for yourself to the **`ratings_df`** dataset.
 
 # COMMAND ----------
 
@@ -253,11 +253,11 @@ ratings_df.createOrReplaceTempView("ratings")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC The user ID 0 is unassigned, so we will use it for your ratings. We set the variable `myUserId` to 0 for you. 
+# MAGIC The user ID 0 is unassigned, so we will use it for your ratings. We set the variable **`myUserId`** to 0 for you. 
 # MAGIC 
-# MAGIC Next, create a new DataFrame called `my_ratings_df`, with your ratings for at least 10 movie ratings. Each entry should be formatted as `(myUserId, movieId, rating)`.  As in the original dataset, ratings should be between 1 and 5 (inclusive). 
+# MAGIC Next, create a new DataFrame called **`my_ratings_df`**, with your ratings for at least 10 movie ratings. Each entry should be formatted as **`(myUserId, movieId, rating)`**.  As in the original dataset, ratings should be between 1 and 5 (inclusive). 
 # MAGIC 
-# MAGIC If you have not seen at least 10 of these movies, you can increase the parameter passed to `LIMIT` in the above cell until there are 10 movies that you have seen (or you can also guess what your rating would be for movies you have not seen).
+# MAGIC If you have not seen at least 10 of these movies, you can increase the parameter passed to **`LIMIT`** in the above cell until there are 10 movies that you have seen (or you can also guess what your rating would be for movies you have not seen).
 
 # COMMAND ----------
 
@@ -280,7 +280,7 @@ display(my_ratings_df.limit(10))
 # MAGIC %md
 # MAGIC ### (3b) Add Your Movies to Training Dataset
 # MAGIC 
-# MAGIC Now that you have ratings for yourself, you need to add your ratings to the `train_df` dataset so that the model you train will incorporate your preferences.  Spark's [union()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.union.html?highlight=union#pyspark.sql.DataFrame.union) transformation combines two DataFrames; use `union()` to create a new training dataset that includes your ratings and the data in the original training dataset.
+# MAGIC Now that you have ratings for yourself, you need to add your ratings to the **`train_df`** dataset so that the model you train will incorporate your preferences.  Spark's <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.union.html?highlight=union#pyspark.sql.DataFrame.union" target="_blank">union()</a> transformation combines two DataFrames; use **`union()`** to create a new training dataset that includes your ratings and the data in the original training dataset.
 
 # COMMAND ----------
 
@@ -314,7 +314,7 @@ my_ratings_model = als.<FILL_IN>
 # MAGIC %md
 # MAGIC ### (3d) Predict Your Ratings
 # MAGIC 
-# MAGIC Now that we have trained a new model, let's predict what ratings you would give to the movies that you did not already provide ratings for. The code below filters out all of the movies you have rated, and creates a `predicted_ratings_df` DataFrame of the predicted ratings for all of your unseen movies.
+# MAGIC Now that we have trained a new model, let's predict what ratings you would give to the movies that you did not already provide ratings for. The code below filters out all of the movies you have rated, and creates a **`predicted_ratings_df`** DataFrame of the predicted ratings for all of your unseen movies.
 
 # COMMAND ----------
 

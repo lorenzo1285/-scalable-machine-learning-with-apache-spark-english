@@ -12,7 +12,7 @@
 # MAGIC 
 # MAGIC The pandas API on Spark project makes data scientists more productive when interacting with big data, by implementing the pandas DataFrame API on top of Apache Spark. By unifying the two ecosystems with a familiar API, pandas API on Spark offers a seamless transition between small and large data. 
 # MAGIC 
-# MAGIC Some of you might be familiar with the [Koalas](https://github.com/databricks/koalas) project, which has been merged into PySpark in 3.2. For Apache Spark 3.2 and above, please use PySpark directly as the standalone Koalas project is now in maintenance mode. See this [blog post](https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html).
+# MAGIC Some of you might be familiar with the <a href="https://github.com/databricks/koalas" target="_blank">Koalas</a> project, which has been merged into PySpark in 3.2. For Apache Spark 3.2 and above, please use PySpark directly as the standalone Koalas project is now in maintenance mode. See this <a href="https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html" target="_blank">blog post</a>.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
 # MAGIC - Demonstrate the similarities of the pandas API on Spark API with the pandas API
@@ -106,7 +106,7 @@ pandas_df.head()
 
 # MAGIC %md Read in Parquet with pandas API on Spark. You'll notice pandas API on Spark generates an index column for you, like in pandas.
 # MAGIC 
-# MAGIC Pandas API on Spark also supports reading from Delta (`read_delta`), but pandas does not support that yet.
+# MAGIC Pandas API on Spark also supports reading from Delta (**`read_delta`**), but pandas does not support that yet.
 
 # COMMAND ----------
 
@@ -117,7 +117,7 @@ df.head()
 
 # COMMAND ----------
 
-# MAGIC %md ### [Index Types](https://koalas.readthedocs.io/en/latest/user_guide/options.html#default-index-type)
+# MAGIC %md ### <a href="https://koalas.readthedocs.io/en/latest/user_guide/options.html#default-index-type" target="_blank">Index Types</a>
 # MAGIC 
 # MAGIC ![](https://files.training.databricks.com/images/301/koalas_index.png)
 
@@ -203,9 +203,9 @@ ps.sql("SELECT distinct(property_type) FROM {df}")
 # MAGIC %md ### Interesting Facts
 # MAGIC 
 # MAGIC * With pandas API on Spark you can read from Delta Tables and read in a directory of files
-# MAGIC * If you use apply on a pandas API on Spark DF and that DF is <1000 (by default), pandas API on Spark will use pandas as a shortcut - this can be adjusted using `compute.shortcut_limit`
-# MAGIC * When you create bar plots, the top n rows are only used - this can be adjusted using `plotting.max_rows`
-# MAGIC * How to utilize `.apply` ([docs](https://koalas.readthedocs.io/en/latest/reference/api/databricks.koalas.DataFrame.apply.html#databricks.koalas.DataFrame.apply)) with its use of return type hints similar to pandas UDFs
+# MAGIC * If you use apply on a pandas API on Spark DF and that DF is <1000 (by default), pandas API on Spark will use pandas as a shortcut - this can be adjusted using **`compute.shortcut_limit`**
+# MAGIC * When you create bar plots, the top n rows are only used - this can be adjusted using **`plotting.max_rows`**
+# MAGIC * How to utilize **`.apply`** <a href="https://koalas.readthedocs.io/en/latest/reference/api/databricks.koalas.DataFrame.apply.html#databricks.koalas.DataFrame.apply" target="_blank">docs</a> with its use of return type hints similar to pandas UDFs
 # MAGIC * How to check the execution plan, as well as caching a pandas API on Spark DF (which aren't immediately intuitive)
 # MAGIC * Koalas are marsupials whose max speed is 30 kph (20 mph)
 

@@ -17,7 +17,7 @@
 # MAGIC - Forecast using ARIMA
 # MAGIC - Forecast using Exponential Smoothing
 # MAGIC 
-# MAGIC In this notebook we will be using the [Coronavirus dataset](https://www.kaggle.com/kimjihoo/coronavirusdataset) containing data about Coronavirus patients in South Korea.
+# MAGIC In this notebook we will be using the <a href="https://www.kaggle.com/kimjihoo/coronavirusdataset" target="_blank">Coronavirus dataset</a> containing data about Coronavirus patients in South Korea.
 
 # COMMAND ----------
 
@@ -29,7 +29,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md ### [Time Series](https://en.wikipedia.org/wiki/Time_series)
+# MAGIC %md ### <a href="https://en.wikipedia.org/wiki/Time_series", target="_blank">Time Series</a>
 # MAGIC 
 # MAGIC A time series is a series of data points indexed (or listed or graphed) in time order. Most commonly, a time series is a sequence taken at successive equally spaced points in time. Thus it is a sequence of discrete-time data. Examples of time series include:<br><br>
 # MAGIC 
@@ -72,7 +72,7 @@ df.head()
 # COMMAND ----------
 
 # MAGIC %md ### Prophet
-# MAGIC [Facebook's Prophet](https://facebook.github.io/prophet/) is widely considered the easiest way to forecast because it generally does all the heavy lifting for the user. Let's take a look at how Prophet works with our dataset.
+# MAGIC <a href="https://facebook.github.io/prophet/" target="_blank">Facebook's Prophet</a> is widely considered the easiest way to forecast because it generally does all the heavy lifting for the user. Let's take a look at how Prophet works with our dataset.
 
 # COMMAND ----------
 
@@ -96,7 +96,7 @@ prophet_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md Next, let's specify how many days we want to forecast for. We can do this using the `Prophet.make_future_dataframe` method. With the size of our data, let's take a look at the numbers a month from now. 
+# MAGIC %md Next, let's specify how many days we want to forecast for. We can do this using the **`Prophet.make_future_dataframe`** method. With the size of our data, let's take a look at the numbers a month from now. 
 # MAGIC 
 # MAGIC We can see dates up to one month in the future.
 
@@ -109,7 +109,7 @@ prophet_future.tail()
 
 # COMMAND ----------
 
-# MAGIC %md Finally, we can run the `predict` method to forecast our data points. The `yhat` column contains the forecasted values. You can also look at the entire DataFrame to see what other values Prophet generates.
+# MAGIC %md Finally, we can run the **`predict`** method to forecast our data points. The **`yhat`** column contains the forecasted values. You can also look at the entire DataFrame to see what other values Prophet generates.
 
 # COMMAND ----------
 
@@ -118,7 +118,7 @@ prophet_forecast[['ds', 'yhat']].tail()
 
 # COMMAND ----------
 
-# MAGIC %md Let's take a look at a graph representation of our forecast using `plot`
+# MAGIC %md Let's take a look at a graph representation of our forecast using **`plot`**
 
 # COMMAND ----------
 
@@ -126,7 +126,7 @@ prophet_plot = prophet_obj.plot(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md We can also use `plot_components` to get a more detailed look at our forecast.
+# MAGIC %md We can also use **`plot_components`** to get a more detailed look at our forecast.
 
 # COMMAND ----------
 
@@ -134,7 +134,7 @@ prophet_plot2 = prophet_obj.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md We can also use Prophet to identify [changepoints](https://facebook.github.io/prophet/docs/trend_changepoints.html), points where the dataset had an abrupt change. This is especially useful for our dataset because it could identify time periods where Coronavirus cases spiked.
+# MAGIC %md We can also use Prophet to identify <a href="https://facebook.github.io/prophet/docs/trend_changepoints.html" target="_blank">changepoints</a>, points where the dataset had an abrupt change. This is especially useful for our dataset because it could identify time periods where Coronavirus cases spiked.
 
 # COMMAND ----------
 
@@ -149,9 +149,9 @@ print(prophet_obj.changepoints)
 
 # COMMAND ----------
 
-# MAGIC %md Next, let's find out if there's any correlation between holidays in South Korea and increases in confirmed cases. We can use the built-in `add_country_holidays` [method](https://facebook.github.io/prophet/docs/seasonality,_holiday_effects,_and_regressors.html#built-in-country-holidays) to find out about any trends.
+# MAGIC %md Next, let's find out if there's any correlation between holidays in South Korea and increases in confirmed cases. We can use the built-in **`add_country_holidays`** <a href="https://facebook.github.io/prophet/docs/seasonality,_holiday_effects,_and_regressors.html#built-in-country-holidays" target="_blank">method</a> to find out about any trends.
 # MAGIC 
-# MAGIC You can find a complete list of country codes [here](https://github.com/dr-prodigy/python-holidays/blob/master/holidays/countries/).
+# MAGIC You can find a complete list of country codes <a href="https://github.com/dr-prodigy/python-holidays/blob/master/holidays/countries/" target="_blank">here</a>.
 
 # COMMAND ----------
 
@@ -185,9 +185,9 @@ prophet_plot_holiday = prophet_holiday.plot_components(prophet_forecast)
 # MAGIC 
 # MAGIC To create our ARIMA model, we need to find the following parameters:<br><br>
 # MAGIC 
-# MAGIC - `p`: The number of lag observations included in the model, also called the lag order.
-# MAGIC - `d`: The number of times that the raw observations are differenced, also called the degree of differencing.
-# MAGIC - `q`: The size of the moving average window, also called the order of moving average.
+# MAGIC - **`p`**: The number of lag observations included in the model, also called the lag order.
+# MAGIC - **`d`**: The number of times that the raw observations are differenced, also called the degree of differencing.
+# MAGIC - **`q`**: The size of the moving average window, also called the order of moving average.
 
 # COMMAND ----------
 
@@ -202,7 +202,7 @@ arima_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md The first step of creating an ARIMA model is to find the d-parameter by making sure your dataset is stationary. This is easy to check using an [Augmented Dickey Fuller Test](https://en.wikipedia.org/wiki/Augmented_Dickey%E2%80%93Fuller_test) from the `statsmodels` library. 
+# MAGIC %md The first step of creating an ARIMA model is to find the d-parameter by making sure your dataset is stationary. This is easy to check using an <a href="https://en.wikipedia.org/wiki/Augmented_Dickey%E2%80%93Fuller_test" target="_blank">Augmented Dickey Fuller Test</a> from the **`statsmodels`** library. 
 # MAGIC 
 # MAGIC Since the P-value is larger than the ADF statistic, we will have to difference the dataset. Differencing helps stabilize the mean of the dataset, therefore removing the influence of past trends and seasonality on your data.
 
@@ -217,7 +217,7 @@ print(f'p-value: {result[1]}')
 
 # COMMAND ----------
 
-# MAGIC %md To difference the dataset, call `diff` on the value column. We are looking for a near-stationary series which roams around a defined mean and an ACF plot that reaches zero fairly quickly. After looking at our graphs, we can determine that our d-parameter should either be 1 or 2.
+# MAGIC %md To difference the dataset, call **`diff`** on the value column. We are looking for a near-stationary series which roams around a defined mean and an ACF plot that reaches zero fairly quickly. After looking at our graphs, we can determine that our d-parameter should either be 1 or 2.
 
 # COMMAND ----------
 
@@ -287,7 +287,7 @@ print(arima_fit.summary())
 
 # COMMAND ----------
 
-# MAGIC %md Finally, let's split our data into train and test data to test the accuracy of our model. Note that since we have to split the data sequentially for time series, functions like sklearn's `train_test_split` cannot be used here.
+# MAGIC %md Finally, let's split our data into train and test data to test the accuracy of our model. Note that since we have to split the data sequentially for time series, functions like sklearn's **`train_test_split`** cannot be used here.
 
 # COMMAND ----------
 
@@ -323,7 +323,7 @@ plt.show()
 
 # MAGIC %md ### Exponential Smoothing
 # MAGIC 
-# MAGIC [Exponential smoothing](https://en.wikipedia.org/wiki/Exponential_smoothing) is a rule of thumb technique for smoothing time series data using the exponential window function. Whereas in the simple moving average the past observations are weighted equally, exponential functions are used to assign exponentially decreasing weights over time. It is an easily learned and easily applied procedure for making some determination based on prior assumptions by the user, such as seasonality. Exponential smoothing is often used for analysis of time-series data.
+# MAGIC <a href="(https://en.wikipedia.org/wiki/Exponential_smoothing" target="_blank">Exponential smoothing</a> is a rule of thumb technique for smoothing time series data using the exponential window function. Whereas in the simple moving average the past observations are weighted equally, exponential functions are used to assign exponentially decreasing weights over time. It is an easily learned and easily applied procedure for making some determination based on prior assumptions by the user, such as seasonality. Exponential smoothing is often used for analysis of time-series data.
 # MAGIC 
 # MAGIC There are three types of Exponential Smoothing:<br><br>
 # MAGIC - Single Exponential Smoothing (SES)
@@ -358,7 +358,7 @@ exp_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md Luckily, statsmodel does most of the work for us. However, we still have to tweak the parameters to get an accurate forecast. The available parameters here are α or `smoothing_level` and β or `smoothing_slope`. α defines the smoothing factor of the level and β defines the smoothing factor of the trend.
+# MAGIC %md Luckily, statsmodel does most of the work for us. However, we still have to tweak the parameters to get an accurate forecast. The available parameters here are α or **`smoothing_level`** and β or **`smoothing_slope`**. α defines the smoothing factor of the level and β defines the smoothing factor of the trend.
 # MAGIC 
 # MAGIC In the cell below, we are trying three different kinds of predictions. The first, Holt's Linear Trend, forecasts with a linear trend. The second, Exponential Trend, forecasts with an exponential trend. The third, Additive Damped Trend, damps the forecast trend linearly.
 

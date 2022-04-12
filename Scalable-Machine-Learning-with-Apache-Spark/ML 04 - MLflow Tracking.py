@@ -10,7 +10,7 @@
 # MAGIC %md
 # MAGIC # MLflow
 # MAGIC 
-# MAGIC [MLflow](https://mlflow.org/docs/latest/concepts.html) seeks to address these three core issues:
+# MAGIC <a href="https://mlflow.org/docs/latest/concepts.html" target="_blank">MLflow</a> seeks to address these three core issues:
 # MAGIC 
 # MAGIC * It’s difficult to keep track of experiments
 # MAGIC * It’s difficult to reproduce code
@@ -50,7 +50,7 @@ print(train_df.cache().count())
 # MAGIC 
 # MAGIC MLflow Tracking is a logging API specific for machine learning and agnostic to libraries and environments that do the training.  It is organized around the concept of **runs**, which are executions of data science code.  Runs are aggregated into **experiments** where many runs can be a part of a given experiment and an MLflow server can host many experiments.
 # MAGIC 
-# MAGIC You can use [mlflow.set_experiment()](https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_experiment) to set an experiment, but if you do not specify an experiment, it will automatically be scoped to this notebook.
+# MAGIC You can use <a href="https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_experiment" target="_blank">mlflow.set_experiment()</a> to set an experiment, but if you do not specify an experiment, it will automatically be scoped to this notebook.
 
 # COMMAND ----------
 
@@ -191,7 +191,7 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
 # MAGIC %md
 # MAGIC ### Querying Past Runs
 # MAGIC 
-# MAGIC You can query past runs programmatically in order to use this data back in Python.  The pathway to doing this is an `MlflowClient` object. 
+# MAGIC You can query past runs programmatically in order to use this data back in Python.  The pathway to doing this is an **`MlflowClient`** object. 
 
 # COMMAND ----------
 
@@ -205,7 +205,7 @@ client.list_experiments()
 
 # COMMAND ----------
 
-# MAGIC %md You can also use [search_runs](https://mlflow.org/docs/latest/search-syntax.html) to find all runs for a given experiment.
+# MAGIC %md You can also use <a href="https://mlflow.org/docs/latest/search-syntax.html" target="_blank">search_runs</a> to find all runs for a given experiment.
 
 # COMMAND ----------
 
@@ -231,7 +231,7 @@ runs[0].info.run_id
 
 # MAGIC %md Examine the results in the UI.  Look for the following:<br><br>
 # MAGIC 
-# MAGIC 1. The `Experiment ID`
+# MAGIC 1. The **`Experiment ID`**
 # MAGIC 2. The artifact location.  This is where the artifacts are stored in DBFS.
 # MAGIC 3. The time the run was executed.  **Click this to see more information on the run.**
 # MAGIC 4. The code that executed the run.
@@ -240,7 +240,7 @@ runs[0].info.run_id
 # MAGIC After clicking on the time of the run, take a look at the following:<br><br>
 # MAGIC 
 # MAGIC 1. The Run ID will match what we printed above
-# MAGIC 2. The model that we saved, included a pickled version of the model as well as the Conda environment and the `MLmodel` file.
+# MAGIC 2. The model that we saved, included a pickled version of the model as well as the Conda environment and the **`MLmodel`** file.
 # MAGIC 
 # MAGIC Note that you can add notes under the "Notes" tab to help keep track of important information about your models. 
 # MAGIC 
@@ -249,8 +249,8 @@ runs[0].info.run_id
 # COMMAND ----------
 
 # MAGIC %md ### Load Saved Model
-# MAGIC 
-# MAGIC Let's practice [loading](https://www.mlflow.org/docs/latest/python_api/mlflow.spark.html) our logged log-normal model.
+# MAGIC ,
+# MAGIC Let's practice <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.spark.html" target="_blank">loading</a> our logged log-normal model.
 
 # COMMAND ----------
 

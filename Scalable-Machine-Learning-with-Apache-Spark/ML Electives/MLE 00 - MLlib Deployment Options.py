@@ -120,13 +120,13 @@ for stream in spark.streams.active:
 
 # MAGIC %md ### What about Model Export?
 # MAGIC 
-# MAGIC * [ONNX](https://onnx.ai/)
+# MAGIC * <a href="https://onnx.ai/" target="_blank">ONNX</a>
 # MAGIC   * ONNX is very popular in the deep learning community allowing developers to switch between libraries and languages, but only has experimental support for MLlib.
 # MAGIC * DIY (Reimplement it yourself)
 # MAGIC   * Error-prone, fragile
 # MAGIC * 3rd party libraries
 # MAGIC   * See XGBoost notebook
-# MAGIC   * [H2O](https://www.h2o.ai/products/h2o-sparkling-water/)
+# MAGIC   * <a href="https://www.h2o.ai/products/h2o-sparkling-water/" target="_blank">H2O</a>
 
 # COMMAND ----------
 
@@ -134,9 +134,9 @@ for stream in spark.streams.active:
 # MAGIC 
 # MAGIC Low-latency serving can operate as quickly as tens to hundreds of milliseconds.  Custom solutions are normally backed by Docker and/or Flask (though Flask generally isn't recommended in production unless significant precations are taken).  Managed solutions also include:<br><br>
 # MAGIC 
-# MAGIC * [MLflow Model Serving](https://docs.databricks.com/applications/mlflow/model-serving.html)
-# MAGIC * [Azure Machine Learning](https://azure.microsoft.com/en-us/services/machine-learning/)
-# MAGIC * [SageMaker](https://aws.amazon.com/sagemaker/)
+# MAGIC * <a href="https://docs.databricks.com/applications/mlflow/model-serving.html" target="_blank">MLflow Model Serving</a>
+# MAGIC * <a href="https://azure.microsoft.com/en-us/services/machine-learning/" target="_blank">Azure Machine Learning</a>
+# MAGIC * <a href="https://aws.amazon.com/sagemaker/" target="_blank">SageMaker</a>
 
 # COMMAND ----------
 

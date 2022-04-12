@@ -57,7 +57,7 @@
 # MAGIC * Use the <a href="https://spark.apache.org/docs/latest/api/python/index.html" target="_blank">API docs</a>. Specifically, you might find 
 # MAGIC   <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.html?highlight=dataframe#pyspark.sql.DataFrame" target="_blank">DataFrame</a> and
 # MAGIC   <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql.html#functions" target="_blank">functions</a> to be helpful.
-# MAGIC * It's helpful to look at the file first, so you can check the format. `dbutils.fs.head()` (or just `%fs head`) is a big help here.
+# MAGIC * It's helpful to look at the file first, so you can check the format. **`dbutils.fs.head()`** (or just **`%fs head`**) is a big help here.
 
 # COMMAND ----------
 

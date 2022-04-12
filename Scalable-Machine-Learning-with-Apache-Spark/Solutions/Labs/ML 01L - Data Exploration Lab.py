@@ -24,9 +24,9 @@
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC Let's keep 80% for the training set and set aside 20% of our data for the test set. We will use the [randomSplit](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit) method.
+# MAGIC Let's keep 80% for the training set and set aside 20% of our data for the test set. We will use the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit" target="_blank">randomSplit</a> method.
 # MAGIC 
-# MAGIC We will discuss more about the train-test split later, but throughout this notebook, do your data exploration on `train_df`.
+# MAGIC We will discuss more about the train-test split later, but throughout this notebook, do your data exploration on **`train_df`**.
 
 # COMMAND ----------
 
@@ -46,7 +46,7 @@ display(train_df.select("price"))
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Is this a <a href="https://en.wikipedia.org/wiki/Log-normal_distribution" target="_blank">Log Normal</a> distribution? Take the `log` of price and check the histogram. Keep this in mind for later :).
+# MAGIC Is this a <a href="https://en.wikipedia.org/wiki/Log-normal_distribution" target="_blank">Log Normal</a> distribution? Take the **`log`** of price and check the histogram. Keep this in mind for later :).
 
 # COMMAND ----------
 
@@ -59,11 +59,11 @@ display(train_df.select(log("price")))
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Now take a look at how `price` depends on some of the variables:
-# MAGIC * Plot `price` vs `bedrooms`
-# MAGIC * Plot `price` vs `accommodates`
+# MAGIC Now take a look at how **`price`** depends on some of the variables:
+# MAGIC * Plot **`price`** vs **`bedrooms`**
+# MAGIC * Plot **`price`** vs **`accommodates`**
 # MAGIC 
-# MAGIC Make sure to change the aggregation to `AVG`.
+# MAGIC Make sure to change the aggregation to **`AVG`**.
 
 # COMMAND ----------
 
@@ -143,17 +143,17 @@ displayHTML("""
 # MAGIC 
 # MAGIC Before we build any Machine Learning models, we want to build a baseline model to compare to. We also want to determine a metric to evaluate our model. Let's use RMSE here.
 # MAGIC 
-# MAGIC For this dataset, let's build a baseline model that always predict the average price and one that always predicts the [median](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.approxQuantile.html?highlight=approxquantile#pyspark.sql.DataFrame.approxQuantile) price, and see how we do. Do this in two separate steps:
+# MAGIC For this dataset, let's build a baseline model that always predicts the average price and one that always predicts the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.approxQuantile.html?highlight=approxquantile#pyspark.sql.DataFrame.approxQuantile" target="_blank">median</a> price, and see how we do. Do this in two separate steps:
 # MAGIC 
-# MAGIC 0. `train_df`: Extract the average and median price from `train_df`, and store them in the variables `avg_price` and `median_price`, respectively.
-# MAGIC 0. `test_df`: Create two additional columns called `avgPrediction` and `medianPrediction` with the average and median price from `train_df`, respectively. Call the resulting DataFrame `pred_df`. 
+# MAGIC 0. **`train_df`**: Extract the average and median price from **`train_df`**, and store them in the variables **`avg_price`** and **`median_price`**, respectively.
+# MAGIC 0. **`test_df`**: Create two additional columns called **`avgPrediction`** and **`medianPrediction`** with the average and median price from **`train_df`**, respectively. Call the resulting DataFrame **`pred_df`**. 
 # MAGIC 
 # MAGIC Some useful functions:
-# MAGIC * [avg()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.avg.html?highlight=avg#pyspark.sql.functions.avg)
-# MAGIC * [col()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.col.html?highlight=col#pyspark.sql.functions.col)
-# MAGIC * [lit()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.lit.html?highlight=lit#pyspark.sql.functions.lit)
-# MAGIC * [approxQuantile()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.approxQuantile.html?highlight=approxquantile#pyspark.sql.DataFrame.approxQuantile) [**HINT**: There is no median function, so you will need to use approxQuantile]
-# MAGIC * [withColumn()](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.withColumn.html?highlight=withcolumn#pyspark.sql.DataFrame.withColumn)
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.avg.html?highlight=avg#pyspark.sql.functions.avg" target="_blank">avg()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.col.html?highlight=col#pyspark.sql.functions.col" target="_blank">col()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.lit.html?highlight=lit#pyspark.sql.functions.lit" target="_blank">lit()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.approxQuantile.html?highlight=approxquantile#pyspark.sql.DataFrame.approxQuantile" target="_blank">approxQuantile()</a> **HINT**: There is no median function, so you will need to use approxQuantile
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.withColumn.html?highlight=withcolumn#pyspark.sql.DataFrame.withColumn" target="_blank">withColumn()</a>
 
 # COMMAND ----------
 
@@ -172,7 +172,9 @@ pred_df = (test_df
 
 # MAGIC %md ## Evaluate model
 # MAGIC 
-# MAGIC We are going to use SparkML's [RegressionEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.RegressionEvaluator.html?highlight=regressionevaluator#pyspark.ml.evaluation.RegressionEvaluator) to compute the [RMSE](https://en.wikipedia.org/wiki/Root-mean-square_deviation) for our average price and median price predictions. We will dig into evaluators in more detail in the next notebook.
+# MAGIC We are going to use SparkML's <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.RegressionEvaluator.html?highlight=regressionevaluator#pyspark.ml.evaluation.RegressionEvaluator" target="_blank">RegressionEvaluator</a> to compute the <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" target="_blank">root mean square error (RMSE)</a>. 
+# MAGIC 
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_32.png"> We'll discuss the specifics of the RMSE evaluation metric along with SparkML's evaluators in the next lesson. For now, simply realize that RMSE quantifies how far off our predictions are from the true values on average.
 
 # COMMAND ----------
 

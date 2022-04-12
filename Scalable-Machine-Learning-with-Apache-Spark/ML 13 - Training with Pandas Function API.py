@@ -12,7 +12,7 @@
 # MAGIC This notebook demonstrates how to use Pandas Function API to manage and scale machine learning models for IoT devices. 
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you:<br>
-# MAGIC  - Use [`.groupBy().applyInPandas()`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.GroupedData.applyInPandas.html?highlight=applyinpandas#pyspark.sql.GroupedData.applyInPandas) to build many models in parallel for each IoT Device
+# MAGIC  - Use <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.GroupedData.applyInPandas.html?highlight=applyinpandas#pyspark.sql.GroupedData.applyInPandas" target="_blank"> **`.groupBy().applyInPandas()`** </a> to build many models in parallel for each IoT Device
 
 # COMMAND ----------
 
@@ -21,12 +21,12 @@
 # COMMAND ----------
 
 # MAGIC %md Create dummy data with:
-# MAGIC - `device_id`: 10 different devices
-# MAGIC - `record_id`: 10k unique records
-# MAGIC - `feature_1`: a feature for model training
-# MAGIC - `feature_2`: a feature for model training
-# MAGIC - `feature_3`: a feature for model training
-# MAGIC - `label`: the variable we're trying to predict
+# MAGIC - **`device_id`**: 10 different devices
+# MAGIC - **`record_id`**: 10k unique records
+# MAGIC - **`feature_1`**: a feature for model training
+# MAGIC - **`feature_2`**: a feature for model training
+# MAGIC - **`feature_3`**: a feature for model training
+# MAGIC - **`label`**: the variable we're trying to predict
 
 # COMMAND ----------
 

@@ -18,7 +18,7 @@
 # MAGIC  - Manage the model lifecycle
 # MAGIC  - Archive and delete models
 # MAGIC  
-# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> If you would like to set up a model serving endpoint, you will need [cluster creation](https://docs.databricks.com/applications/mlflow/model-serving.html#requirements) permissions.
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> If you would like to set up a model serving endpoint, you will need <a href="https://docs.databricks.com/applications/mlflow/model-serving.html#requirements" target="_blank">cluster creation</a> permissions.
 
 # COMMAND ----------
 
@@ -53,15 +53,15 @@
 
 # COMMAND ----------
 
-# MAGIC %md Train a model and log it to MLflow using [autologging](https://docs.databricks.com/applications/mlflow/databricks-autologging.html). Autologging allows you to log metrics, parameters, and models without the need for explicit log statements.
+# MAGIC %md Train a model and log it to MLflow using <a href="https://docs.databricks.com/applications/mlflow/databricks-autologging.html" target="_blank">autologging</a>. Autologging allows you to log metrics, parameters, and models without the need for explicit log statements.
 # MAGIC 
 # MAGIC There are a few ways to use autologging:
 # MAGIC 
-# MAGIC   1. Call `mlflow.autolog()` before your training code. This will enable autologging for each supported library you have installed as soon as you import it.
+# MAGIC   1. Call **`mlflow.autolog()`** before your training code. This will enable autologging for each supported library you have installed as soon as you import it.
 # MAGIC 
 # MAGIC   2. Enable autologging at the workspace level from the admin console
 # MAGIC 
-# MAGIC   3. Use library-specific autolog calls for each library you use in your code. (e.g. `mlflow.spark.autolog()`)
+# MAGIC   3. Use library-specific autolog calls for each library you use in your code. (e.g. **`mlflow.spark.autolog()`**)
 # MAGIC 
 # MAGIC Here we are only using numeric features for simplicity of building the random forest.
 
@@ -158,13 +158,13 @@ client.update_model_version(
 
 # MAGIC %md ### Deploying a Model
 # MAGIC 
-# MAGIC The MLflow Model Registry defines several model stages: `None`, `Staging`, `Production`, and `Archived`. Each stage has a unique meaning. For example, `Staging` is meant for model testing, while `Production` is for models that have completed the testing or review processes and have been deployed to applications. 
+# MAGIC The MLflow Model Registry defines several model stages: **`None`**, **`Staging`**, **`Production`**, and **`Archived`**. Each stage has a unique meaning. For example, **`Staging`** is meant for model testing, while **`Production`** is for models that have completed the testing or review processes and have been deployed to applications. 
 # MAGIC 
 # MAGIC Users with appropriate permissions can transition models between stages. 
 
 # COMMAND ----------
 
-# MAGIC %md Now that you've learned about stage transitions, transition the model to the `Production` stage.
+# MAGIC %md Now that you've learned about stage transitions, transition the model to the **`Production`** stage.
 
 # COMMAND ----------
 
@@ -194,7 +194,7 @@ print(f"The current model stage is: '{model_version_details.current_stage}'")
 
 # COMMAND ----------
 
-# MAGIC %md Fetch the latest model using a `pyfunc`.  Loading the model in this way allows us to use the model regardless of the package that was used to train it.
+# MAGIC %md Fetch the latest model using a **`pyfunc`**.  Loading the model in this way allows us to use the model regardless of the package that was used to train it.
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> You can load a specific version of the model too.
 

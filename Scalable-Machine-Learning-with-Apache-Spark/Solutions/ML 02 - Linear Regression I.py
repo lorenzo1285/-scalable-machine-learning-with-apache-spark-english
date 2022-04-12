@@ -55,7 +55,7 @@ print(train_repartition_df.count())
 
 # MAGIC %md ## Linear Regression
 # MAGIC 
-# MAGIC We are going to build a very simple model predicting `price` just given the number of `bedrooms`.
+# MAGIC We are going to build a very simple model predicting **`price`** just given the number of **`bedrooms`**.
 # MAGIC 
 # MAGIC **Question**: What are some assumptions of the linear regression model?
 
@@ -75,7 +75,7 @@ display(train_df)
 
 # MAGIC %md There does appear to be some outliers in our dataset for the price ($10,000 a night??). Just keep this in mind when we are building our models.
 # MAGIC 
-# MAGIC We will use [LinearRegression](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html?highlight=linearregression#pyspark.ml.regression.LinearRegression) to build our first model.
+# MAGIC We will use <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html?highlight=linearregression#pyspark.ml.regression.LinearRegression" target="_blank">LinearRegression</a> to build our first model.
 # MAGIC 
 # MAGIC The cell below will fail because the Linear Regression estimator expects a vector of values as input. We will fix that with VectorAssembler below. 
 
@@ -92,11 +92,11 @@ lr = LinearRegression(featuresCol="bedrooms", labelCol="price")
 
 # MAGIC %md ## Vector Assembler
 # MAGIC 
-# MAGIC What went wrong? Turns out that the Linear Regression **estimator** (`.fit()`) expected a column of Vector type as input.
+# MAGIC What went wrong? Turns out that the Linear Regression **estimator** (**`.fit()`**) expected a column of Vector type as input.
 # MAGIC 
-# MAGIC We can easily get the values from the `bedrooms` column into a single vector using [VectorAssembler](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.VectorAssembler.html?highlight=vectorassembler#pyspark.ml.feature.VectorAssembler). VectorAssembler is an example of a **transformer**. Transformers take in a DataFrame, and return a new DataFrame with one or more columns appended to it. They do not learn from your data, but apply rule based transformations.
+# MAGIC We can easily get the values from the **`bedrooms`** column into a single vector using <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.VectorAssembler.html?highlight=vectorassembler#pyspark.ml.feature.VectorAssembler" target="_blank">VectorAssembler</a>. VectorAssembler is an example of a **transformer**. Transformers take in a DataFrame, and return a new DataFrame with one or more columns appended to it. They do not learn from your data, but apply rule based transformations.
 # MAGIC 
-# MAGIC You can see an example of how to use VectorAssembler on the [ML Programming Guide](https://spark.apache.org/docs/latest/ml-features.html#vectorassembler).
+# MAGIC You can see an example of how to use VectorAssembler on the <a href="https://spark.apache.org/docs/latest/ml-features.html#vectorassembler" target="_blank">ML Programming Guide</a>.
 
 # COMMAND ----------
 

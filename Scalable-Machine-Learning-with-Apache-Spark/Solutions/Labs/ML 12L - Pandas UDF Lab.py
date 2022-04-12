@@ -20,7 +20,7 @@
 
 # MAGIC %md
 # MAGIC 
-# MAGIC In the cell below, we train the same model on the same data set as in the lesson and [autolog](https://www.mlflow.org/docs/latest/python_api/mlflow.sklearn.html) metrics, parameters, and models to MLflow. 
+# MAGIC In the cell below, we train the same model on the same data set as in the lesson and <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.sklearn.html" target="_blank">autolog</a> metrics, parameters, and models to MLflow. 
 
 # COMMAND ----------
 
@@ -55,14 +55,14 @@ spark_df = spark.createDataFrame(df)
 
 # MAGIC %md ### MLflow UDF
 # MAGIC 
-# MAGIC Here, instead of using `mlflow.sklearn.load_model(model_path)`, we would like to use `mlflow.pyfunc.spark_udf()`.
+# MAGIC Here, instead of using **`mlflow.sklearn.load_model(model_path)`**, we would like to use **`mlflow.pyfunc.spark_udf()`**.
 # MAGIC 
 # MAGIC This method can reduce computational cost and space, since it only loads the model into memory once per Python process. In other words, when we generate predictions for a DataFrame, the Python process knows that it should reuse the copy of the model, rather than loading the same model more than once. This can actually be more performant than using a Pandas Iterator UDF.
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC In the cell below, fill in the `model_path` variable and the `mlflow.pyfunc.spark_udf` function. You can refer to this [documentation](https://www.mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf) for help. 
+# MAGIC In the cell below, fill in the **`model_path`** variable and the **`mlflow.pyfunc.spark_udf`** function. You can refer to this <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf" target="_blank">documentation</a> for help. 
 
 # COMMAND ----------
 
@@ -75,9 +75,9 @@ predict = mlflow.pyfunc.spark_udf(spark, model_path)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC After loading the model using `mlflow.pyfunc.spark_udf`, we can now perform model inference at scale.
+# MAGIC After loading the model using **`mlflow.pyfunc.spark_udf`**, we can now perform model inference at scale.
 # MAGIC 
-# MAGIC In the cell below, fill in the blank to use the `predict` function you have defined above to predict the price based on the features.
+# MAGIC In the cell below, fill in the blank to use the **`predict`** function you have defined above to predict the price based on the features.
 
 # COMMAND ----------
 

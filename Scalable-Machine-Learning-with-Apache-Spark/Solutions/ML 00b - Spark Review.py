@@ -104,9 +104,9 @@ df.count()
 # MAGIC %md
 # MAGIC ## Collect Data
 # MAGIC 
-# MAGIC When you pull data back to the driver  (e.g. call `.collect()`, `.toPandas()`,  etc), you'll need to be careful of how much data you're bringing back. Otherwise, you might get OOM exceptions!
+# MAGIC When you pull data back to the driver  (e.g. call **`.collect()`**, **`.toPandas()`**,  etc), you'll need to be careful of how much data you're bringing back. Otherwise, you might get OOM exceptions!
 # MAGIC 
-# MAGIC A best practice is explicitly limit the number of records, unless you know your data set is small, before calling `.collect()` or `.toPandas()`.
+# MAGIC A best practice is explicitly limit the number of records, unless you know your data set is small, before calling **`.collect()`** or **`.toPandas()`**.
 
 # COMMAND ----------
 
@@ -114,21 +114,22 @@ df.limit(10).toPandas()
 
 # COMMAND ----------
 
-# MAGIC %md ## What's new in [Spark 3.0](https://www.youtube.com/watch?v=l6SuXvhorDY&feature=emb_logo)
-# MAGIC * [Adaptive Query Execution](https://www.youtube.com/watch?v=jzrEc4r90N8&feature=emb_logo)
+# MAGIC %md ## What's new in <a href="https://www.youtube.com/watch?v=l6SuXvhorDY&feature=emb_logo" target="_blank">Spark 3.0</a>
+# MAGIC 
+# MAGIC * <a href="https://www.youtube.com/watch?v=jzrEc4r90N8&feature=emb_logo" target="_blank">Adaptive Query Execution</a>
 # MAGIC   * Dynamic query optimization that happens in the middle of your query based on runtime statistics
 # MAGIC     * Dynamically coalesce shuffle partitions
 # MAGIC     * Dynamically switch join strategies
 # MAGIC     * Dynamically optimize skew joins
-# MAGIC   * Enable it with: `spark.sql.adaptive.enabled=true`
+# MAGIC   * Enable it with: **`spark.sql.adaptive.enabled=true`**
 # MAGIC * Dynamic Partition Pruning (DPP)
 # MAGIC   * Avoid partition scanning based on the query results of the other query fragments
 # MAGIC * Join Hints
-# MAGIC * [Improved Pandas UDFs](https://www.youtube.com/watch?v=UZl0pHG-2HA&feature=emb_logo)
+# MAGIC * <a href="https://www.youtube.com/watch?v=UZl0pHG-2HA&feature=emb_logo" target="_blank">Improved Pandas UDFs</a>
 # MAGIC   * Type Hints
 # MAGIC   * Iterators
 # MAGIC   * Pandas Function API (mapInPandas, applyInPandas, etc)
-# MAGIC * And many more! See the [migration guide](https://spark.apache.org/docs/latest/api/python/migration_guide/pyspark_2.4_to_3.0.html) and resources linked above.
+# MAGIC * And many more! See the <a href="https://spark.apache.org/docs/latest/api/python/migration_guide/pyspark_2.4_to_3.0.html" target="_blank">migration guide</a> and resources linked above.
 
 # COMMAND ----------
 

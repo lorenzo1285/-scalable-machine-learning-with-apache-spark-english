@@ -9,9 +9,9 @@
 
 # MAGIC %md # Feature Store Lab
 # MAGIC 
-# MAGIC Now that you are familiar with the [Databricks Feature Store](https://docs.databricks.com/applications/machine-learning/feature-store.html), try applying the concepts we learned to a new dataset below.
+# MAGIC Now that you are familiar with the <a href="https://docs.databricks.com/applications/machine-learning/feature-store.html" target="_blank">Databricks Feature Store</a>, try applying the concepts we learned to a new dataset below.
 # MAGIC 
-# MAGIC The Feature Store Python API documentation can be found [here](https://docs.databricks.com/dev-tools/api/python/latest/index.html#feature-store-python-api-reference).
+# MAGIC The Feature Store Python API documentation can be found <a href="https://docs.databricks.com/dev-tools/api/python/latest/index.html#feature-store-python-api-reference" target="_blank">here</a>.
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lab you will:<br>
 # MAGIC  - Create a feature store 
@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # MAGIC %md ### Load the data
-# MAGIC For this example, we will use a new COVID-19 dataset. Run the cell below to create our dataframe `covid_df`.
+# MAGIC For this example, we will use a new COVID-19 dataset. Run the cell below to create our dataframe **`covid_df`**.
 
 # COMMAND ----------
 
@@ -44,7 +44,7 @@ display(covid_df)
 
 # COMMAND ----------
 
-# MAGIC %md Run the cell below to set up a database and unique table name `table_name` for the lab.
+# MAGIC %md Run the cell below to set up a database and unique table name **`table_name`** for the lab.
 
 # COMMAND ----------
 
@@ -57,9 +57,9 @@ print(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md Let's set up our FeatureStoreClient `fs`. 
+# MAGIC %md Let's set up our FeatureStoreClient **`fs`**. 
 # MAGIC 
-# MAGIC To create a feature store client, initialize a `FeatureStoreClient` object from the `feature_store` module. 
+# MAGIC To create a feature store client, initialize a **`FeatureStoreClient`** object from the **`feature_store`** module. 
 
 # COMMAND ----------
 
@@ -76,7 +76,7 @@ fs = # FILL_IN
 # MAGIC 
 # MAGIC Before we write to our feature table, we will need to write a feature computation function that separates our features from the label. 
 # MAGIC 
-# MAGIC Fill in the feature computation function below to select only the feature columns, not `deceased`.
+# MAGIC Fill in the feature computation function below to select only the feature columns, not **`deceased`**.
 
 # COMMAND ----------
 
@@ -94,7 +94,7 @@ display(covid_features_df)
 # MAGIC 
 # MAGIC Now that we have our features ready, complete the cell below to create our feature table.
 # MAGIC 
-# MAGIC Make sure to set the name to the `table_name` we defined above.
+# MAGIC Make sure to set the name to the **`table_name`** we defined above.
 # MAGIC 
 # MAGIC **NOTE:** The primary key needs to be defined in a list as follows: ["primary key name"]
 
@@ -133,9 +133,9 @@ display(add_df)
 
 # COMMAND ----------
 
-# MAGIC %md Now we want to add this information to our feature table using `write_table`. 
+# MAGIC %md Now we want to add this information to our feature table using **`write_table`**. 
 # MAGIC 
-# MAGIC **NOTE:** Remember, we can use either `"overwrite"` or `"merge"` mode. Which one should we use here?
+# MAGIC **NOTE:** Remember, we can use either **`"overwrite"`** or **`"merge"`** mode. Which one should we use here?
 
 # COMMAND ----------
 
@@ -148,7 +148,7 @@ fs.write_table(
 
 # COMMAND ----------
 
-# MAGIC %md Now try using `fs.read_table`, specifying the `table_name` to see our updated feature table.
+# MAGIC %md Now try using **`fs.read_table`**, specifying the **`table_name`** to see our updated feature table.
 
 # COMMAND ----------
 
@@ -161,7 +161,7 @@ display(updated_df)
 
 # MAGIC %md ### Training 
 # MAGIC 
-# MAGIC Now that we have our feature table, we are ready to use it for model training. We'll need our target variable `deceased` in addition to our features, so let's get that first. 
+# MAGIC Now that we have our feature table, we are ready to use it for model training. We'll need our target variable **`deceased`** in addition to our features, so let's get that first. 
 
 # COMMAND ----------
 

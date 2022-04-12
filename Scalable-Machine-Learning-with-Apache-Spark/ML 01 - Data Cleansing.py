@@ -10,7 +10,7 @@
 # MAGIC %md
 # MAGIC # Data Cleansing
 # MAGIC 
-# MAGIC We will be using Spark to do some exploratory data analysis & cleansing of the SF Airbnb rental dataset from [Inside Airbnb](http://insideairbnb.com/get-the-data.html).
+# MAGIC We will be using Spark to do some exploratory data analysis & cleansing of the SF Airbnb rental dataset from <a href="http://insideairbnb.com/get-the-data.html" target="_blank">Inside Airbnb</a>.
 # MAGIC 
 # MAGIC <img src="https://files.training.databricks.com/images/301/sf.jpg" style="height: 200px; margin: 10px; border: 1px solid #ddd; padding: 10px"/>
 # MAGIC 
@@ -82,7 +82,7 @@ display(base_df)
 # MAGIC %md 
 # MAGIC ### Fixing Data Types
 # MAGIC 
-# MAGIC Take a look at the schema above. You'll notice that the `price` field got picked up as string. For our task, we need it to be a numeric (double type) field. 
+# MAGIC Take a look at the schema above. You'll notice that the **`price`** field got picked up as string. For our task, we need it to be a numeric (double type) field. 
 # MAGIC 
 # MAGIC Let's fix that.
 
@@ -100,8 +100,8 @@ display(fixed_price_df)
 # MAGIC ### Summary statistics
 # MAGIC 
 # MAGIC Two options:
-# MAGIC * `describe`: count, mean, stddev, min, max
-# MAGIC * `summary`: describe + interquartile range (IQR)
+# MAGIC * **`describe`**: count, mean, stddev, min, max
+# MAGIC * **`summary`**: describe + interquartile range (IQR)
 # MAGIC 
 # MAGIC **Question:** When to use IQR/median over mean? Vice versa?
 
@@ -117,7 +117,7 @@ display(fixed_price_df.summary())
 
 # MAGIC %md ### Dbutils Data Summary
 # MAGIC 
-# MAGIC We can also use `dbutils.data.summarize` to see more detailed summary statistics and data plots.
+# MAGIC We can also use **`dbutils.data.summarize`** to see more detailed summary statistics and data plots.
 
 # COMMAND ----------
 
@@ -128,7 +128,7 @@ dbutils.data.summarize(fixed_price_df)
 # MAGIC %md
 # MAGIC ### Getting rid of extreme values
 # MAGIC 
-# MAGIC Let's take a look at the *min* and *max* values of the `price` column.
+# MAGIC Let's take a look at the *min* and *max* values of the **`price`** column.
 
 # COMMAND ----------
 
@@ -203,7 +203,7 @@ display(min_nights_df)
 
 # MAGIC %md ### Impute: Cast to Double
 # MAGIC 
-# MAGIC SparkML's [Imputer](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.Imputer.html?highlight=imputer#pyspark.ml.feature.Imputer) requires all fields be of type double. Let's cast all integer fields to double.
+# MAGIC SparkML's <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.Imputer.html?highlight=imputer#pyspark.ml.feature.Imputer" target="_blank">Imputer </a> requires all fields be of type double. Let's cast all integer fields to double.
 
 # COMMAND ----------
 
@@ -251,11 +251,11 @@ display(doubles_df.describe())
 
 # MAGIC %md ### Transformers and Estimators
 # MAGIC 
-# MAGIC Spark ML standardizes APIs for machine learning algorithms to make it easier to combine multiple algorithms into a single pipeline, or workflow. Let's cover two key concepts introduced by the Spark ML API: `transformers` and `estimators`.
+# MAGIC Spark ML standardizes APIs for machine learning algorithms to make it easier to combine multiple algorithms into a single pipeline, or workflow. Let's cover two key concepts introduced by the Spark ML API: **`transformers`** and **`estimators`**.
 # MAGIC 
-# MAGIC **Transformer**: Transforms one DataFrame into another DataFrame. It accepts a DataFrame as input, and returns a new DataFrame with one or more columns appended to it. Transformers do not learn any parameters from your data and simply apply rule-based transformations. It has a `.transform()` method.
+# MAGIC **Transformer**: Transforms one DataFrame into another DataFrame. It accepts a DataFrame as input, and returns a new DataFrame with one or more columns appended to it. Transformers do not learn any parameters from your data and simply apply rule-based transformations. It has a **`.transform()`** method.
 # MAGIC 
-# MAGIC **Estimator**: An algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model. It has a `.fit()` method because it learns (or "fits") parameters from your DataFrame.
+# MAGIC **Estimator**: An algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model. It has a **`.fit()`** method because it learns (or "fits") parameters from your DataFrame.
 
 # COMMAND ----------
 
@@ -274,26 +274,6 @@ imputed_df = imputer_model.transform(doubles_df)
 # COMMAND ----------
 
 imputed_df.write.format("delta").mode("overwrite").save(working_dir)
-
-# COMMAND ----------
-
-# MAGIC %md ## What's needed for the lab
-# MAGIC * Train-test split
-# MAGIC * RMSE
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### [Train-test split](https://en.wikipedia.org/wiki/Training,_validation,_and_test_sets)
-# MAGIC ![](https://files.training.databricks.com/images/301/TrainTestSplit.png)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC 
-# MAGIC ### [Root-Mean-Square Error (RMSE)](https://en.wikipedia.org/wiki/Root-mean-square_deviation)
-# MAGIC 
-# MAGIC ![](https://files.training.databricks.com/images/301/rmse.png)
 
 # COMMAND ----------
 

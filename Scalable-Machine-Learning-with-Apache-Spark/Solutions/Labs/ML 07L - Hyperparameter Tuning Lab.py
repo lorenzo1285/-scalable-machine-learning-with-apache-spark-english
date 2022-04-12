@@ -16,7 +16,7 @@
 # MAGIC  - Generate feature importance scores and classification metrics
 # MAGIC  - Identify differences between scikit-learn's Random Forest and SparkML's
 # MAGIC  
-# MAGIC You can read more about the distributed implementation of Random Forests in the Spark [source code](https://github.com/apache/spark/blob/master/mllib/src/main/scala/org/apache/spark/ml/tree/impl/RandomForest.scala#L42).
+# MAGIC You can read more about the distributed implementation of Random Forests in the Spark <a href="https://github.com/apache/spark/blob/master/mllib/src/main/scala/org/apache/spark/ml/tree/impl/RandomForest.scala#L42" target="_blank">source code</a>.
 
 # COMMAND ----------
 
@@ -26,10 +26,10 @@
 
 # MAGIC %md ## From Regression to Classification
 # MAGIC 
-# MAGIC In this case, we'll turn the Airbnb housing dataset into a classification problem to **classify between high and low price listings.**  Our `class` column will be:<br><br>
+# MAGIC In this case, we'll turn the Airbnb housing dataset into a classification problem to **classify between high and low price listings.**  Our **`class`** column will be:<br><br>
 # MAGIC 
-# MAGIC - `0` for a low cost listing of under $150
-# MAGIC - `1` for a high cost listing of $150 or more
+# MAGIC - **`0`** for a low cost listing of under $150
+# MAGIC - **`1`** for a high cost listing of $150 or more
 
 # COMMAND ----------
 
@@ -70,9 +70,9 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # MAGIC %md ## Random Forest
 # MAGIC 
-# MAGIC Create a Random Forest classifer called `rf` with the `labelCol`=`priceClass`, `maxBins`=`40`, and `seed`=`42` (for reproducibility).
+# MAGIC Create a Random Forest classifer called **`rf`** with the **`labelCol=priceClass`**, **`maxBins=40`**, and **`seed=42`** (for reproducibility).
 # MAGIC 
-# MAGIC It's under `pyspark.ml.classification.RandomForestClassifier` in Python.
+# MAGIC It's under **`pyspark.ml.classification.RandomForestClassifier`** in Python.
 
 # COMMAND ----------
 
@@ -88,13 +88,13 @@ rf = RandomForestClassifier(labelCol="priceClass", maxBins=40, seed=42)
 # MAGIC 
 # MAGIC There are a lot of hyperparameters we could tune, and it would take a long time to manually configure.
 # MAGIC 
-# MAGIC Let's use Spark's [ParamGridBuilder](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgrid#pyspark.ml.tuning.ParamGridBuilder) to find the optimal hyperparameters in a more systematic approach. Call this variable `param_grid`.
+# MAGIC Let's use Spark's <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.ParamGridBuilder.html?highlight=paramgrid#pyspark.ml.tuning.ParamGridBuilder" target="_blank">ParamGridBuilder</a> to find the optimal hyperparameters in a more systematic approach. Call this variable **`param_grid`**.
 # MAGIC 
 # MAGIC Let's define a grid of hyperparameters to test:
-# MAGIC   - maxDepth: max depth of the decision tree (Use the values `2, 5, 10`)
-# MAGIC   - numTrees: number of decision trees (Use the values `10, 20, 100`)
+# MAGIC   - maxDepth: max depth of the decision tree (Use the values **`2, 5, 10`**)
+# MAGIC   - numTrees: number of decision trees (Use the values **`10, 20, 100`**)
 # MAGIC 
-# MAGIC `addGrid()` accepts the name of the parameter (e.g. `rf.maxDepth`), and a list of the possible values (e.g. `[2, 5, 10]`).
+# MAGIC **`addGrid()`** accepts the name of the parameter (e.g. **`rf.maxDepth`**), and a list of the possible values (e.g. **`[2, 5, 10]`**).
 
 # COMMAND ----------
 
@@ -111,11 +111,11 @@ param_grid = (ParamGridBuilder()
 
 # MAGIC %md ## Evaluator
 # MAGIC 
-# MAGIC In the past, we used a `RegressionEvaluator`.  For classification, we can use a [BinaryClassificationEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.BinaryClassificationEvaluator.html?highlight=binaryclass#pyspark.ml.evaluation.BinaryClassificationEvaluator) if we have two classes or [MulticlassClassificationEvaluator](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.MulticlassClassificationEvaluator.html?highlight=multiclass#pyspark.ml.evaluation.MulticlassClassificationEvaluator) for more than two classes.
+# MAGIC In the past, we used a **`RegressionEvaluator`**.  For classification, we can use a <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.BinaryClassificationEvaluator.html?highlight=binaryclass#pyspark.ml.evaluation.BinaryClassificationEvaluator" target="_blank">BinaryClassificationEvaluator</a> if we have two classes or <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.evaluation.MulticlassClassificationEvaluator.html?highlight=multiclass#pyspark.ml.evaluation.MulticlassClassificationEvaluator" target="_blank">MulticlassClassificationEvaluator</a> for more than two classes.
 # MAGIC 
-# MAGIC Create a `BinaryClassificationEvaluator` with `areaUnderROC` as the metric.
+# MAGIC Create a **`BinaryClassificationEvaluator`** with **`areaUnderROC`** as the metric.
 # MAGIC 
-# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> [Read more on ROC curves here.](https://en.wikipedia.org/wiki/Receiver_operating_characteristic)  In essence, it compares true positive and false positives.
+# MAGIC <img src="https://files.training.databricks.com/images/icon_note_24.png"/> <a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic" target="_blank">Read more on ROC curves here.</a>  In essence, it compares true positive and false positives.
 
 # COMMAND ----------
 
@@ -128,9 +128,9 @@ evaluator = BinaryClassificationEvaluator(labelCol="priceClass", metricName="are
 
 # MAGIC %md ## Cross Validation
 # MAGIC 
-# MAGIC We are going to do 3-Fold cross-validation, with `parallelism`=4, and set the `seed`=42 on the cross-validator for reproducibility.
+# MAGIC We are going to do 3-Fold cross-validation, with **`parallelism`**=4, and set the **`seed`**=42 on the cross-validator for reproducibility.
 # MAGIC 
-# MAGIC Put the Random Forest in the CV to speed up the [cross validation](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator) (as opposed to the pipeline in the CV).
+# MAGIC Put the Random Forest in the CV to speed up the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator" target="_blank">cross validation</a> (as opposed to the pipeline in the CV).
 
 # COMMAND ----------
 
@@ -201,7 +201,7 @@ print(f"Area under ROC is {area_under_roc:.2f}")
 
 # MAGIC %md ## Save Model
 # MAGIC 
-# MAGIC Save the model to `working_dir` (variable defined in Classroom-Setup)
+# MAGIC Save the model to **`working_dir`** (variable defined in Classroom-Setup)
 
 # COMMAND ----------
 
@@ -212,7 +212,7 @@ pipeline_model.write().overwrite().save(working_dir)
 
 # MAGIC %md ## Sklearn vs SparkML
 # MAGIC 
-# MAGIC [Sklearn RandomForestRegressor](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) vs [SparkML RandomForestRegressor](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.RandomForestRegressor.html?highlight=randomfore#pyspark.ml.regression.RandomForestRegressor).
+# MAGIC <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html" target="_blank">Sklearn RandomForestRegressor</a> vs <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.RandomForestRegressor.html?highlight=randomfore#pyspark.ml.regression.RandomForestRegressor" target="_blank">SparkML RandomForestRegressor</a>.
 # MAGIC 
 # MAGIC Look at these params in particular:
 # MAGIC * **n_estimators** (sklearn) vs **numTrees** (SparkML)

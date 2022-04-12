@@ -9,7 +9,7 @@
 
 # MAGIC %md # AutoML
 # MAGIC 
-# MAGIC [Databricks AutoML](https://docs.databricks.com/applications/machine-learning/automl.html) helps you automatically build machine learning models both through a UI and programmatically. It prepares the dataset for model training and then performs and records a set of trials (using HyperOpt), creating, tuning, and evaluating multiple models. 
+# MAGIC <a href="https://docs.databricks.com/applications/machine-learning/automl.html" target="_blank">Databricks AutoML</a> helps you automatically build machine learning models both through a UI and programmatically. It prepares the dataset for model training and then performs and records a set of trials (using HyperOpt), creating, tuning, and evaluating multiple models. 
 # MAGIC 
 # MAGIC ## ![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) In this lesson you will:<br>
 # MAGIC  - Use AutoML to automatically train and tune your models
@@ -32,16 +32,16 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md We can now use AutoML to search for the optimal [regression](https://docs.databricks.com/applications/machine-learning/automl.html#regression) model. 
+# MAGIC %md We can now use AutoML to search for the optimal <a href="https://docs.databricks.com/applications/machine-learning/automl.html#regression" target="_blank">regression</a> model. 
 # MAGIC 
 # MAGIC Required parameters:
-# MAGIC * `dataset` - Input Spark or pandas DataFrame that contains training features and targets. If using a Spark DataFrame, it will convert it to a Pandas DataFrame under the hood by calling .toPandas() - just be careful you don't OOM!
-# MAGIC * `target_col` - Column name of the target labels
+# MAGIC * **`dataset`** - Input Spark or pandas DataFrame that contains training features and targets. If using a Spark DataFrame, it will convert it to a Pandas DataFrame under the hood by calling .toPandas() - just be careful you don't OOM!
+# MAGIC * **`target_col`** - Column name of the target labels
 # MAGIC 
 # MAGIC We will also specify these optional parameters:
-# MAGIC * `primary_metric` - Primary metric to select the best model. Each trial will compute several metrics, but this one determines which model is selected from all the trials. One of `r2` (default, R squared), `mse` (mean squared error), `rmse` (root mean squared error), `mae` (mean absolute error) for regression problems.
-# MAGIC * `timeout_minutes` - The maximum time to wait for the AutoML trials to complete. `timeout_minutes=None` will run the trials without any timeout restrictions
-# MAGIC * `max_trials` - The maximum number of trials to run. When `max_trials=None`, maximum number of trials will run to completion.
+# MAGIC * **`primary_metric`** - Primary metric to select the best model. Each trial will compute several metrics, but this one determines which model is selected from all the trials. One of **`r2`** (default, R squared), **`mse`** (mean squared error), **`rmse`** (root mean squared error), **`mae`** (mean absolute error) for regression problems.
+# MAGIC * **`timeout_minutes`** - The maximum time to wait for the AutoML trials to complete. **`timeout_minutes=None`** will run the trials without any timeout restrictions
+# MAGIC * **`max_trials`** - The maximum number of trials to run. When **`max_trials=None`**, maximum number of trials will run to completion.
 
 # COMMAND ----------
 
@@ -54,9 +54,9 @@ summary = automl.regress(train_df, target_col="price", primary_metric="rmse", ti
 # MAGIC %md 
 # MAGIC 
 # MAGIC After running the previous cell, you will notice two notebooks and an MLflow experiment:
-# MAGIC * `Data exploration notebook` - we can see a Profiling Report which organizes the input columns and discusses values, frequency and other information
-# MAGIC * `Best trial notebook` - shows the source code for reproducing the best trial conducted by AutoML
-# MAGIC * `MLflow experiment` - contains high level information, such as the root artifact location, experiment ID, and experiment tags. The list of trials contains detailed summaries of each trial, such as the notebook and model location, training parameters, and overall metrics.
+# MAGIC * **`Data exploration notebook`** - we can see a Profiling Report which organizes the input columns and discusses values, frequency and other information
+# MAGIC * **`Best trial notebook`** - shows the source code for reproducing the best trial conducted by AutoML
+# MAGIC * **`MLflow experiment`** - contains high level information, such as the root artifact location, experiment ID, and experiment tags. The list of trials contains detailed summaries of each trial, such as the notebook and model location, training parameters, and overall metrics.
 # MAGIC 
 # MAGIC Dig into these notebooks and the MLflow experiment - what do you find?
 # MAGIC 
@@ -68,7 +68,7 @@ print(summary.best_trial)
 
 # COMMAND ----------
 
-# MAGIC %md Now we can test the model that we got from AutoML against our test data. We'll be using [mlflow.pyfunc.spark_udf](https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf) to register our model as a UDF and apply it in parallel to our test data.
+# MAGIC %md Now we can test the model that we got from AutoML against our test data. We'll be using <a href="https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf" target="_blank">mlflow.pyfunc.spark_udf</a> to register our model as a UDF and apply it in parallel to our test data.
 
 # COMMAND ----------
 
