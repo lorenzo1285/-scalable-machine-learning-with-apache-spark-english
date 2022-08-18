@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b9944704-a562-44e0-8ef6-8639f11312ca
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -28,7 +28,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-3e08ca45-9a00-4c6a-ac38-169c7e87d9e4
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,7 +56,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-733cd880-143d-42c2-9f29-602e48f60efe
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -69,7 +69,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 # MAGIC * **`num_workers`**: The number of workers to distribute over. Requires MLR 9.0+.
 # MAGIC * **`use_gpu`**: Enable to utilize GPU based training for faster performance (optional).
 # MAGIC 
-# MAGIC **NOTE:** **`use_gpu`** requires an ML GPU runtime. Currently, at most one GPU per worker will be used when doing distributed training. 
+# MAGIC **NOTE:** **`use_gpu`** requires an ML GPU runtime. Currently, at most one GPU per worker will be used when doing distributed training.
 
 # COMMAND ----------
 
@@ -85,7 +85,7 @@ pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8d5f8c24-ee0b-476e-a250-95ce2d73dd28
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -105,7 +105,7 @@ display(exp_xgboost_df.select("price", "prediction"))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-364402e1-8073-4b24-8e03-c7e2566f94d2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -124,13 +124,13 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-21cf0d1b-c7a8-43c0-8eea-7677bb0d7847
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC ## Alternative Gradient Boosted Approaches
 # MAGIC 
-# MAGIC There are lots of other gradient boosted approaches, such as <a href="https://catboost.ai/" target="_blank">CatBoost</a>, <a href="https://github.com/microsoft/LightGBM" target="_blank">LightGBM</a>, vanilla gradient boosted trees in <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.GBTClassifier.html?highlight=gbt#pyspark.ml.classification.GBTClassifier" target="_blank">SparkML</a>/<a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html" target="_blank">scikit-learn</a>, etc. Each of these has their respective <a href="https://towardsdatascience.com/catboost-vs-light-gbm-vs-xgboost-5f93620723db" target="_blank">pros and cons</a> that you can read more about. 
+# MAGIC There are lots of other gradient boosted approaches, such as <a href="https://catboost.ai/" target="_blank">CatBoost</a>, <a href="https://github.com/microsoft/LightGBM" target="_blank">LightGBM</a>, vanilla gradient boosted trees in <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.GBTClassifier.html?highlight=gbt#pyspark.ml.classification.GBTClassifier" target="_blank">SparkML</a>/<a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html" target="_blank">scikit-learn</a>, etc. Each of these has their respective <a href="https://towardsdatascience.com/catboost-vs-light-gbm-vs-xgboost-5f93620723db" target="_blank">pros and cons</a> that you can read more about.
 
 # COMMAND ----------
 

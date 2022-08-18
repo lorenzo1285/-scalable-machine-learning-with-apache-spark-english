@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1fa7a9c8-3dad-454e-b7ac-555020a4bda8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -42,7 +42,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2340cdf4-9753-41b4-a613-043b90f0f472
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,7 +56,7 @@ train_df, val_df, test_df = airbnb_df.randomSplit([.6, .2, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-37bbd5bd-f330-4d02-8af6-1b185612cdf8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -84,7 +84,7 @@ regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol=
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e4627900-f2a5-4f65-881e-1374187dd4f9
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -118,7 +118,7 @@ def objective_function(params):
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d4f9dd2b-060b-4eef-8164-442b2be242f4
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -139,7 +139,7 @@ search_space = {
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-27891521-e481-4734-b21c-b2c5fe1f01fe
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -152,7 +152,7 @@ search_space = {
 # MAGIC 
 # MAGIC Hence, **`tpe.suggest`** is a Bayesian method.
 # MAGIC 
-# MAGIC MLflow also integrates with Hyperopt, so you can track the results of all the models you’ve trained and their results as part of your hyperparameter tuning. Notice you can track the MLflow experiment in this notebook, but you can also specify an external experiment. 
+# MAGIC MLflow also integrates with Hyperopt, so you can track the results of all the models you’ve trained and their results as part of your hyperparameter tuning. Notice you can track the MLflow experiment in this notebook, but you can also specify an external experiment.
 
 # COMMAND ----------
 

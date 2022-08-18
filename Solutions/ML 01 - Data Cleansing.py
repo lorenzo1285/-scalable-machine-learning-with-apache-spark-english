@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8c6d3ef3-e44b-4292-a0d3-1aaba0198525
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -27,7 +27,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-969507ea-bffc-4255-9a99-2306a594625f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -47,7 +47,7 @@ raw_df.columns
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-94856418-c319-4915-a73e-5728fcd44101
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -88,7 +88,7 @@ display(base_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a12c5a59-ad1c-4542-8695-d822ec10c4ca
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -108,7 +108,7 @@ display(fixed_price_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4ad08138-4563-4a93-b038-801832c9bc73
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -130,7 +130,7 @@ display(fixed_price_df.summary())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-bd55efda-86d0-4584-a6fc-ef4f221b2872
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -144,7 +144,7 @@ dbutils.data.summarize(fixed_price_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e9860f92-2fbe-4d23-b728-678a7bb4734e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -158,7 +158,7 @@ display(fixed_price_df.select("price").describe())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4a8fe21b-1dac-4edf-a0a3-204f170b05c9
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -172,7 +172,7 @@ fixed_price_df.filter(col("price") == 0).count()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-bf195d9b-ea4d-4a3e-8b61-372be8eec327
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -184,7 +184,7 @@ pos_prices_df = fixed_price_df.filter(col("price") > 0)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-dc8600db-ebd1-4110-bfb1-ce555bc95245
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -203,7 +203,7 @@ display(pos_prices_df
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5aa4dfa8-d9a1-42e2-9060-a5dcc3513a0d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -217,7 +217,7 @@ display(min_nights_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-25a35390-d716-43ad-8f51-7e7690e1c913
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -240,7 +240,7 @@ display(min_nights_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-83e56fca-ce6d-4e3c-8042-0c1c7b9eaa5a
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -264,7 +264,7 @@ print(f"Columns converted from Integer to Double:\n - {columns}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-69b58107-82ad-4cec-8984-028a5df1b69e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -296,7 +296,7 @@ display(doubles_df.describe())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-c88f432d-1252-4acc-8c91-4834c00da789
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -319,7 +319,7 @@ imputed_df = imputer_model.transform(doubles_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4df06e83-27e6-4cc6-b66d-883317b2a7eb
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

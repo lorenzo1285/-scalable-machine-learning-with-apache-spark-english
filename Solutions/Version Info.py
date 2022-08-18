@@ -7,15 +7,15 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ebdf53a8-2e92-41da-8b96-df365abf9d7c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC # Project Information
 # MAGIC 
 # MAGIC * Name: **Scalable Machine Learning with Apache Spark**
-# MAGIC * Version:  **3.8.2**
-# MAGIC * Built On: **Aug 17, 2022 at 21:54:40 UTC**
+# MAGIC * Version:  **3.8.3**
+# MAGIC * Built On: **Aug 18, 2022 at 15:56:24 UTC**
 
 # COMMAND ----------
 

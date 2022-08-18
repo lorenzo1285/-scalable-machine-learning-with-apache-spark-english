@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2cf41655-1957-4aa5-a4f0-b9ec55ea213b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -34,7 +34,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-197ad07c-dead-4444-82de-67353d81dcb0
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -43,7 +43,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8e9e809d-4142-43d8-b361-830099a02d06
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -72,7 +72,7 @@ test_df.write.mode("overwrite").format("delta").save(test_delta_path)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ead09bc6-c6f2-4dfa-bc9c-ddf41accc8f8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -88,7 +88,7 @@ test_delta = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2bf375c9-fb36-47a3-b973-82fa805e8b22
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -101,7 +101,7 @@ display(spark.sql(f"DESCRIBE HISTORY delta.`{train_delta_path}`"))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d3d7251e-c070-4d54-844f-ec6880079e5b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -112,14 +112,14 @@ display(spark.sql(f"DESCRIBE HISTORY delta.`{train_delta_path}`"))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ffe159a7-e5dd-49fd-9059-e399237005a7
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC ### Step 2. Log initial run to MLflow
 # MAGIC 
-# MAGIC Let's first log a run to MLflow where we use all features. We use the same approach with RFormula as before. This time however, let's also log both the version of our data and the data path to MLflow. 
+# MAGIC Let's first log a run to MLflow where we use all features. We use the same approach with RFormula as before. This time however, let's also log both the version of our data and the data path to MLflow.
 
 # COMMAND ----------
 
@@ -161,7 +161,7 @@ with mlflow.start_run(run_name="lr_model") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-3bac0fef-149d-4c25-9db1-94fbcd63ba13
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -181,7 +181,7 @@ model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-78b33d27-0815-4d31-80a0-5e110aa96224
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -227,7 +227,7 @@ wait_for_model(model_name, 1, stage="Staging")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b5f74e40-1806-46ab-9dd0-97b82d8f297e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -247,7 +247,7 @@ wait_for_model(model_details.name, 1, stage="Staging")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-03dff1c0-5c7b-473f-83ec-4a8283427280
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -268,7 +268,7 @@ test_new = test_delta.withColumn("log_price", log(col("price")))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-565313ed-2bca-4cc6-af87-1c0d509c0a69
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -284,7 +284,7 @@ test_new.write.<FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-735a36b6-7510-4e4f-9df8-4ae51f9f87dc
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -297,7 +297,7 @@ set(train_new.schema.fields) ^ set(train_delta.schema.fields)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0c7c986b-1346-4ff1-a4e2-ee190891a5bf
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -316,7 +316,7 @@ test_delta_new = spark.read.format("delta").option("versionAsOf", data_version).
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f29c99ca-b92c-4f74-8bf5-c74070a8cd50
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -360,7 +360,7 @@ with mlflow.start_run(run_name="lr_log_model") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e5bd7bfb-f445-44b5-a272-c6ae2849ac9f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -387,7 +387,7 @@ mlflow.search_runs(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-fd0fc3ae-7c2e-4d7d-90da-0b6e6b830496
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -396,7 +396,7 @@ mlflow.search_runs(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-3056bfcc-7623-4410-8b1b-82cba24ae3dd
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -441,7 +441,7 @@ wait_for_model(model_name, new_model_version, "Production")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-102094e8-1aa0-4448-9cc4-5e5e36fb5426
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -450,7 +450,7 @@ wait_for_model(model_name, new_model_version, "Production")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f74c46fc-b825-4d73-b41f-c45e6cd360fb
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

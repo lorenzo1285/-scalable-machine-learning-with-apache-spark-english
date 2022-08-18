@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-bfaf8cdf-ed63-45f7-a559-954d478bb0f7
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -42,7 +42,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8f030328-5dad-4ae9-bf82-30e96ffc38a5
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,7 +56,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-c70ecf76-ddd9-4f68-8c2c-41bbf258419c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -135,7 +135,7 @@ display(dbutils.fs.ls(dest_file))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-3616cc9c-788f-431a-a895-fde4e0983366
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

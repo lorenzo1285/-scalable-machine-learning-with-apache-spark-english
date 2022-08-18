@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-62811f6d-e550-4c60-8903-f38d7ed56ca7
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -30,7 +30,7 @@ airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ee10d185-fc70-48b8-8efe-ea2feee28e01
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -47,11 +47,11 @@ print(train_df.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b70f996a-31a2-4b62-a699-dc6026105465
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC Let's change the # of partitions (to simulate a different cluster configuration), and see if we get the same number of data points in our training set. 
+# MAGIC Let's change the # of partitions (to simulate a different cluster configuration), and see if we get the same number of data points in our training set.
 
 # COMMAND ----------
 
@@ -63,7 +63,7 @@ print(train_repartition_df.count())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5b96c695-717e-4269-84c7-8292ceff9d83
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -87,7 +87,7 @@ display(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4171a9ae-e928-41e3-9689-c6fcc2b3d57c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -95,7 +95,7 @@ display(train_df)
 # MAGIC 
 # MAGIC We will use <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html?highlight=linearregression#pyspark.ml.regression.LinearRegression" target="_blank">LinearRegression</a> to build our first model.
 # MAGIC 
-# MAGIC The cell below will fail because the Linear Regression estimator expects a vector of values as input. We will fix that with VectorAssembler below. 
+# MAGIC The cell below will fail because the Linear Regression estimator expects a vector of values as input. We will fix that with VectorAssembler below.
 
 # COMMAND ----------
 
@@ -108,7 +108,7 @@ lr = LinearRegression(featuresCol="bedrooms", labelCol="price")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f1353d2b-d9b8-4c8c-af18-2abb8f0d0b84
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -135,7 +135,7 @@ lr_model = lr.fit(vec_train_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ab8f4965-71db-487d-bbb3-329216580be5
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -150,7 +150,7 @@ print(f"The formula for the linear regression line is y = {m:.2f}x + {b:.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ae6dfaf9-9164-4dcc-a699-31184c4a962e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -166,7 +166,7 @@ pred_df.select("bedrooms", "features", "price", "prediction").show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8d73c3ee-34bc-4f8b-b2ba-03597548680c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -185,7 +185,7 @@ print(f"RMSE is {rmse}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-703fbf0b-a2e1-4086-b002-8f63e06afdd8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

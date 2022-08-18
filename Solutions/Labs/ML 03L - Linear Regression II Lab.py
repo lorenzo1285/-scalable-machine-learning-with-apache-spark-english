@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4e1b9835-762c-42f2-9ff8-75164cb1a702
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -33,7 +33,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a427d25c-591f-4899-866a-14064eff40e3
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -68,7 +68,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-c9898a31-90e4-4a6d-87e6-731b95c764bd
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -101,7 +101,7 @@ pred_df = pipeline_model.transform(log_test_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-51b5e35f-e527-438a-ab56-2d4d0d389d29
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -123,7 +123,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-05d3baa6-bb71-4c31-984b-a2daabc35f97
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

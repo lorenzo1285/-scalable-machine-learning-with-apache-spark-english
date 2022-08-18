@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b27f81af-5fb6-4526-b531-e438c0fda55e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -37,7 +37,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-c1a29688-f50a-48cf-9163-ebcc381dfe38
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -53,7 +53,7 @@ print(train_df.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-9ab8c080-9012-4f38-8b01-3846c1531a80
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -65,7 +65,7 @@ print(train_df.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-82786653-4926-4790-b867-c8ccb208b451
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -113,7 +113,7 @@ with mlflow.start_run(run_name="LR-Single-Feature") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-44bc7cac-de4a-47e7-bfff-6d2eb58172cd
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -153,7 +153,7 @@ with mlflow.start_run(run_name="LR-All-Features") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-70188282-8d26-427d-b374-954e9a058000
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -206,7 +206,7 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-66785d5e-e1a7-4896-a8a9-5bfcd18acc5c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -214,13 +214,13 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0b1a68e1-bd5d-4f78-a452-90c7ebcdef39
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC ### Querying Past Runs
 # MAGIC 
-# MAGIC You can query past runs programmatically in order to use this data back in Python.  The pathway to doing this is an **`MlflowClient`** object. 
+# MAGIC You can query past runs programmatically in order to use this data back in Python.  The pathway to doing this is an **`MlflowClient`** object.
 
 # COMMAND ----------
 
@@ -234,7 +234,7 @@ client.list_experiments()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-dcd771b2-d4ed-4e9c-81e5-5a3f8380981f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -249,11 +249,11 @@ display(runs_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-68990866-b084-40c1-beee-5c747a36b918
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC Pull the last run and look at metrics. 
+# MAGIC Pull the last run and look at metrics.
 
 # COMMAND ----------
 
@@ -266,7 +266,7 @@ runs[0].info.run_id
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-cfbbd060-6380-444f-ba88-248e10a56559
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -289,7 +289,7 @@ runs[0].info.run_id
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-63ca7584-2a86-421b-a57e-13d48db8a75d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

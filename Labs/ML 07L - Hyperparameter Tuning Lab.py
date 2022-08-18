@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b778c8d0-84e6-4192-a921-b9b60fd20d9b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -28,7 +28,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-02dc0920-88e1-4f5b-886c-62b8cc02d1bb
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -68,7 +68,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e3bb8033-43ea-439c-a134-36bedbeff408
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -80,7 +80,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0e9bdc2f-0d8d-41cb-9509-47833d66bc5e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -98,7 +98,7 @@ rf = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7f3962e7-51b8-4477-9599-2465ab94a049
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -120,7 +120,7 @@ rf = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e1862bae-e31e-4f5a-ab0e-926261c4e27b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -138,7 +138,7 @@ rf = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ea1c0e11-125d-4067-bd70-0bd6c7ca3cdb
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -158,7 +158,7 @@ cv = <FILL_IN>
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1f8cebd5-673c-4513-b73b-b64b0a56297c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -176,7 +176,7 @@ pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-70cdbfa3-0dd7-4f23-b755-afc0dadd7eb2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -195,7 +195,7 @@ print(rf_model.explainParams())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-11e6c47a-ddb1-416d-92a5-2f61340f9a5e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -211,7 +211,7 @@ top_features
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ae7e312e-d32b-4b02-97ff-ad4d2c737892
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -219,7 +219,7 @@ top_features
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-950eb40f-b1d2-4e7f-8b07-76faff6b8186
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -235,7 +235,7 @@ print(f"Area under ROC is {area_under_roc:.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-01974668-f242-4b8a-ac80-adda3b98392d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -249,7 +249,7 @@ print(f"Area under ROC is {area_under_roc:.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f5fdf1a9-2a65-4252-aa76-18807dbb3a9d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

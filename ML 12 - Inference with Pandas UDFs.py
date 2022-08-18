@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2b5dc285-0d50-4ea7-a71b-8a7aa355ad7c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -24,7 +24,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8b52bca0-45f0-4ada-be31-c2c473fb8e77
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -50,7 +50,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7ebcaaf9-c6f5-4c92-865a-c7f2c7afb555
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -62,7 +62,7 @@ spark_df = spark.createDataFrame(X_test)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1cdc4475-f55f-4126-9d38-dedb19577f4e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -97,7 +97,7 @@ display(prediction_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e97526c6-ef40-4d55-9763-ee3ebe846096
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -134,7 +134,7 @@ display(prediction_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-23b8296e-e0bc-481e-bd35-4048d532c71d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -156,7 +156,7 @@ display(spark_df.mapInPandas(predict, """`host_total_listings_count` DOUBLE,`nei
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d13b87a7-0625-4acc-88dc-438cf06e18bd
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

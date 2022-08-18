@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1108b110-983d-4034-9156-6b95c04dc62c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -22,6 +22,7 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC 
 # MAGIC ![](https://files.training.databricks.com/images/sparkcluster.png)
 
 # COMMAND ----------
@@ -30,7 +31,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-df081f79-6894-4174-a554-fa0943599408
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -46,7 +47,7 @@ df = (spark.range(1, 1000000)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a0c6912d-a8d6-449b-a3ab-5ca91c7f9805
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -58,7 +59,7 @@ display(df.sample(.001))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-6eadef21-d75c-45ba-8d77-419d1ce0c06c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -77,7 +78,7 @@ df.createOrReplaceTempView("df_temp")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2593e6b0-d34b-4086-9fed-c4956575a623
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -91,7 +92,7 @@ df.count()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5d00511e-15da-48e7-bd26-e89fbe56632c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -105,7 +106,7 @@ df.rdd.getNumPartitions()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-50330454-0168-4f50-8355-0204632b20ec
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -119,7 +120,7 @@ df.cache().count()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7dd81880-1575-410c-a168-8ac081a97e9d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -133,7 +134,7 @@ df.count()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ce238b9e-fee4-4644-9469-b7d9910f6243
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -149,7 +150,7 @@ df.limit(10).toPandas()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-279e3325-b121-402b-a2d0-486e1cc26fc0
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

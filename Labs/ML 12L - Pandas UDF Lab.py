@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-decc2c12-1e1b-4bed-b226-b7f3fc822c55
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -22,12 +22,12 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-39135b6f-b848-480b-a44c-1f76817d430b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC In the cell below, we train the same model on the same data set as in the lesson and <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.sklearn.html" target="_blank">autolog</a> metrics, parameters, and models to MLflow. 
+# MAGIC In the cell below, we train the same model on the same data set as in the lesson and <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.sklearn.html" target="_blank">autolog</a> metrics, parameters, and models to MLflow.
 
 # COMMAND ----------
 
@@ -52,7 +52,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-be6a896c-4643-4209-a72b-b1645f9a2b25
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -64,7 +64,7 @@ spark_df = spark.createDataFrame(df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1b00a63d-a768-40f3-b551-e510e5cdf18e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -76,11 +76,11 @@ spark_df = spark.createDataFrame(df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e408115e-6b96-40c9-a911-809125728dc8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC In the cell below, fill in the **`model_path`** variable and the **`mlflow.pyfunc.spark_udf`** function. You can refer to this <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf" target="_blank">documentation</a> for help. 
+# MAGIC In the cell below, fill in the **`model_path`** variable and the **`mlflow.pyfunc.spark_udf`** function. You can refer to this <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#mlflow.pyfunc.spark_udf" target="_blank">documentation</a> for help.
 
 # COMMAND ----------
 
@@ -91,7 +91,7 @@ predict = mlflow.pyfunc.spark_udf(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8a83e1c0-52d3-4d21-b1c3-003808d1da8a
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-94727771-3f7d-41a7-bcbd-774b1fc5837c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -34,11 +34,11 @@ display(iris_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-efd06e75-816c-4ab5-84b5-dd1da377fa01
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC Notice that we have four values as "features".  We'll reduce those down to two values (for visualization purposes) and convert them to a **`DenseVector`**.  To do that we'll use the **`VectorAssembler`**. 
+# MAGIC Notice that we have four values as "features".  We'll reduce those down to two values (for visualization purposes) and convert them to a **`DenseVector`**.  To do that we'll use the **`VectorAssembler`**.
 
 # COMMAND ----------
 
@@ -82,7 +82,7 @@ for centroids in model_centers:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-840acc4b-58f7-439d-afe7-5a70d5718dc1
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -146,7 +146,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b5b5d89a-1595-4e0c-99a1-54209435cf81
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -188,7 +188,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-06e7d08a-e824-435d-9835-adc29bd5c12e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -196,7 +196,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-edc1d38d-5cc3-4bf5-bfc5-bb85a145bb16
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -204,7 +204,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-aa078ae4-fbfd-4dc2-b0cb-92bc10714981
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -212,7 +212,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-9cf17004-1750-49fe-bb92-ce38c54c1ced
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -220,7 +220,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-80c66031-e786-404e-8c77-c90a91fa3f4a
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -228,7 +228,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e0f585c1-1d13-4f8c-b9ae-dfd184547653
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-c7e3123c-9ace-4d9a-89a1-10307b238964
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -29,7 +29,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2861b87d-095f-44c7-848e-9e4ea539ed2d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -52,7 +52,7 @@ display(covid_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e0cab81f-4d2b-486b-9af7-01f6fb212168
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -69,13 +69,13 @@ print(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-9db69933-359c-46df-88df-523c20aec03e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC Let's set up our FeatureStoreClient **`fs`**. 
 # MAGIC 
-# MAGIC To create a feature store client, initialize a **`FeatureStoreClient`** object from the **`feature_store`** module. 
+# MAGIC To create a feature store client, initialize a **`FeatureStoreClient`** object from the **`feature_store`** module.
 
 # COMMAND ----------
 
@@ -86,7 +86,7 @@ fs = # FILL_IN
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-961b8810-5fce-4b34-b066-75f33a12e4f8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -110,7 +110,7 @@ display(covid_features_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d3892ba8-77ca-403f-869f-a6e0b0706555
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -135,7 +135,7 @@ fs.create_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a7a6fb53-a77d-465b-b9bd-1671e3afbbd6
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -145,7 +145,7 @@ fs.create_table(
 # MAGIC 
 # MAGIC Rather than recompute the table with these values, we just want to append these new columns to the existing table. 
 # MAGIC 
-# MAGIC First, let's create columns for the month and day. 
+# MAGIC First, let's create columns for the month and day.
 
 # COMMAND ----------
 
@@ -161,7 +161,7 @@ display(add_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-c040ac8a-f24d-4951-82bc-af1f509a90c2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -180,7 +180,7 @@ fs.write_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-67d3eb45-0083-4a4c-a391-92ce31628b42
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -195,13 +195,13 @@ display(updated_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-529e3acd-adc0-45e3-b2a7-eed04a3911b2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC ### Training 
 # MAGIC 
-# MAGIC Now that we have our feature table, we are ready to use it for model training. We'll need our target variable **`deceased`** in addition to our features, so let's get that first. 
+# MAGIC Now that we have our feature table, we are ready to use it for model training. We'll need our target variable **`deceased`** in addition to our features, so let's get that first.
 
 # COMMAND ----------
 
@@ -211,7 +211,7 @@ display(target_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-386a9f38-3c89-41ba-9ce2-3645aa727411
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -239,7 +239,7 @@ X_train.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-3d1f0e1f-5ead-4f3d-81d5-d400231d0e43
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -289,7 +289,7 @@ train_model(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1836dc20-0e77-467e-af8f-33dcfdac7209
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

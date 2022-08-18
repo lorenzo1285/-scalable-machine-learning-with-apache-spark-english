@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-64f90be2-bcc0-40c9-bbe7-3b501323e71c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -23,7 +23,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0c063b0a-ccbb-486f-8568-1fe52cfa8971
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -45,7 +45,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-35f52f8a-6a95-4273-8e04-ead835c2c184
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -59,7 +59,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2c6e2b76-709f-43e9-9fd2-731713fe30a7
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -82,7 +82,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-6368d08e-4f54-4504-8a83-5e099c7aeb34
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -94,7 +94,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-dd0026c2-92e2-4761-9308-75ad353649d4
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -109,7 +109,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ea44ac8c-88c8-443a-a370-b4671af6f1e9
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -128,7 +128,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4bbc8017-a03b-4b3e-810f-9375e5afd7e2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

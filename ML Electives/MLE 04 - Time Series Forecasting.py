@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-54c3040f-38b6-4562-8dd3-61a8bb6aeba1
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -33,7 +33,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5537f13d-b402-464f-8814-bb981709ffb2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -62,7 +62,7 @@ display(spark_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-91681688-70e2-4eee-b18a-4afa353bce3f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -74,7 +74,7 @@ df = spark_df.toPandas()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-920f1e35-2a54-4588-b4bf-72c6bed85e07
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -87,7 +87,7 @@ df.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f5c365d6-4d8b-49a2-a8be-36aa3232d6c1
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -105,7 +105,7 @@ logging.getLogger("py4j").setLevel(logging.ERROR)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a0a43507-9db1-41da-b7bf-8d5c2f4b2a67
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -120,7 +120,7 @@ prophet_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-daf04369-b1c3-4c84-80c1-0f7da47fc3e6
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -137,7 +137,7 @@ prophet_future.tail()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b79ef0fd-8017-4d04-a1f4-f4e8f04dfc87
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -150,7 +150,7 @@ prophet_forecast[['ds', 'yhat']].tail()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-02352d36-96cb-4c11-aca6-d47a194f9942
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -162,7 +162,7 @@ prophet_plot = prophet_obj.plot(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d260f48c-7aaa-4cf2-8ab1-50c3a9c7318d
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -174,7 +174,7 @@ prophet_plot2 = prophet_obj.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-44baaf89-7f68-48a7-9cfd-8ed431613bfa
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -193,7 +193,7 @@ print(prophet_obj.changepoints)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-93d9af60-11de-472f-8a26-f9a679ff29f2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -211,7 +211,7 @@ prophet_holiday.fit(prophet_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0a5f7168-3877-4457-81d4-4ceebce8ec02
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -229,7 +229,7 @@ prophet_plot_holiday = prophet_holiday.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-81681565-2eb4-467c-8c5e-c6546c7230aa
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -247,7 +247,7 @@ prophet_plot_holiday = prophet_holiday.plot_components(prophet_forecast)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-99b5826a-6cf1-4bb0-a859-8cce45c50f74
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -262,7 +262,7 @@ arima_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-286ec724-d52c-46ff-bd35-84201bede0a5
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -281,7 +281,7 @@ print(f'p-value: {result[1]}')
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-8766e03d-4623-40c2-a5fa-25684db75670
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -311,7 +311,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7e2a2b58-4516-4036-9f93-e6514c529de5
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -332,7 +332,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-42204bfb-229b-4695-82f1-56b34ad04ba2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -349,7 +349,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7855a2df-0091-4a6d-b05f-538c20784b66
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -367,7 +367,7 @@ print(arima_fit.summary())
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b787949f-d55a-4178-baf2-66b023567904
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -383,7 +383,7 @@ test_df = arima_df[split_ind: ]
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5e50d9a6-321f-4577-afa3-e146ad7a38ab
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -409,7 +409,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ce127e7b-c717-4d46-b354-77bf6a0f8dc0
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -429,7 +429,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-294eaf9b-8ba0-4137-bb52-d27b39f3d34f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -444,7 +444,7 @@ exp_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7ddb8a5e-453b-491d-ac0d-3087a2c7f955
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -458,7 +458,7 @@ exp_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b4fb0e59-5554-44b0-81b3-efbfeca88e33
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -481,7 +481,7 @@ exp_forecast3 = exp_fit3.forecast(30).rename("Additive damped trend")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4e3c58f7-afdc-42c6-805f-6f34770ea4d8
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -500,7 +500,7 @@ plt.show()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f3bbd647-3586-482f-880a-369258cfc7d0
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d6718279-32b1-490e-8a38-f1d6e3578184
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -24,7 +24,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-35af29dc-0fc5-4e37-963d-3fbe86f4ba59
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -53,7 +53,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b5f90a62-80fd-4173-adf0-6e73d0e31309
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -65,7 +65,7 @@ train_return_schema = "device_id integer, n_used integer, model_path string, mse
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e2ac315f-e950-48c6-9bb8-9ceede8f93dd
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -120,7 +120,7 @@ def train_model(df_pandas: pd.DataFrame) -> pd.DataFrame:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2b6bf899-de7c-4ab9-b343-a11a832ddd77
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -145,7 +145,7 @@ display(combined_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-3f660cc6-4979-48dd-beea-9dab9b536230
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -178,7 +178,7 @@ display(prediction_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-d760694c-8be7-4cbb-8825-8b8aa0d740db
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -190,7 +190,7 @@ display(prediction_df)
 # MAGIC 
 # MAGIC Below we demonstrate creating such a custom model that bundles all of the models we trained for each device. For every row of data fed to this model, the model will determine the device id and then use the appropriate model trained on that device id to make predictions for a given row. 
 # MAGIC 
-# MAGIC First, we need to access the models for each device id. 
+# MAGIC First, we need to access the models for each device id.
 
 # COMMAND ----------
 
@@ -207,11 +207,11 @@ display(model_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b9b38048-397b-4eb3-a7c7-541aef502d4a
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC We create a dictionary mapping device ids to the model trained on that device id. 
+# MAGIC We create a dictionary mapping device ids to the model trained on that device id.
 
 # COMMAND ----------
 
@@ -221,11 +221,11 @@ device_to_model
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f1081d85-677f-4a55-a3f5-a7e3a6710d3a
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC We create a custom model that takes the device id to model mappings as an attribute and delegates input to the appropriate model based on the device id. 
+# MAGIC We create a custom model that takes the device id to model mappings as an attribute and delegates input to the appropriate model based on the device id.
 
 # COMMAND ----------
 
@@ -250,7 +250,7 @@ class OriginDelegatingModel(PythonModel):
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-da424f95-113f-4feb-a20c-6d0178d03bdb
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -263,7 +263,7 @@ example_model.predict(combined_df.toPandas().head(20))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-624309e5-7ba8-4968-92d4-3fe71e36375b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

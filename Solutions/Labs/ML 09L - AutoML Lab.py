@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0f0f211a-70ba-4432-ab87-19bf7c8fc6cc
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -26,7 +26,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-9178a13f-aeaf-49cb-ac27-600e7cea0077
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -40,7 +40,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-af913436-4be4-4a26-8381-d40d4e1af9d2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -55,7 +55,7 @@ train_df.write.mode("overwrite").saveAsTable(f"{DA.cleaned_username}.autoMLTable
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2f854d06-800c-428c-8add-aece6c9a91b6
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -65,7 +65,7 @@ train_df.write.mode("overwrite").saveAsTable(f"{DA.cleaned_username}.autoMLTable
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-98f64ede-5b15-442b-8346-874e0fdea6b5
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -75,7 +75,7 @@ train_df.write.mode("overwrite").saveAsTable(f"{DA.cleaned_username}.autoMLTable
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4e561687-2509-4084-bd33-4221cb047eba
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -85,7 +85,7 @@ train_df.write.mode("overwrite").saveAsTable(f"{DA.cleaned_username}.autoMLTable
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b15305f8-04cd-422f-a1da-ad7640b3846b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

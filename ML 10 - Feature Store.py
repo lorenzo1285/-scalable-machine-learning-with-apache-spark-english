@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b69335d5-86c7-40c5-b430-509a7444dae7
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -42,11 +42,11 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5dcd3e8e-2553-429f-bbe1-aef0bc1ef0ab
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC Let's load in our data and generate a unique ID for each listing. The **`index`** column will serve as the "key" of the feature table and used to lookup features.  
+# MAGIC Let's load in our data and generate a unique ID for each listing. The **`index`** column will serve as the "key" of the feature table and used to lookup features.
 
 # COMMAND ----------
 
@@ -56,7 +56,7 @@ display(airbnb_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a04b29f6-e7a6-4e6a-875f-945edf938e9e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -70,7 +70,7 @@ print(table_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a0712a39-b413-490f-a59e-dbd7f533e9a9
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -83,7 +83,7 @@ fs = feature_store.FeatureStoreClient()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-90998fdb-87ed-4cdd-8844-fbd59ac5631f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -118,7 +118,7 @@ fs.create_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4a7cbb2e-87a2-4ea8-85e6-207ec5e42147
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -143,7 +143,7 @@ fs.create_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-44586907-302a-4916-93f6-e92210619c6f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -154,7 +154,7 @@ fs.create_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-cf0ad0d0-8456-471b-935c-8a34a836fca7
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -168,7 +168,7 @@ fs.create_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b07da702-485e-44b8-bd00-f0330c8b7657
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -184,7 +184,7 @@ fs.get_table(table_name).description
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1df7795c-1a07-47ae-92a8-1c5f7aec75ae
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -192,7 +192,7 @@ fs.get_table(table_name).description
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-bcbf72b7-a013-40fd-bf55-a2b179a7728e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -200,7 +200,7 @@ fs.get_table(table_name).description
 # MAGIC 
 # MAGIC Further, there may be other information that _can_ be supplied at inference time, but does not make sense to consider a feature to _look up_. 
 # MAGIC 
-# MAGIC In this (fictional) example, we made up a feature **`score_diff_from_last_month`**. It is a feature generated at inference time and used in training as well. 
+# MAGIC In this (fictional) example, we made up a feature **`score_diff_from_last_month`**. It is a feature generated at inference time and used in training as well.
 
 # COMMAND ----------
 
@@ -210,11 +210,11 @@ display(inference_data_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b8301fa9-27bd-4d3b-bf13-9ab784205d81
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC Build a training dataset that will use the indicated "key" to lookup features from the feature table and also the online feature **`score_diff_from_last_month`**. We will use <a href="https://docs.databricks.com/dev-tools/api/python/latest/index.html" target="_blank">FeatureLookup</a> and if you specify no features, it will return all of them except the primary key. 
+# MAGIC Build a training dataset that will use the indicated "key" to lookup features from the feature table and also the online feature **`score_diff_from_last_month`**. We will use <a href="https://docs.databricks.com/dev-tools/api/python/latest/index.html" target="_blank">FeatureLookup</a> and if you specify no features, it will return all of them except the primary key.
 
 # COMMAND ----------
 
@@ -236,7 +236,7 @@ X_train.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-eae1aa4a-f770-4173-9502-cb946e6949d2
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -285,7 +285,7 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-40b7718f-101c-4ac4-8639-545b8ef6d932
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -296,7 +296,7 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-f03314dc-1ade-4bd8-958f-ddf04ac1bb13
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -308,7 +308,7 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-acd4d5a4-c4ed-4695-a911-5fd88dcfa513
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -316,13 +316,13 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-921dc6c9-b9ed-43c7-86ff-608791a11367
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC ### Feature Store Batch Scoring
 # MAGIC 
-# MAGIC Apply a feature store registered MLflow model to features with **`score_batch`**. Input data only need the key column **`index`** and online feature **`score_diff_from_last_month`**. Everything else is looked up. 
+# MAGIC Apply a feature store registered MLflow model to features with **`score_batch`**. Input data only need the key column **`index`** and online feature **`score_diff_from_last_month`**. Everything else is looked up.
 
 # COMMAND ----------
 
@@ -334,7 +334,7 @@ display(predictions_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-fa42d4d3-a6a6-4205-b799-032154d1d8a3
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -357,7 +357,7 @@ display(condensed_review_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-da3ee1df-391c-4f26-99d0-82937e91a40a
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -373,7 +373,7 @@ fs.write_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ae45b580-e79e-4f54-85a0-1274cb5f5c5f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -381,7 +381,7 @@ fs.write_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5d4d8425-b9b7-4e47-8856-91e1142e9c47
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -395,7 +395,7 @@ fs.write_table(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-884ff3ff-f965-4c37-8cff-f6a1600ee0b6
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -411,7 +411,7 @@ display(fs.read_table(name=table_name))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4148328d-4046-4251-b4db-f9e427b2e0f9
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -424,7 +424,7 @@ display(fs.read_table(name=table_name))
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-81e53dea-dc51-418c-b366-eed3a9c4ce2f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -450,7 +450,7 @@ X_train.head()
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-94873d7f-3bb9-4d5f-a414-c24480a84f3b
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -483,7 +483,7 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-b0ffd91d-c73f-4f86-a02a-43ffdc73460c
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -501,7 +501,7 @@ display(predictions_df)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-67471f1c-0dc0-445f-ae6a-beafb3508a16
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 

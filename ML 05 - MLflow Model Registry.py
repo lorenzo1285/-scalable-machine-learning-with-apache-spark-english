@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-04aa5a94-e0d3-4bec-a9b5-a0590c33a257
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -30,7 +30,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox --i18n-5802ff47-58b5-4789-973d-2fb855bf347a
+# MAGIC %md-sandbox
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -52,7 +52,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-7f34f7da-b5d2-42af-b24d-54e1730db95f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -64,7 +64,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-cbc59424-e45b-4179-a586-8c14a66a61a1
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -102,7 +102,7 @@ with mlflow.start_run(run_name="LR Model") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-1322cac5-9638-4cc9-b050-3545958f3936
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -117,11 +117,11 @@ model_name
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0777e3f5-ba7c-41c4-a477-9f0a5a809664
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC Register the model. 
+# MAGIC Register the model.
 
 # COMMAND ----------
 
@@ -132,7 +132,7 @@ model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox --i18n-22756858-ff7f-4392-826f-f401a81230c4
+# MAGIC %md-sandbox
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -146,7 +146,7 @@ model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-481cba23-661f-4de7-a1d8-06b6be8c57d3
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -163,7 +163,7 @@ model_version_details.status
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-10556266-2903-4afc-8af9-3213d244aa21
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -178,7 +178,7 @@ client.update_registered_model(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-5abeafb2-fd60-4b0d-bf52-79320c10d402
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -194,7 +194,7 @@ client.update_model_version(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-aaac467f-3a52-4428-a119-8286cb0ac158
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -202,11 +202,11 @@ client.update_model_version(
 # MAGIC 
 # MAGIC The MLflow Model Registry defines several model stages: **`None`**, **`Staging`**, **`Production`**, and **`Archived`**. Each stage has a unique meaning. For example, **`Staging`** is meant for model testing, while **`Production`** is for models that have completed the testing or review processes and have been deployed to applications. 
 # MAGIC 
-# MAGIC Users with appropriate permissions can transition models between stages. 
+# MAGIC Users with appropriate permissions can transition models between stages.
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-dff93671-f891-4779-9e41-a0960739516f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -228,7 +228,7 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4dc7e8b7-da38-4ce1-a238-39cad74d97c5
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -244,7 +244,7 @@ print(f"The current model stage is: '{model_version_details.current_stage}'")
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ba563293-bb74-4318-9618-a1dcf86ec7a3
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -263,7 +263,7 @@ model_version_1 = mlflow.pyfunc.load_model(model_version_uri)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e1bb8ae5-6cf3-42c2-aebd-bde925a9ef30
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -275,7 +275,7 @@ model_version_1.predict(X_test)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-75a9c277-0115-4cef-b4aa-dd69a0a5d8a0
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -285,7 +285,7 @@ model_version_1.predict(X_test)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-2ef7acd0-422a-4449-ad27-3a26f217ab15
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -315,7 +315,7 @@ with mlflow.start_run(run_name="LR Ridge Model") as run:
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-dc1dd6b4-9e9e-45be-93c4-5500a10191ed
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -335,7 +335,7 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox --i18n-fe857eeb-6119-4927-ad79-77eaa7bffe3a
+# MAGIC %md-sandbox
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -345,7 +345,7 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-6f568dd2-0413-4b78-baf6-23debb8a5118
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -358,7 +358,7 @@ new_model_version = max([model_version_info.version for model_version_info in mo
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-4fb5d7c9-b0c0-49d5-a313-ac95da7e0f91
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -374,7 +374,7 @@ client.update_model_version(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-10adff21-8116-4a01-a309-ce5a7d233fcf
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -391,7 +391,7 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-e3caaf08-a721-425b-8765-050c757d1d2e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -408,7 +408,7 @@ client.delete_model_version(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-a896f3e5-d83c-4328-821f-a67d60699f0e
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -424,7 +424,7 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-0eb4929d-648b-4ae6-bca3-aff8af50f15f
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -436,7 +436,7 @@ client.delete_registered_model(model_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-6fe495ec-f481-4181-a006-bea55a6cef09
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -452,7 +452,7 @@ client.delete_registered_model(model_name)
 
 # COMMAND ----------
 
-# MAGIC %md --i18n-ecf5132e-f80d-4374-a325-28b4e96d5b61
+# MAGIC %md
 # MAGIC 
 # MAGIC 
 # MAGIC 
