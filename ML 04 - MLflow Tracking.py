@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="b27f81af-5fb6-4526-b531-e438c0fda55e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -28,7 +28,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="b7c8a0e0-649e-4814-8310-ae6225a57489"/>
 # MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-4/mlflow-tracking.png" style="height: 400px; margin: 20px"/></div>
 
 # COMMAND ----------
@@ -37,7 +37,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c1a29688-f50a-48cf-9163-ebcc381dfe38"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -53,7 +53,7 @@ print(train_df.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9ab8c080-9012-4f38-8b01-3846c1531a80"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -65,7 +65,7 @@ print(train_df.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="82786653-4926-4790-b867-c8ccb208b451"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -113,7 +113,7 @@ with mlflow.start_run(run_name="LR-Single-Feature") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="44bc7cac-de4a-47e7-bfff-6d2eb58172cd"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -153,7 +153,7 @@ with mlflow.start_run(run_name="LR-All-Features") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="70188282-8d26-427d-b374-954e9a058000"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -206,7 +206,7 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="66785d5e-e1a7-4896-a8a9-5bfcd18acc5c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -214,7 +214,7 @@ with mlflow.start_run(run_name="LR-Log-Price") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="0b1a68e1-bd5d-4f78-a452-90c7ebcdef39"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -234,7 +234,7 @@ client.list_experiments()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="dcd771b2-d4ed-4e9c-81e5-5a3f8380981f"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -249,7 +249,7 @@ display(runs_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="68990866-b084-40c1-beee-5c747a36b918"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -266,7 +266,7 @@ runs[0].info.run_id
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="cfbbd060-6380-444f-ba88-248e10a56559"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -289,7 +289,7 @@ runs[0].info.run_id
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="63ca7584-2a86-421b-a57e-13d48db8a75d"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

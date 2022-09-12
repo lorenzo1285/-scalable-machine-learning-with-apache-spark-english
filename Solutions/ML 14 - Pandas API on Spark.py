@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c311be95-77f9-477b-93a5-c9289b3dedb6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -23,7 +23,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d711990a-af32-4357-b710-d2db434e4f15"/>
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -44,7 +44,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c3080510-c8d9-4020-9910-37199f0ad5de"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -62,7 +62,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="785ed714-6726-40d5-b7fb-c63c094e568e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -76,7 +76,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e6d7a47f-a4c8-4178-bc70-62c2ac6764d5"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -90,7 +90,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="23a2fc6d-1360-4e41-beab-b1fe8e23aac3"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -106,7 +106,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1be64dea-9d63-476d-a7d6-9f6fa4ccd784"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -119,7 +119,7 @@ display(spark_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="00b99bdc-e4d1-44d2-b117-ae2cd97d0490"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -134,7 +134,7 @@ pandas_df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e75a3ba6-98f6-4b39-aecb-345109cb2ce9"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -151,7 +151,7 @@ df.head()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f099c73b-0bd8-4ff1-a12e-578ffb0cb152"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -167,7 +167,7 @@ df_dist_sequence.head()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="07b3f029-f81b-442f-8cdd-cb2d29033a35"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -175,7 +175,7 @@ df_dist_sequence.head()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="ed25204e-2822-4694-b3b3-968ea8ef7343"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -188,7 +188,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="a41480c7-1787-4bd6-a4c3-c85552a5f762"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -201,7 +201,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="5abf965b-2f69-469e-a0cf-ba8ffd714764"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -213,7 +213,7 @@ display(df.to_spark())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="480e9e60-9286-4f4c-9db3-b650b32cb7ce"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -221,7 +221,7 @@ display(df.to_spark())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="99f93d32-d09d-4fea-9ac9-57099eb2c819"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -233,7 +233,7 @@ display(spark_df.groupby("property_type").count().orderBy("count", ascending=Fal
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="150b6a18-123d-431a-84b1-ad2d2b7beae2"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -245,7 +245,7 @@ df["property_type"].value_counts()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="767f19b5-137f-4b33-9ef4-e5bb48603299"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -262,7 +262,7 @@ df.plot(kind="hist", x="bedrooms", y="price", bins=200)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="6b70f1df-dfe1-43de-aeec-5541b036927c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -274,7 +274,7 @@ ps.sql("SELECT distinct(property_type) FROM {df}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="7345361b-e6c4-4ce3-9ba4-8f132c8c8df2"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="60a5d18a-6438-4ee3-9097-5145dc31d938"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -31,7 +31,7 @@ airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f8b3c675-f8ce-4339-865e-9c64f05291a6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -45,7 +45,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="09003d63-70c1-4fb7-a4b7-306101a88ae3"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -74,7 +74,7 @@ ohe_encoder = OneHotEncoder(inputCols=index_output_cols, outputCols=ohe_output_c
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="dedd7980-1c27-4f35-9d94-b0f1a1f92839"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -92,7 +92,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="fb06fb9b-5dac-46df-aff3-ddee6dc88125"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -108,7 +108,7 @@ lr = LinearRegression(labelCol="price", featuresCol="features")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="a7aabdd1-b384-45fc-bff2-f385cc7fe4ac"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -129,7 +129,7 @@ pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c7420125-24be-464f-b609-1bb4e765d4ff"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -143,7 +143,7 @@ pipeline_model.write().overwrite().save(DA.paths.working_dir)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="15f4623d-d99a-42d6-bee8-d7c4f79fdecb"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -161,7 +161,7 @@ saved_pipeline_model = PipelineModel.load(DA.paths.working_dir)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1303ef7d-1a57-4573-8afe-561f7730eb33"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -175,7 +175,7 @@ display(pred_df.select("features", "price", "prediction"))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9497f680-1c61-4bf1-8ab4-e36af502268d"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -196,7 +196,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="cc0618e0-59d9-4a6d-bb90-a7945da1457e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

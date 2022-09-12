@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="be8397b6-c087-4d7b-8302-5652eec27caf"/>
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -26,7 +26,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="13b0389c-cbd8-4b31-9f15-a6a9f18e8f60"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -47,7 +47,7 @@ X_train, X_test, y_train, y_test = train_test_split(df.drop(["price"], axis=1),
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="b84062c7-9fb2-4d34-a196-98e5074c7ad4"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -78,7 +78,7 @@ def objective_function(params):
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="7b10a96d-d868-4603-ab84-50388a8f50fc"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -98,7 +98,7 @@ search_space = {
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="6db6a36a-e1ca-400d-81fc-20ad5a794a01"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -147,7 +147,7 @@ with mlflow.start_run(run_name="best_model"):
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="398681fb-0ab4-4886-bb08-58117da3b7af"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

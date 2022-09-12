@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="263caa08-bb08-4022-8d8f-bd2f51d77752"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -32,7 +32,7 @@ airbnb_df = spark.read.format("delta").load(file_path)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3f07e772-c15d-46e4-8acd-866b661fbb9b"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -64,7 +64,7 @@ pred_df = label_df.withColumn("prediction", lit(0.0))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d04eb817-2010-4021-a898-42ca8abaa00d"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -81,7 +81,7 @@ print(f"The accuracy is {100*mc_evaluator.evaluate(pred_df):.2f}%")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="5fe00f31-d186-4ab8-b6bb-437f7ddc4a00"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -96,7 +96,7 @@ print(train_df.cache().count())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="a7998d44-af91-4dfa-b80c-8b96ebfe5311"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -110,7 +110,7 @@ display(train_df.select("review_scores_rating", "label"))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1ce4ba05-f558-484d-a8e8-53bde1e119fc"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -137,7 +137,7 @@ pred_df = pipeline_model.transform(test_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3a06d71c-8551-44c8-b33e-8ae40a443713"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -161,7 +161,7 @@ print(f"The area under the PR curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="0ef0e2b9-6ce9-4377-8587-83b5260fd05a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -191,7 +191,7 @@ pred_df = pipeline_model.transform(test_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="111f2dc7-5535-45b7-82f6-ad2e5f2cbf16"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -207,7 +207,7 @@ print(f"The area under the ROC curve: {bc_evaluator.evaluate(pred_df):.2f}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="7e88e044-0a34-4815-8eab-1dc37532a082"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

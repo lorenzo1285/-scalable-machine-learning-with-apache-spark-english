@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="7051c998-fa70-4ff4-8c4b-439030503fb8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -27,7 +27,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="af8bcd70-9430-4470-95b0-2fcff94ed149"/>
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -43,7 +43,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d4fed64b-d7ad-4426-805e-192854e1471c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -55,7 +55,7 @@ display(train_df.select("price"))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f9d67fce-097f-40fd-9261-0ec1a5acd12a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -69,7 +69,7 @@ display(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9a834ac8-878c-4d6e-b685-d0d37f148830"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -85,7 +85,7 @@ display(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="6694a7c9-9258-4b67-a403-4d72898994fa"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -97,7 +97,7 @@ display(train_df.groupBy("room_type").count())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="cbb15ce5-15f0-488c-a0a9-f282d7460b40"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -110,7 +110,7 @@ display(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f72931f3-0d1d-4721-b5af-1da14da2d60d"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -156,7 +156,7 @@ displayHTML("""
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f8bcc454-6e0a-4b5d-a9f7-4917f3a66553"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -182,7 +182,7 @@ displayHTML("""
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="37f17c9d-94b7-48f4-b579-352edab84703"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -204,7 +204,7 @@ print(f"The RMSE for predicting the median price is: {regressionMedianEvaluator.
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="a2158c71-c343-4ee6-a1e4-4c6f8dd1792c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

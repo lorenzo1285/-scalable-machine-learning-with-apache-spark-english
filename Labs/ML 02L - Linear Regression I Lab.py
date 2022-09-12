@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="45bb1181-9fe0-4255-b0f0-b42637fc9591"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,7 +56,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="25a260af-8d6e-4897-8228-80074c4f1d64"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -71,7 +71,7 @@ print(f"intercept: {lr_model.intercept}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="218d51b8-7453-4f6a-8965-5a60e8c80eaf"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -90,7 +90,7 @@ print(f"intercept: {lr_model.intercept}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f3e00d9e-3b02-44cf-87b7-20b54ba350c9"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

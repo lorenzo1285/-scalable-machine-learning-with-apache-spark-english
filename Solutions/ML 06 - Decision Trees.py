@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3bdc2b9e-9f58-4cb7-8c55-22bade9f79df"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -32,7 +32,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9af16c65-168c-4078-985d-c5f8991f171f"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,7 +56,7 @@ string_indexer = StringIndexer(inputCols=categorical_cols, outputCols=index_outp
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="35e2f231-2ebb-4889-bc55-089200dd1605"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -76,7 +76,7 @@ vec_assembler = VectorAssembler(inputCols=assembler_inputs, outputCol="features"
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2096f7aa-7fab-4807-b45f-fcbd0424a3e8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -92,7 +92,7 @@ dt = DecisionTreeRegressor(labelCol="price")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="506ab7fa-0952-4c55-ad9b-afefb6469380"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -113,7 +113,7 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d0791ff8-8d79-4d32-937d-9fcfbac4e9bd"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -123,7 +123,7 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1f9c229e-6f8c-4174-9927-c284e64e5753"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -132,7 +132,7 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3b7e60c3-22de-4794-9cd4-6713255b79a4"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -142,7 +142,7 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="0552ed6a-120f-4e49-ae3a-5f92bd9f863d"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -154,7 +154,7 @@ dt.setMaxBins(40)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="92252524-e388-439b-a92b-958cc332a861"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -166,7 +166,7 @@ pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2426e78b-9bd2-4b7d-a65b-52054906e438"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -185,7 +185,7 @@ dt_model.featureImportances
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="823c20ff-f20b-4853-beb0-4b324debb2e6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -202,7 +202,7 @@ features_df
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1fe0f603-add5-4904-964b-7288ae98b2e8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -222,7 +222,7 @@ print(top_features)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d9525bf7-b871-45c8-b0f9-dca5fd7ae825"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -234,7 +234,7 @@ print(top_features)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="bad0dd6d-05ba-484b-90d6-cfe16a1bc11e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -248,7 +248,7 @@ display(pred_df.select("features", "price", "prediction").orderBy("price", ascen
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="094553a3-10c0-4e08-9a58-f94430b4a512"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -271,7 +271,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="033a9c19-0f9d-4c33-aa5e-f58665637448"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1fa7a9c8-3dad-454e-b7ac-555020a4bda8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -42,7 +42,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2340cdf4-9753-41b4-a613-043b90f0f472"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,7 +56,7 @@ train_df, val_df, test_df = airbnb_df.randomSplit([.6, .2, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="37bbd5bd-f330-4d02-8af6-1b185612cdf8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -84,7 +84,7 @@ regression_evaluator = RegressionEvaluator(predictionCol="prediction", labelCol=
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e4627900-f2a5-4f65-881e-1374187dd4f9"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -118,7 +118,7 @@ def objective_function(params):
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d4f9dd2b-060b-4eef-8164-442b2be242f4"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -139,7 +139,7 @@ search_space = {
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="27891521-e481-4734-b21c-b2c5fe1f01fe"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

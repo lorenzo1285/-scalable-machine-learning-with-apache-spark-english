@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="59431a59-5305-45dc-81c5-bc13132e61ce"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -30,7 +30,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="46846e08-4b50-4297-a871-98beaf65c3f7"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -50,7 +50,7 @@ schema = spark.read.parquet(repartitioned_path).schema
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="6d5976b8-54b3-4379-9240-2fb9b7941f4c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -68,7 +68,7 @@ streaming_data = (spark
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="29c9d057-1b46-41ff-a7a0-2d80a113e7a3"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -80,7 +80,7 @@ stream_pred = pipeline_model.transform(streaming_data)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d0c54563-04fc-48f3-b739-9acc85723d51"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -107,7 +107,7 @@ DA.block_until_stream_is_ready(query)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3654909a-da6d-4e8e-919a-9802e8292e77"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -125,7 +125,7 @@ DA.block_until_stream_is_ready(query)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="fb17c70a-c926-446c-a94a-900afc08efff"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -141,7 +141,7 @@ for stream in spark.streams.active:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="622245a0-07c0-43ee-967c-41cb4a601152"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -157,7 +157,7 @@ for stream in spark.streams.active:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="39b0e95b-29e0-462f-a7ec-17bb6c5469ef"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
