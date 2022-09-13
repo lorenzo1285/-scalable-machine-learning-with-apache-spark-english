@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="fd2d84ac-6a17-44c2-bb92-18b0c7fef797"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -26,7 +26,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="68fcecd4-2280-411c-94c1-3e111683c6a3"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -46,7 +46,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="8ce92b68-6e6c-4fd0-8d3c-a57f27e5bdd9"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -62,7 +62,7 @@ display(airbnb_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c100b529-ac6b-4540-a3ff-4afa63577eee"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -76,7 +76,7 @@ airbnb_df.write.format("delta").mode("overwrite").save(DA.paths.working_dir)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="090a31f6-1082-44cf-8e2a-6c659ea796ea"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -91,7 +91,7 @@ airbnb_df.write.format("delta").mode("overwrite").saveAsTable("delta_review")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="732577c2-095d-4278-8466-74e494a9c1bd"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -103,7 +103,7 @@ airbnb_df.write.format("delta").mode("overwrite").partitionBy("neighbourhood_cle
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e9ce863b-5761-4676-ae0b-95f3f5f027f6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -116,7 +116,7 @@ display(dbutils.fs.ls(DA.paths.working_dir))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="ac970bba-1cf6-4aa3-91bb-74a797496eef"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -132,7 +132,7 @@ display(dbutils.fs.ls(f"{DA.paths.working_dir}/_delta_log/"))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2905b874-373b-493d-9084-8ff4f7583ccc"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -151,7 +151,7 @@ display(spark.read.json(f"{DA.paths.working_dir}/_delta_log/00000000000000000000
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="8f79d1df-d777-4364-9783-b52bc0eed81a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -163,7 +163,7 @@ display(spark.read.json(f"{DA.paths.working_dir}/_delta_log/00000000000000000001
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="18500df8-b905-4f24-957c-58040920d554"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -175,7 +175,7 @@ display(dbutils.fs.ls(f"{DA.paths.working_dir}/neighbourhood_cleansed=Bayview/")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9f817cd0-87ec-457b-8776-3fc275521868"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -188,7 +188,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="faba817b-7cbf-49d4-a32c-36a40f582021"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -212,7 +212,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e4cafdf4-a346-4729-81a6-fdea70f4929a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -224,7 +224,7 @@ display(dbutils.fs.ls(f"{DA.paths.working_dir}/neighbourhood_cleansed=Bayview/")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="25ca7489-8077-4b23-96af-8d801982367c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -232,7 +232,7 @@ display(dbutils.fs.ls(f"{DA.paths.working_dir}/neighbourhood_cleansed=Bayview/")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c6f2e771-502d-46ed-b8d4-b02e3e4f4134"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -251,7 +251,7 @@ display(dbutils.fs.ls(f"{DA.paths.working_dir}/neighbourhood_cleansed=Bayview/")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="61faa23f-d940-479c-95fe-5aba72c29ddf"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -264,7 +264,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="5664be65-8fd2-4746-8065-35ee8b563797"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -285,7 +285,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="6cbe5204-fe27-438a-af54-87492c2563b5"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -293,7 +293,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="4da7827c-b312-4b66-8466-f0245f3787f4"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -310,7 +310,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1150e320-5ed2-4a38-b39f-b63157bca94f"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -326,7 +326,7 @@ delta_table.vacuum(0)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="b845b2ea-2c11-4d6e-b083-d5908b65d313"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -338,7 +338,7 @@ display(dbutils.fs.ls(f"{DA.paths.working_dir}/neighbourhood_cleansed=Bayview/")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="a7bcdad3-affb-4b00-b791-07c14f5e59d5"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

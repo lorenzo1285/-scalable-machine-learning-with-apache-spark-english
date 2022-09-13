@@ -1,8 +1,8 @@
 # Databricks notebook source
 # MAGIC %pip install \
-# MAGIC git+https://github.com/databricks-academy/dbacademy-gems@c3032c2df47472f1600d368523f052d2920b406d \
-# MAGIC git+https://github.com/databricks-academy/dbacademy-rest@e729b6dbb566de2958cba60fe4bd50e1b9e7f25b \
-# MAGIC git+https://github.com/databricks-academy/dbacademy-helper@fd1619a8b6f22adb3b7b54e2897cbdc5c3f161a4 \
+# MAGIC git+https://github.com/databricks-academy/dbacademy-gems@e8183eed9481624f25b34436810cf6666b4438c0 \
+# MAGIC git+https://github.com/databricks-academy/dbacademy-rest@9f11b96e8d7e641f6141c7da0acd90a975075a9f \
+# MAGIC git+https://github.com/databricks-academy/dbacademy-helper@e0e819d661e6bf972c6fb1872c1ae1a7d2a74b23 \
 # MAGIC --quiet --disable-pip-version-check
 
 # COMMAND ----------
@@ -15,7 +15,7 @@ from dbacademy_gems import dbgems
 from dbacademy_helper import DBAcademyHelper, Paths
 
 helper_arguments = {
-    "course_code" : "smlwas",          # The abreviated version of the course
+    "course_code" : "sml",             # The abreviated version of the course
     "course_name" : "scalable-machine-learning-with-apache-spark",      # The full name of the course, hyphenated
     "data_source_name" : "scalable-machine-learning-with-apache-spark", # Should be the same as the course
     "data_source_version" : "v02",     # New courses would start with 01

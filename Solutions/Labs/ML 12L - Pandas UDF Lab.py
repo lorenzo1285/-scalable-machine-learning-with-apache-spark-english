@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="decc2c12-1e1b-4bed-b226-b7f3fc822c55"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -22,7 +22,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="39135b6f-b848-480b-a44c-1f76817d430b"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -52,7 +52,7 @@ with mlflow.start_run(run_name="sklearn-random-forest") as run:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="be6a896c-4643-4209-a72b-b1645f9a2b25"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -64,7 +64,7 @@ spark_df = spark.createDataFrame(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1b00a63d-a768-40f3-b551-e510e5cdf18e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -76,7 +76,7 @@ spark_df = spark.createDataFrame(df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e408115e-6b96-40c9-a911-809125728dc8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -91,7 +91,7 @@ predict = mlflow.pyfunc.spark_udf(spark, model_path)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="8a83e1c0-52d3-4d21-b1c3-003808d1da8a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

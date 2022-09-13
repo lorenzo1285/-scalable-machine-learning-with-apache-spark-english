@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="bfaf8cdf-ed63-45f7-a559-954d478bb0f7"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -42,7 +42,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="8f030328-5dad-4ae9-bf82-30e96ffc38a5"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -56,15 +56,15 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c70ecf76-ddd9-4f68-8c2c-41bbf258419c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Hints
 # MAGIC 
 # MAGIC * Use the <a href="https://spark.apache.org/docs/latest/api/python/index.html" target="_blank">API docs</a>. Specifically, you might find 
-# MAGIC   <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.html?highlight=dataframe#pyspark.sql.DataFrame" target="_blank">DataFrame</a> and
-# MAGIC   <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql.html#functions" target="_blank">functions</a> to be helpful.
+# MAGIC   <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/dataframe.html" target="_blank">DataFrame</a> and
+# MAGIC   <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html" target="_blank">functions</a> to be helpful.
 # MAGIC * It's helpful to look at the file first, so you can check the format. **`dbutils.fs.head()`** (or just **`%fs head`**) is a big help here.
 
 # COMMAND ----------
@@ -79,7 +79,7 @@ dbutils.fs.rm(dest_file, True)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3616cc9c-788f-431a-a895-fde4e0983366"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

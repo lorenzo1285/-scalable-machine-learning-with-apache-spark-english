@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="7051c998-fa70-4ff4-8c4b-439030503fb8"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -27,11 +27,11 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="af8bcd70-9430-4470-95b0-2fcff94ed149"/>
 # MAGIC 
 # MAGIC 
 # MAGIC  
-# MAGIC Let's keep 80% for the training set and set aside 20% of our data for the test set. We will use the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.randomSplit.html?highlight=randomsplit#pyspark.sql.DataFrame.randomSplit" target="_blank">randomSplit</a> method.
+# MAGIC Let's keep 80% for the training set and set aside 20% of our data for the test set. We will use the <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.randomSplit.html" target="_blank">randomSplit</a> method.
 # MAGIC 
 # MAGIC We will discuss more about the train-test split later, but throughout this notebook, do your data exploration on **`train_df`**.
 
@@ -43,7 +43,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="d4fed64b-d7ad-4426-805e-192854e1471c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -55,11 +55,13 @@ display(train_df.select("price"))
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f9d67fce-097f-40fd-9261-0ec1a5acd12a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
 # MAGIC Is this a <a href="https://en.wikipedia.org/wiki/Log-normal_distribution" target="_blank">Log Normal</a> distribution? Take the **`log`** of price and check the histogram. Keep this in mind for later :).
+# MAGIC 
+# MAGIC To add a visualization, click the `+` icon and select `Visualization`. You will need to re-execute the query for the visualization to display.
 
 # COMMAND ----------
 
@@ -69,7 +71,7 @@ display(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9a834ac8-878c-4d6e-b685-d0d37f148830"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -85,7 +87,7 @@ display(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="6694a7c9-9258-4b67-a403-4d72898994fa"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -97,7 +99,7 @@ display(train_df.groupBy("room_type").count())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="cbb15ce5-15f0-488c-a0a9-f282d7460b40"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -110,7 +112,7 @@ display(<FILL_IN>)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f72931f3-0d1d-4721-b5af-1da14da2d60d"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -156,7 +158,7 @@ displayHTML("""
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="f8bcc454-6e0a-4b5d-a9f7-4917f3a66553"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -170,11 +172,11 @@ displayHTML("""
 # MAGIC 0. **`test_df`**: Create two additional columns called **`avgPrediction`** and **`medianPrediction`** with the average and median price from **`train_df`**, respectively. Call the resulting DataFrame **`pred_df`**. 
 # MAGIC 
 # MAGIC Some useful functions:
-# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.avg.html?highlight=avg#pyspark.sql.functions.avg" target="_blank">avg()</a>
-# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.col.html?highlight=col#pyspark.sql.functions.col" target="_blank">col()</a>
-# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.functions.lit.html?highlight=lit#pyspark.sql.functions.lit" target="_blank">lit()</a>
-# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.approxQuantile.html?highlight=approxquantile#pyspark.sql.DataFrame.approxQuantile" target="_blank">approxQuantile()</a> **HINT**: There is no median function, so you will need to use approxQuantile
-# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.withColumn.html?highlight=withcolumn#pyspark.sql.DataFrame.withColumn" target="_blank">withColumn()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.avg.html" target="_blank">avg()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.col.html" target="_blank">col()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.lit.html" target="_blank">lit()</a>
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.approxQuantile.html" target="_blank">approxQuantile()</a> **HINT**: There is no median function, so you will need to use approxQuantile
+# MAGIC * <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.withColumn.html" target="_blank">withColumn()</a>
 
 # COMMAND ----------
 
@@ -182,7 +184,7 @@ displayHTML("""
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="37f17c9d-94b7-48f4-b579-352edab84703"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -204,7 +206,7 @@ print(f"The RMSE for predicting the median price is: {regressionMedianEvaluator.
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="a2158c71-c343-4ee6-a1e4-4c6f8dd1792c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

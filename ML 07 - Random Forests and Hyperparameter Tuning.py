@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2ab084da-06ed-457d-834a-1d19353e5c59"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -48,7 +48,7 @@ pipeline = Pipeline(stages=stages)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="4561938e-90b5-413c-9e25-ef15ba40e99c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -64,7 +64,7 @@ print(rf.explainParams())
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="819de6f9-75d2-45df-beb1-6b59ecd2cfd2"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -89,7 +89,7 @@ param_grid = (ParamGridBuilder()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9f043287-11b8-482d-8501-2f7d8b1458ea"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -103,7 +103,7 @@ param_grid = (ParamGridBuilder()
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="ec0440ab-071d-4201-be86-5eeedaf80a4f"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -126,7 +126,7 @@ cv = CrossValidator(estimator=pipeline, evaluator=evaluator, estimatorParamMaps=
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="673c9261-a861-4ace-b008-c04565230a8e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -138,7 +138,7 @@ cv_model = cv.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="c9bc1596-7b0f-4595-942c-109cfca51698"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -156,7 +156,7 @@ cv_model = cv.setParallelism(4).fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2d00b40f-c5e7-4089-890b-a50ccced34c6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -178,7 +178,7 @@ pipeline_model = pipeline.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="dede990c-2551-4c07-8aad-d697ae827e71"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -199,7 +199,7 @@ print(f"R2 is {r2}")
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="8f80daf2-8f0b-4cab-a8e6-4060c78d94b0"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

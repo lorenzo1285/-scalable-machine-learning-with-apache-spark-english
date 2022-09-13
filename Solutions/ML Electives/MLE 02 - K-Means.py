@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="94727771-3f7d-41a7-bcbd-774b1fc5837c"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -34,7 +34,7 @@ display(iris_df)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="efd06e75-816c-4ab5-84b5-dd1da377fa01"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -82,7 +82,7 @@ for centroids in model_centers:
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="840acc4b-58f7-439d-afe7-5a70d5718dc1"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -146,7 +146,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="b5b5d89a-1595-4e0c-99a1-54209435cf81"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -188,7 +188,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="06e7d08a-e824-435d-9835-adc29bd5c12e"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -196,7 +196,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="edc1d38d-5cc3-4bf5-bfc5-bb85a145bb16"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -204,7 +204,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="aa078ae4-fbfd-4dc2-b0cb-92bc10714981"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -212,7 +212,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="9cf17004-1750-49fe-bb92-ce38c54c1ced"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -220,7 +220,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="80c66031-e786-404e-8c77-c90a91fa3f4a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -228,7 +228,7 @@ fig
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="e0f585c1-1d13-4f8c-b9ae-dfd184547653"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 

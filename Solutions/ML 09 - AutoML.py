@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="2630af5a-38e6-482e-87f1-1a1633438bb6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -26,7 +26,7 @@
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="7aa84cf3-1b6c-4ba4-9249-00359ee8d70a"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -40,7 +40,7 @@ train_df, test_df = airbnb_df.randomSplit([.8, .2], seed=42)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="1b5c8a94-3ac2-4977-bfe4-51a97d83ebd9"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
@@ -63,7 +63,7 @@ summary = automl.regress(train_df, target_col="price", primary_metric="rmse", ti
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="57d884c6-2099-4f34-b840-a4e873308ffe"/>
 # MAGIC 
 # MAGIC 
 # MAGIC  
@@ -83,7 +83,7 @@ print(summary.best_trial)
 
 # COMMAND ----------
 
-# MAGIC %md
+# MAGIC %md <i18n value="3c0cd1ec-8965-4af3-896d-c30938033abf"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
