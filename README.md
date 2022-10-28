@@ -1,4 +1,4 @@
-# Scalable Machine Learning With Apache Spark
+# Scalable Machine Learning With Apache Spark [English]
 
 This repository contains the resources students need to follow along with the instructor teaching this course, in addition to the various labs and their solutions.
 
