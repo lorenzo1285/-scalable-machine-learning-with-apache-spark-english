@@ -138,29 +138,11 @@ cv_model = cv.fit(train_df)
 
 # COMMAND ----------
 
-# MAGIC %md <i18n value="c9bc1596-7b0f-4595-942c-109cfca51698"/>
-# MAGIC 
-# MAGIC 
-# MAGIC 
-# MAGIC ## Parallelism Parameter
-# MAGIC 
-# MAGIC Hmmm... that took a long time to run. That's because the models were being trained sequentially rather than in parallel!
-# MAGIC 
-# MAGIC In Spark 2.3, a <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator.parallelism" target="_blank">parallelism</a> parameter was introduced. From the docs: **`the number of threads to use when running parallel algorithms (>= 1)`**.
-# MAGIC 
-# MAGIC Let's set this value to 4 and see if we can train any faster. The Spark <a href="https://spark.apache.org/docs/latest/ml-tuning.html" target="_blank">docs</a> recommend a value between 2-10.
-
-# COMMAND ----------
-
-cv_model = cv.setParallelism(4).fit(train_df)
-
-# COMMAND ----------
-
 # MAGIC %md <i18n value="2d00b40f-c5e7-4089-890b-a50ccced34c6"/>
 # MAGIC 
 # MAGIC 
 # MAGIC 
-# MAGIC **Question**: Hmmm... that still took a long time to run. Should we put the pipeline in the cross validator, or the cross validator in the pipeline?
+# MAGIC **Question**: Should we put the pipeline in the cross validator, or the cross validator in the pipeline?
 # MAGIC 
 # MAGIC It depends if there are estimators or transformers in the pipeline. If you have things like StringIndexer (an estimator) in the pipeline, then you have to refit it every time if you put the entire pipeline in the cross validator.
 # MAGIC 
@@ -169,7 +151,7 @@ cv_model = cv.setParallelism(4).fit(train_df)
 # COMMAND ----------
 
 cv = CrossValidator(estimator=rf, evaluator=evaluator, estimatorParamMaps=param_grid, 
-                    numFolds=3, parallelism=4, seed=42)
+                    numFolds=3, seed=42)
 
 stages_with_cv = [string_indexer, vec_assembler, cv]
 pipeline = Pipeline(stages=stages_with_cv)

@@ -21,7 +21,7 @@ __validate_libraries()
 
 # COMMAND ----------
 
-version = spark.conf.get("dbacademy.library.version", "v1.0.38")
+version = spark.conf.get("dbacademy.library.version", "v1.0.41")
 
 if not version.startswith("v"): library_url = f"git+https://github.com/databricks-academy/dbacademy@{version}"
 else: library_url = f"https://github.com/databricks-academy/dbacademy/releases/download/{version}/dbacademy-{version[1:]}-py3-none-any.whl"

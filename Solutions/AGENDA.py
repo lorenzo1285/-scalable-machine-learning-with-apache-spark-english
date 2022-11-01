@@ -61,7 +61,7 @@
 # MAGIC | 20m  | **Review**                               | *Review of Topics* |
 # MAGIC | 40m    | **[Decision Trees]($./ML 06 - Decision Trees)**    | Distributed implementation of decision trees and maxBins parameter (why you WILL get different results from sklearn)<br/> Feature importance |
 # MAGIC | 10m  | **Break**                                               ||
-# MAGIC | 40m  | **[Random Forests and Hyperparameter Tuning]($./ML 07 - Random Forests and Hyperparameter Tuning)** | What's random about a random forest? <br/> K-Fold cross-validation <br/>Parallelism and tips to speed up pipeline training |                                             
+# MAGIC | 40m  | **[Random Forests and Hyperparameter Tuning]($./ML 07 - Random Forests and Hyperparameter Tuning)** | What's random about a random forest? <br/> K-Fold cross-validation <br/>Tips to speed up pipeline training |                                             
 # MAGIC | 30m  | **[Hyperparameter Tuning Lab]($./Labs/ML 07L - Hyperparameter Tuning Lab)**  | Perform grid search on a random forest <br/>Generate feature importance scores and classification metrics <br/>Identify differences between sklearn and SparkML random forests |
 # MAGIC | 10m  | **Break**   ||
 # MAGIC | 20m  | **[Hyperopt]($./ML 08 - Hyperopt)**  | Perform hyperparameter search on a random forest and save the optimal model configuration |

@@ -155,7 +155,7 @@ evaluator = BinaryClassificationEvaluator(labelCol="priceClass", metricName="are
 # MAGIC 
 # MAGIC ## Cross Validation
 # MAGIC 
-# MAGIC We are going to do 3-Fold cross-validation, with **`parallelism`**=4, and set the **`seed`**=42 on the cross-validator for reproducibility.
+# MAGIC We are going to do 3-Fold cross-validation and set the **`seed`**=42 on the cross-validator for reproducibility.
 # MAGIC 
 # MAGIC Put the Random Forest in the CV to speed up the <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.tuning.CrossValidator.html?highlight=crossvalidator#pyspark.ml.tuning.CrossValidator" target="_blank">cross validation</a> (as opposed to the pipeline in the CV).
 
@@ -165,7 +165,7 @@ evaluator = BinaryClassificationEvaluator(labelCol="priceClass", metricName="are
 from pyspark.ml.tuning import CrossValidator
 
 cv = CrossValidator(estimator=rf, evaluator=evaluator, estimatorParamMaps=param_grid,
-                    numFolds=3, parallelism=4, seed=42)
+                    numFolds=3, seed=42)
 
 # COMMAND ----------
 
