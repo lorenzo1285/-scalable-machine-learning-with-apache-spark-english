@@ -1,8 +1,8 @@
 # Databricks notebook source
 # MAGIC %pip install \
-# MAGIC git+https://github.com/databricks-academy/dbacademy-gems@e8183eed9481624f25b34436810cf6666b4438c0 \
-# MAGIC git+https://github.com/databricks-academy/dbacademy-rest@9f11b96e8d7e641f6141c7da0acd90a975075a9f \
-# MAGIC git+https://github.com/databricks-academy/dbacademy-helper@e0e819d661e6bf972c6fb1872c1ae1a7d2a74b23 \
+# MAGIC git+https://github.com/databricks-academy/dbacademy-gems@v1.1.15 \
+# MAGIC git+https://github.com/databricks-academy/dbacademy-rest@v1.1.1 \
+# MAGIC git+https://github.com/databricks-academy/dbacademy-helper@v1.1.2 \
 # MAGIC --quiet --disable-pip-version-check
 
 # COMMAND ----------

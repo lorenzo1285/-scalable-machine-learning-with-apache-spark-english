@@ -270,7 +270,7 @@ df.plot(kind="hist", x="bedrooms", y="price", bins=200)
 
 # COMMAND ----------
 
-ps.sql("SELECT distinct(property_type) FROM {df}")
+ps.sql("SELECT distinct(property_type) FROM {df}", df=df)
 
 # COMMAND ----------
 
