@@ -4,17 +4,15 @@
 # COMMAND ----------
 
 import re
-from dbacademy_helper import DBAcademyHelper, Paths
 
-DA = DBAcademyHelper(**helper_arguments) # Create the DA object
-DA.reset_environment()                   # Reset by removing databases and files from other lessons
-DA.init(install_datasets=True,           # Initialize, install and validate the datasets
-        create_db=True)                  # Continue initialization, create the user-db
+DA = DBAcademyHelper(course_config, lesson_config)
+DA.reset_lesson()
+DA.init()
 
-DA.cleaned_username = re.sub("[^a-zA-Z0-9]", "_", DA.username.lower().split("@")[0])
+DA.cleaned_username = dbgems.clean_string(DA.username)
 DA.init_mlflow_as_job()
 
-DA.conclude_setup()                      # Conclude setup by advertising environmental changes
+DA.conclude_setup()
 
 # COMMAND ----------
 
@@ -122,8 +120,6 @@ def loadYourTestMap(path):
     map[row["name"]] = row["value"]
   
   return map
-
- 
 
 # ****************************************************************************
 # Placeholder variables for coding challenge type specification

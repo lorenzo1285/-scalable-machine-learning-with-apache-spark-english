@@ -3,8 +3,12 @@
 
 # COMMAND ----------
 
-DA = DBAcademyHelper(**helper_arguments)
-DA.init(install_datasets=True, create_db=False)
+lesson_config.create_schema = False
+
+DA = DBAcademyHelper(course_config, lesson_config)
+DA.reset_lesson()
+DA.init()
+DA.conclude_setup()
 
 # COMMAND ----------
 

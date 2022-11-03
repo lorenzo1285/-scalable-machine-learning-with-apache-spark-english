@@ -386,7 +386,7 @@ client.transition_model_version_stage(
     name=model_name,
     version=new_model_version,
     stage="Production", 
-    archive_existing_versions=True # Archieve existing model in production 
+    archive_existing_versions=True # Archive existing model in production 
 )
 
 # COMMAND ----------
